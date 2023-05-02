@@ -36,11 +36,25 @@ podman run --rm \
 # run pod
 podman play kube --log-level=debug templates/astria_stack.yaml
 
+# run cargo
+# TODO - containerize and include in pod
+cd your-repos/astria-conductor
+# get ConductorConfig.toml for conductor below
+cargo run
+
 # deploy test contract
 git clone https://github.com/joroshiba/test-contracts
 cd test-contracts
 export PRIV_KEY=123...
 RUST_LOG=debug forge create --private-key $PRIV_KEY src/Storage.sol:Storage
+```
+
+## ConductorConfig.toml
+```toml
+celestia_node_url = "http://localhost:26659"
+tendermint_url = "http://localhost:1318"
+chain_id = "ethereum"
+execution_rpc_url = "http://localhost:50051"
 ```
 
 ### Helpful commands
