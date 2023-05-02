@@ -10,7 +10,7 @@ metro keys add "$validator_key_name" \
   --keyring-backend="$keyring_backend" \
   --home "$home_dir"
 
-validator_key=`metro keys show "$validator_key_name" -a --keyring-backend="$keyring_backend" --home "$home_dir"`
+validator_key=$(metro keys show "$validator_key_name" -a --keyring-backend="$keyring_backend" --home "$home_dir")
 metro add-genesis-account "$validator_key" "$coins" \
   --home "$home_dir"
 

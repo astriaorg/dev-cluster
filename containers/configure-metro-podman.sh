@@ -2,7 +2,7 @@
 
 set -o errexit -o nounset -o pipefail
 
-# change ports that we know metro metro will not receive messages on
+# change ports that we know metro will not receive messages on
 # so they won't interfere with celestia-app ports:
 #
 # ~/.metro # netstat -lntp
@@ -23,6 +23,6 @@ set -o errexit -o nounset -o pipefail
 dasel put -r toml '.rpc.pprof_laddr' -t string -v "127.0.0.1:60000" -f "$home_dir/config/config.toml"
 dasel put -r toml '.rpc.laddr' -t string -v "tcp://0.0.0.0:60001" -f "$home_dir/config/config.toml"
 dasel put -r toml '.p2p.laddr' -t string -v "tcp://0.0.0.0:60002" -f "$home_dir/config/config.toml"
-dasel put -r toml '.api.address' -t string -v "tcp://0.0.0.0:1318" -f "$home_dir/config/app.toml"
-dasel put -r toml '.grpc.address' -t string -v "0.0.0.0:9100" -f "$home_dir/config/app.toml"
+dasel put -r toml '.api.address' -t string -v "tcp://0.0.0.0:$sequencer_host_port" -f "$home_dir/config/app.toml"
+dasel put -r toml '.grpc.address' -t string -v "0.0.0.0:$sequencer_host_grpc_port" -f "$home_dir/config/app.toml"
 dasel put -r toml '.grpc-web.address' -t string -v "0.0.0.0:9101" -f "$home_dir/config/app.toml"
