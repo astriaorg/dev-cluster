@@ -3,11 +3,18 @@
 This repository contains configuration and related scripts for running Astria with Podman.
 
 ## Dependencies
-You must have Podman installed
 
-https://podman.io/getting-started/installation
+Main dependencies
+
+* Rust - https://www.rust-lang.org/tools/install
+* Podman - https://podman.io/getting-started/installation
+
+For contract deployment:
+
+* Forge (part of Foundry) - https://book.getfoundry.sh/getting-started/installation
 
 ## Setup
+
 ```bash
 # init and start podman machine
 podman machine init
@@ -34,7 +41,6 @@ podman run --rm \
   -o /data/templates/astria_stack.yaml \
   /data/templates/astria_stack.yaml.jinja2
 
-
 # run pod
 podman play kube --log-level=debug templates/astria_stack.yaml
 
@@ -51,9 +57,11 @@ git clone https://github.com/joroshiba/test-contracts
 cd test-contracts
 export PRIV_KEY=123...
 RUST_LOG=debug forge create --private-key $PRIV_KEY src/Storage.sol:Storage
+
 ```
 
 ## ConductorConfig.toml
+
 ```toml
 celestia_node_url = "http://localhost:26659"
 tendermint_url = "http://localhost:1318"
@@ -62,6 +70,7 @@ execution_rpc_url = "http://localhost:50051"
 ```
 
 ### Helpful commands
+
 ```bash
 # list running containers
 podman ps
@@ -74,6 +83,7 @@ podman pod rm astria_stack
 ```
 
 ### Helpful links
+
 * https://podman.io/getting-started/
 * https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 * https://kubernetes.io/docs/concepts/configuration/configmap/
