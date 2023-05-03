@@ -36,7 +36,7 @@ metadata:
   name: geth-env
   namespace: default
 data:
-  geth_local_account: "{{ geth_local_account }}"
+  executor_local_account: "{{ executor_local_account }}"
   home_dir: "/home/geth"
 ---
 apiVersion: v1
@@ -76,6 +76,10 @@ spec:
         - mountPath: /home/celestia
           name: {{ celestia_home_volume }}
       env:
+        - name: bridge_host_port
+          value: {{ bridge_host_port }}
+        - name: celestia_app_host_port
+          value: {{ celestia_app_host_port }}
         - name: home_dir
           valueFrom:
             configMapKeyRef:
@@ -143,11 +147,17 @@ spec:
       envFrom:
         - configMapRef:
             name: celestia-env
+      env:
+        - name: celestia_app_host_port
+          value: {{ celestia_app_host_port }}
       volumeMounts:
         - mountPath: /scripts/
           name: scripts-volume
         - mountPath: /home/celestia
           name: {{ celestia_home_volume }}
+      ports:
+        - containerPort: {{ celestia_app_host_port }}
+          hostPort: {{ celestia_app_host_port }}
     - name: celestia-bridge
       command:
       - /scripts/start-bridge-podman.sh
@@ -160,6 +170,9 @@ spec:
       envFrom:
         - configMapRef:
             name: celestia-env
+      env:
+        - name: celestia_app_host_port
+          value: {{ celestia_app_host_port }}
       ports:
         - containerPort: {{ bridge_host_port }}
           hostPort: {{ bridge_host_port }}
@@ -184,6 +197,7 @@ spec:
       command: ["/usr/local/bin/relayer"]
       args:
         - "--sequencer-endpoint=http://localhost:{{ sequencer_host_port }}"
+        - "--celestia-endpoint=http://localhost:{{ bridge_host_port }}"
         - "--validator-key-file=/root/.metro/config/priv_validator_key.json"
       volumeMounts:
         - mountPath: /home/relayer
