@@ -47,8 +47,6 @@ podman play kube --log-level=debug templates/astria_stack.yaml
 # run cargo
 # TODO - containerize and include in pod
 cd your-repos/astria-conductor
-git fetch --all
-git checkout feature/podman
 # get ConductorConfig.toml for conductor below
 cargo run
 
