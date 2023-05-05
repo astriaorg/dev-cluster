@@ -53,15 +53,6 @@ RUST_LOG=debug forge create --private-key $PRIV_KEY src/Storage.sol:Storage
 
 ```
 
-## ConductorConfig.toml
-
-```toml
-celestia_node_url = "http://localhost:26659"
-tendermint_url = "http://localhost:1318"
-chain_id = "ethereum"
-execution_rpc_url = "http://localhost:50051"
-```
-
 ### Helpful commands
 
 ```bash
