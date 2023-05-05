@@ -48,6 +48,14 @@ data:
   home_dir: "/home/relayer"
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: conductor-env
+  namespace: default
+data:
+  home_dir: "/home/conductor"
+---
+apiVersion: v1
 kind: Pod
 metadata:
   creationTimestamp: "2023-04-25T15:20:49Z"
@@ -205,6 +213,17 @@ spec:
         - mountPath: /root/.metro
           name: {{ metro_home_volume }}
           readOnly: true
+    - name: conductor
+      image: "ghcr.io/astriaorg/astria-conductor"
+      command: ["/usr/local/bin/conductor"]
+      args:
+        - "--tendermint-url=http://localhost:{{ sequencer_host_port }}"
+        - "--celestia-node-url=http://localhost:{{ bridge_host_port }}"
+        - "--chain-id=ethereum"
+        - "--execution-rpc-url=http://localhost:{{ executor_host_grpc_port }}"
+      volumeMounts:
+        - mountPath: /home/conductor
+          name: {{ conductor_home_volume }}
     - name: geth-executor
       command: ["/scripts/start-geth-podman.sh"]
       image: "ghcr.io/astriaorg/go-ethereum:0.0.3"
@@ -248,5 +267,7 @@ spec:
     name: {{ executor_home_volume }}
   - emptyDir: {}
     name: {{ relayer_home_volume }}
+  - emptyDir: {}
+    name: {{ conductor_home_volume }}
 
 status: {}

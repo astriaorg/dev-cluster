@@ -28,6 +28,7 @@ podman run --rm \
   -e metro_home_volume=metro-home-vol \
   -e executor_home_volume=executor-home-vol \
   -e relayer_home_volume=relayer-home-vol \
+  -e conductor_home_volume=conductor-home-vol \
   -e executor_local_account=0xb0E31D878F49Ec0403A25944d6B1aE1bf05D17E1 \
   -e celestia_app_host_port=26657 \
   -e bridge_host_port=26659 \
