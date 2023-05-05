@@ -45,12 +45,6 @@ podman run --rm \
 # run pod
 podman play kube --log-level=debug templates/astria_stack.yaml
 
-# run cargo
-# TODO - containerize and include in pod
-cd your-repos/astria-conductor
-# get ConductorConfig.toml for conductor below
-cargo run
-
 # deploy test contract
 git clone https://github.com/joroshiba/test-contracts
 cd test-contracts
