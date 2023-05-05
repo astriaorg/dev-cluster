@@ -21,7 +21,7 @@ podman machine init
 podman machine start
 
 # create template yaml
-# NOTE - replace the geth_local_account with your own account address
+# NOTE - replace the executor_local_account with your own account address
 podman run --rm \
   -e pod_name=astria_stack \
   -e celestia_home_volume=celestia-home-vol \
