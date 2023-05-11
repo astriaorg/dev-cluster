@@ -201,8 +201,9 @@ spec:
         - configMapRef:
             name: metro-env
     - name: relayer
-      image: "ghcr.io/astriaorg/sequencer-relayer:latest"
-      command: ["/usr/local/bin/relayer"]
+      #image: "ghcr.io/astriaorg/sequencer-relayer:sha-5a52ae2"
+      image: "ghcr.io/astriaorg/sequencer-relayer:pr-41"
+      command: ["/usr/local/bin/relayer", "--log", "debug"]
       args:
         - "--sequencer-endpoint=http://localhost:{{ sequencer_host_port }}"
         - "--celestia-endpoint=http://localhost:{{ bridge_host_port }}"
