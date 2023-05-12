@@ -201,9 +201,8 @@ spec:
         - configMapRef:
             name: metro-env
     - name: relayer
-      #image: "ghcr.io/astriaorg/sequencer-relayer:sha-5a52ae2"
-      image: "ghcr.io/astriaorg/sequencer-relayer:pr-41"
-      command: ["/usr/local/bin/relayer", "--log", "debug"]
+      image: "ghcr.io/astriaorg/sequencer-relayer:0.0.4"
+      command: ["/usr/local/bin/relayer"]
       args:
         - "--sequencer-endpoint=http://localhost:{{ sequencer_host_port }}"
         - "--celestia-endpoint=http://localhost:{{ bridge_host_port }}"
@@ -215,7 +214,7 @@ spec:
           name: {{ metro_home_volume }}
           readOnly: true
     - name: conductor
-      image: "ghcr.io/astriaorg/astria-conductor"
+      image: "ghcr.io/astriaorg/astria-conductor:0.0.4"
       command: ["/usr/local/bin/conductor"]
       args:
         - "--tendermint-url=http://localhost:{{ sequencer_host_port }}"
@@ -227,7 +226,7 @@ spec:
           name: {{ conductor_home_volume }}
     - name: geth-executor
       command: ["/scripts/start-geth-podman.sh"]
-      image: "ghcr.io/astriaorg/go-ethereum:0.0.3"
+      image: "ghcr.io/astriaorg/go-ethereum:0.0.4"
       volumeMounts:
         - mountPath: /scripts/
           name: scripts-volume
