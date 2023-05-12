@@ -226,9 +226,7 @@ spec:
           name: {{ conductor_home_volume }}
     - name: geth-executor
       command: ["/scripts/start-geth-podman.sh"]
-      # uncomment and tag v0.0.4 when PR is merged
-      # image: "ghcr.io/astriaorg/go-ethereum:0.0.4"
-      image: "ghcr.io/astriaorg/go-ethereum:pr-14"
+      image: "ghcr.io/astriaorg/go-ethereum:0.0.4"
       volumeMounts:
         - mountPath: /scripts/
           name: scripts-volume
