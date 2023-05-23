@@ -5,6 +5,7 @@ resources:
 - config-maps.yml
 - deployment.yml
 - service.yml
+- ingress.yml
 configMapGenerator:
 - name: metro-scripts
   namespace: astria-dev-cluster

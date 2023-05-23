@@ -178,6 +178,7 @@ spec:
                 name: geth-env
           ports:
             - containerPort: 8545
+              name: executor-svc
             - containerPort: 50051
       volumes:
       - name: bridge-scripts-volume
