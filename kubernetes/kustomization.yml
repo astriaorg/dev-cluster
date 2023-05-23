@@ -29,4 +29,3 @@ configMapGenerator:
   - scripts/configure-geth.sh
   - scripts/init-geth.sh
   - scripts/start-geth.sh
-
