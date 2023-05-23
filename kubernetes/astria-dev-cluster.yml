@@ -94,8 +94,8 @@ metadata:
 ---
 apiVersion: v1
 data:
-  bridge_host_port: 26659
-  celestia_app_host_port: 26657
+  bridge_host_port: "26659"
+  celestia_app_host_port: "26657"
   chainid: test
   coins: 1000000000000000utia
   evm_address: 0x966e6f22781EF6a6A82BBB4DB3df8E225DfD9488
@@ -157,10 +157,11 @@ metadata:
 ---
 apiVersion: v1
 data:
-  executor_host_grpc_port: 50051
-  executor_host_http_port: 8545
+  executor_host_grpc_port: "50051"
+  executor_host_http_port: "8545"
   executor_local_account: 0xb0E31D878F49Ec0403A25944d6B1aE1bf05D17E1
   home_dir: /home/geth
+  sequencer_host_grpc_port: "9100"
 kind: ConfigMap
 metadata:
   name: geth-env
@@ -173,8 +174,8 @@ data:
   evm_address: 0x966e6f22781EF6a6A82BBB4DB3df8E225DfD9488
   home_dir: /home/metro
   keyring_backend: test
-  sequencer_host_grpc_port: 9100
-  sequencer_host_port: 1318
+  sequencer_host_grpc_port: "9100"
+  sequencer_host_port: "1318"
   validator_key_name: validator
   validator_stake: 5000000000utick
 kind: ConfigMap
@@ -373,6 +374,7 @@ spec:
         name: geth-executor
         ports:
         - containerPort: 8545
+          name: executor-svc
         - containerPort: 50051
         volumeMounts:
         - mountPath: /scripts/
@@ -483,3 +485,23 @@ spec:
         name: relayer-home-vol
       - emptyDir: {}
         name: conductor-home-vol
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  name: astria-dev-cluster-ingress
+  namespace: astria-dev-cluster
+spec:
+  rules:
+  - host: astria.localdev.me
+    http:
+      paths:
+      - backend:
+          service:
+            name: astria-dev-cluster-service
+            port:
+              number: 8545
+        path: /executor/(.*)
+        pathType: Prefix
