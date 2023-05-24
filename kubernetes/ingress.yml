@@ -4,7 +4,7 @@ metadata:
   name: astria-dev-cluster-ingress
   namespace: astria-dev-cluster
 spec:
-  rules: 
+  rules:
   - host: executor.astria.localdev.me
     http:
       paths:

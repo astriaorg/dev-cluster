@@ -3,7 +3,7 @@ apiVersion: v1
 metadata:
   name: astria-dev-cluster-service
   namespace: astria-dev-cluster
-spec: 
+spec:
   selector:
     app: astria-dev-cluster
   ports:
@@ -16,3 +16,4 @@ spec:
     - name: executor-svc
       port: 8545
       targetPort: executor-svc
+---
