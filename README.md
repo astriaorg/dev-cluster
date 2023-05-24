@@ -1,11 +1,13 @@
 # Astria Dev Cluster
 
-This repository contains configuration and related scripts for running Astria with [`kind`](https://kind.sigs.k8s.io/) (Kubernetes and Docker).
+This repository contains configuration and related scripts for running Astria with [`kind` (Kubernetes and Docker)](https://kind.sigs.k8s.io/).
 
 ## Dependencies
 
 Main dependencies
 
+* docker - https://docs.docker.com/get-docker/
+* kubectl - https://kubernetes.io/docs/tasks/tools/
 * kind - https://kind.sigs.k8s.io/docs/user/quick-start/#installation
 
 For contract deployment:
