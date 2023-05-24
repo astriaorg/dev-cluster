@@ -56,7 +56,7 @@ kubectl get -n astria-dev-cluster pods
 # delete cluster and resources
 just cleanup-astria
 
-# example of deploying contract w/ [forge](https://github.com/foundry-rs/foundry)
+# example of deploying contract w/ forge (https://github.com/foundry-rs/foundry)
 RUST_LOG=debug forge create --private-key $PRIV_KEY --rpc-url "http://executor.astria.localdev.me" src/Storage.sol:Storage
 ```
 
