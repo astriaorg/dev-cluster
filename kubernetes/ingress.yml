@@ -3,15 +3,13 @@ kind: Ingress
 metadata:
   name: astria-dev-cluster-ingress
   namespace: astria-dev-cluster
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules: 
-  - host: astria.localdev.me
+  - host: executor.astria.localdev.me
     http:
       paths:
-        - pathType: Prefix
-          path: "/executor/(.*)"
+        - path: "/"
+          pathType: Prefix
           backend:
             service:
               name: astria-dev-cluster-service

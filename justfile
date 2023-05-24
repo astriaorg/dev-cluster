@@ -2,7 +2,7 @@ default:
   @just --list
 
 create-cluster:
-  kind create cluster --config ./kubernetes/astria-dev-cluster
+  kind create cluster --config ./kubernetes/kind-cluster-config.yml
 
 deploy-ingress-controller:
   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
