@@ -13,3 +13,6 @@ spec:
     - name: bridge-svc
       port: 26659
       targetPort: bridge-svc
+    - name: executor-svc
+      port: 8545
+      targetPort: executor-svc
