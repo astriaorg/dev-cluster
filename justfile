@@ -1,10 +1,7 @@
 default:
   @just --list
 
-kustomize:
-  kubectl kustomize ./kubernetes -o ./kubernetes/astria-dev-cluster.yml
-
-create-control-plane:
+create-cluster:
   kind create cluster --config ./kubernetes/kind-cluster-config.yml
 
 deploy-ingress-controller:
