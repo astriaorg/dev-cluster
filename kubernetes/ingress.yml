@@ -5,8 +5,7 @@ metadata:
   namespace: astria-dev-cluster
 spec:
   rules:
-  - host: executor.astria.localdev.me
-    http:
+  - http:
       paths:
         - path: "/"
           pathType: Prefix
