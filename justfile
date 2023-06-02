@@ -13,16 +13,8 @@ wait-for-ingress-controller:
 deploy-astria:
   kubectl apply -k kubernetes/
 
-cleanup-astria: delete-cluster delete-ingress delete-astria
-
-delete-cluster:
-  kind delete cluster --name astria-dev-cluster
-
-delete-ingress:
-  kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-
-delete-astria:
-  kubectl delete -k kubernetes/
+cleanup-astria:
+  kubectl delete all --all --namespace astria-dev-cluster
 
 # logs
 logs-nginx-controller:
