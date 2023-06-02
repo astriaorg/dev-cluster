@@ -13,6 +13,9 @@ wait-for-ingress-controller:
 deploy-astria:
   kubectl apply -k kubernetes/
 
+wait-for-astria:
+  kubectl get -n astria-dev-cluster pods --no-headers=true | awk '/deployment/{print $1}' | xargs -I{} kubectl wait --namespace astria-dev-cluster --for=condition=ready pod/{} --timeout=600s
+
 cleanup-astria:
   kubectl delete all --all --namespace astria-dev-cluster
 
