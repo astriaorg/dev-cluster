@@ -41,11 +41,20 @@ just deploy-astria
 
 ### Helpful commands
 
+The following commands are helpful for interacting with the cluster and its resources. These may be useful for debugging and development, but are not necessary for running the cluster.
+
 ```bash
-# logs
-just logs-nginx-controller
-just logs-astria
-just logs-container geth-executor
+# list all containers by name
+kubectl get -n astria-dev-cluster deployments/astria-dev-cluster-deployment -o json | jq -r ".spec.template.spec.containers[] | .name"
+
+# log the entire astria cluster
+kubectl logs  -n astria-dev-cluster -l app=astria-dev-cluster -f
+
+# log a specific container
+kubectl logs  -n astria-dev-cluster -l app=astria-dev-cluster -f --container CONTAINER_NAME
+
+# log nginx controller
+kubectl logs -n ingress-nginx -f deployment/ingress-nginx-controller
 
 # list nodes
 kubectl get -n astria-dev-cluster nodes
@@ -55,7 +64,7 @@ kubectl get --all-namespaces pods
 kubectl get -n astria-dev-cluster pods
 
 # delete cluster and resources
-just cleanup-astria
+just clean
 
 # example of deploying contract w/ forge (https://github.com/foundry-rs/foundry)
 RUST_LOG=debug forge create --private-key $PRIV_KEY --rpc-url "http://executor.astria.localdev.me" src/Storage.sol:Storage
