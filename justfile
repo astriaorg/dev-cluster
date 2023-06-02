@@ -1,7 +1,7 @@
 default:
   @just --list
 
-create-cluster:
+create-control-plane:
   kind create cluster --config ./kubernetes/kind-cluster-config.yml
 
 deploy-ingress-controller:
