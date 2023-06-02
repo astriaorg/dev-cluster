@@ -16,8 +16,8 @@ deploy-astria:
 wait-for-astria:
   kubectl wait -n astria-dev-cluster deployment astria-dev-cluster-deployment --for=condition=Available=True
 
-cleanup-astria:
-  kubectl delete all --all --namespace astria-dev-cluster
+clean:
+  kind delete cluster --name astria-dev-cluster
 
 # logs
 logs-nginx-controller:
