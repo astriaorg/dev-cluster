@@ -18,7 +18,3 @@ wait-for-astria:
 
 clean:
   kind delete cluster --name astria-dev-cluster
-
-logs-nginx-controller:
-  kubectl logs --selector app=ingress-nginx --namespace ingress-nginx --container controller -f
-  kubectl get -n ingress-nginx pods --no-headers=true | awk '/controller/{print $1}' | xargs kubectl logs -n ingress-nginx -f
