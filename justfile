@@ -14,7 +14,7 @@ deploy-astria:
   kubectl apply -k kubernetes/
 
 wait-for-astria:
-  kubectl wait -n astria-dev-cluster deployment astria-dev-cluster-deployment --for=condition=Available=True
+  kubectl wait -n astria-dev-cluster deployment astria-dev-cluster-deployment --for=condition=Available=True --timeout=600s
 
 clean:
   kind delete cluster --name astria-dev-cluster

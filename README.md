@@ -48,10 +48,10 @@ The following commands are helpful for interacting with the cluster and its reso
 kubectl get -n astria-dev-cluster deployments/astria-dev-cluster-deployment -o json | jq -r ".spec.template.spec.containers[] | .name"
 
 # log the entire astria cluster
-kubectl logs  -n astria-dev-cluster -l app=astria-dev-cluster -f
+kubectl logs -n astria-dev-cluster -l app=astria-dev-cluster -f
 
 # log a specific container
-kubectl logs  -n astria-dev-cluster -l app=astria-dev-cluster -f --container CONTAINER_NAME
+kubectl logs -n astria-dev-cluster -l app=astria-dev-cluster -f --container CONTAINER_NAME
 
 # log nginx controller
 kubectl logs -n ingress-nginx -f deployment/ingress-nginx-controller
