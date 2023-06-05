@@ -17,8 +17,8 @@ For contract deployment:
 ## Setup
 
 ```bash
-# create control cluster
-just create-cluster
+# create control plane cluster
+just create-control-plane
 
 # ingress
 just deploy-ingress-controller
