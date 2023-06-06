@@ -48,7 +48,7 @@ spec:
         - command:
           - /scripts/init-metro.sh
           name: init-metro
-          image: "ghcr.io/astriaorg/metro:0.0.3"
+          image: "ghcr.io/astriaorg/metro:0.0.4"
           volumeMounts:
             - mountPath: /scripts/
               name: metro-scripts-volume
@@ -124,7 +124,7 @@ spec:
               name: bridge-svc
         - name: metro-sequencer
           command: ["/scripts/start-metro.sh"]
-          image: "ghcr.io/astriaorg/metro:0.0.3"
+          image: "ghcr.io/astriaorg/metro:0.0.4"
           ports:
             - containerPort: 1318
               name: sequencer-svc
@@ -138,8 +138,8 @@ spec:
             - configMapRef:
                 name: metro-env
         - name: astria-sequencer-relayer
-          image: "ghcr.io/astriaorg/sequencer-relayer:0.0.4"
-          command: ["/usr/local/bin/relayer"]
+          image: "ghcr.io/astriaorg/astria-sequencer-relayer:0.0.5-local"
+          command: ["/usr/local/bin/astria-sequencer-relayer"]
           args:
             - "--sequencer-endpoint=http://localhost:1318"
             - "--celestia-endpoint=http://localhost:26659"
@@ -150,9 +150,9 @@ spec:
             - mountPath: /root/.metro
               name: metro-home-vol
               readOnly: true
-        - name: conductor
-          image: "ghcr.io/astriaorg/astria-conductor:0.0.4"
-          command: ["/usr/local/bin/conductor"]
+        - name: astria-conductor
+          image: "ghcr.io/astriaorg/astria-conductor:0.0.5-local"
+          command: ["/usr/local/bin/astria-conductor"]
           args:
             - "--tendermint-url=http://localhost:1318"
             - "--celestia-node-url=http://localhost:26659"
@@ -163,7 +163,7 @@ spec:
               name: conductor-home-vol
         - name: geth-executor
           command: ["/scripts/start-geth.sh"]
-          image: "ghcr.io/astriaorg/go-ethereum:0.0.3"
+          image: "ghcr.io/astriaorg/go-ethereum:pr-16"
           volumeMounts:
             - mountPath: /scripts/
               name: executor-scripts-volume
