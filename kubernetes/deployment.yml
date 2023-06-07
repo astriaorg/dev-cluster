@@ -48,7 +48,7 @@ spec:
         - command:
           - /scripts/init-metro.sh
           name: init-metro
-          image: "ghcr.io/astriaorg/metro:0.0.4"
+          image: "ghcr.io/astriaorg/metro:0.0.5"
           volumeMounts:
             - mountPath: /scripts/
               name: metro-scripts-volume
@@ -60,7 +60,7 @@ spec:
         - command:
           - /scripts/configure-geth.sh
           name: configure-geth
-          image: ghcr.io/astriaorg/go-ethereum:pr-16
+          image: "ghcr.io/astriaorg/go-ethereum:local-new-grpc"
           volumeMounts:
             - mountPath: /scripts/
               name: executor-scripts-volume
@@ -72,7 +72,7 @@ spec:
         - command:
           - /scripts/init-geth.sh
           name: init-geth
-          image: ghcr.io/astriaorg/go-ethereum:pr-16
+          image: "ghcr.io/astriaorg/go-ethereum:local-new-grpc"
           volumeMounts:
             - mountPath: /scripts/
               name: executor-scripts-volume
@@ -84,7 +84,7 @@ spec:
         - command:
           - /scripts/configure-metro.sh
           name: configure-metro
-          image: ghcr.io/tomwright/dasel:alpine
+          image: "ghcr.io/tomwright/dasel:alpine"
           envFrom:
             - configMapRef:
                 name: metro-env
@@ -124,7 +124,7 @@ spec:
               name: bridge-svc
         - name: metro-sequencer
           command: ["/scripts/start-metro.sh"]
-          image: "ghcr.io/astriaorg/metro:0.0.4"
+          image: "ghcr.io/astriaorg/metro:0.0.5"
           ports:
             - containerPort: 1318
               name: sequencer-svc
@@ -163,7 +163,7 @@ spec:
               name: conductor-home-vol
         - name: geth-executor
           command: ["/scripts/start-geth.sh"]
-          image: "ghcr.io/astriaorg/go-ethereum:pr-16"
+          image: "ghcr.io/astriaorg/go-ethereum:local-new-grpc"
           volumeMounts:
             - mountPath: /scripts/
               name: executor-scripts-volume
@@ -172,7 +172,6 @@ spec:
               name: executor-home-vol
             - mountPath: /root/.metro
               name: metro-home-vol
-              readOnly: true
           envFrom:
             - configMapRef:
                 name: geth-env
