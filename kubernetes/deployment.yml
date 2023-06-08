@@ -48,7 +48,7 @@ spec:
         - command:
           - /scripts/init-metro.sh
           name: init-metro
-          image: "ghcr.io/astriaorg/metro:0.0.5"
+          image: "ghcr.io/astriaorg/metro:0.0.6"
           volumeMounts:
             - mountPath: /scripts/
               name: metro-scripts-volume
@@ -124,7 +124,7 @@ spec:
               name: bridge-svc
         - name: metro-sequencer
           command: ["/scripts/start-metro.sh"]
-          image: "ghcr.io/astriaorg/metro:0.0.5"
+          image: "ghcr.io/astriaorg/metro:0.0.6"
           ports:
             - containerPort: 1318
               name: sequencer-svc
