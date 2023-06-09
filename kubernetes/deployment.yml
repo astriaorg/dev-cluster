@@ -138,7 +138,7 @@ spec:
             - configMapRef:
                 name: metro-env
         - name: astria-sequencer-relayer
-          image: "ghcr.io/astriaorg/astria-sequencer-relayer:0.0.5-local"
+          image: "ghcr.io/astriaorg/sequencer-relayer:0.0.5--sequencer-relayer"
           command: ["/usr/local/bin/astria-sequencer-relayer"]
           args:
             - "--sequencer-endpoint=http://localhost:1318"
@@ -151,7 +151,7 @@ spec:
               name: metro-home-vol
               readOnly: true
         - name: astria-conductor
-          image: "ghcr.io/astriaorg/astria-conductor:0.0.5-local"
+          image: "ghcr.io/astriaorg/conductor:0.0.5--conductor"
           command: ["/usr/local/bin/astria-conductor"]
           args:
             - "--tendermint-url=http://localhost:1318"
