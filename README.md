@@ -1,13 +1,14 @@
 # Astria Dev Cluster
 
-This repository contains configuration and related scripts for running Astria with Podman.
+This repository contains configuration and related scripts for running Astria with [`kind` (Kubernetes and Docker)](https://kind.sigs.k8s.io/).
 
 ## Dependencies
 
 Main dependencies
 
-* Rust - https://www.rust-lang.org/tools/install
-* Podman - https://podman.io/getting-started/installation
+* docker - https://docs.docker.com/get-docker/
+* kubectl - https://kubernetes.io/docs/tasks/tools/
+* kind - https://kind.sigs.k8s.io/docs/user/quick-start/#installation
 
 For contract deployment:
 
@@ -16,60 +17,62 @@ For contract deployment:
 ## Setup
 
 ```bash
-# init and start podman machine
-podman machine init
-podman machine start
+# create control plane cluster
+just create-control-plane
 
-# create template yaml
-# NOTE - replace the executor_local_account with your own account address
-podman run --rm \
-  -e pod_name=astria_stack \
-  -e celestia_home_volume=celestia-home-vol \
-  -e metro_home_volume=metro-home-vol \
-  -e executor_home_volume=executor-home-vol \
-  -e relayer_home_volume=relayer-home-vol \
-  -e conductor_home_volume=conductor-home-vol \
-  -e executor_local_account=0xb0E31D878F49Ec0403A25944d6B1aE1bf05D17E1 \
-  -e celestia_app_host_port=26657 \
-  -e bridge_host_port=26659 \
-  -e sequencer_host_port=1318 \
-  -e sequencer_host_grpc_port=9100 \
-  -e executor_host_http_port=8545 \
-  -e executor_host_grpc_port=50051 \
-  -e scripts_host_volume="$PWD"/container-scripts \
-  -v "$PWD"/templates:/data/templates \
-  dcagatay/j2cli:latest \
-  -o /data/templates/astria_stack.yaml \
-  /data/templates/astria_stack.yaml.jinja2
+# ingress
+just deploy-ingress-controller
 
-# run pod
-podman play kube --log-level=debug templates/astria_stack.yaml
+# wait for ingress.
+# NOTE: this may fail quickly with "error: no matching resources found".
+#  please retry the command
+just wait-for-ingress-controller
 
-# deploy test contract
-git clone https://github.com/joroshiba/test-contracts
-cd test-contracts
-export PRIV_KEY=123...
-RUST_LOG=debug forge create --private-key $PRIV_KEY src/Storage.sol:Storage
-
+# deploy
+just deploy-astria
 ```
+
+### Connecting Metamask
+* add custom network
+  * network name: `astria-local`
+  * rpc url: `http://executor.astria.localdev.me`
+  * chain id: `1337`
+  * currency symbol: `ETH`
 
 ### Helpful commands
 
+The following commands are helpful for interacting with the cluster and its resources. These may be useful for debugging and development, but are not necessary for running the cluster.
+
 ```bash
-# list running containers
-podman ps
+# list all containers by name
+kubectl get -n astria-dev-cluster deployments/astria-dev-cluster-deployment -o json | jq -r ".spec.template.spec.containers[] | .name"
 
-# stop running stack
-podman pod stop astria_stack
+# log the entire astria cluster
+kubectl logs -n astria-dev-cluster -l app=astria-dev-cluster -f
 
-# remove stack
-podman pod rm astria_stack
+# log a specific container
+kubectl logs -n astria-dev-cluster -l app=astria-dev-cluster -f --container CONTAINER_NAME
+
+# log nginx controller
+kubectl logs -n ingress-nginx -f deployment/ingress-nginx-controller
+
+# list nodes
+kubectl get -n astria-dev-cluster nodes
+
+# list pods
+kubectl get --all-namespaces pods
+kubectl get -n astria-dev-cluster pods
+
+# delete cluster and resources
+just clean
+
+# example of deploying contract w/ forge (https://github.com/foundry-rs/foundry)
+RUST_LOG=debug forge create --private-key $PRIV_KEY --rpc-url "http://executor.astria.localdev.me" src/Storage.sol:Storage
 ```
 
 ### Helpful links
 
-* https://podman.io/getting-started/
 * https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 * https://kubernetes.io/docs/concepts/configuration/configmap/
-* https://www.redhat.com/sysadmin/podman-play-kube-updates
-* https://www.redhat.com/sysadmin/podman-mac-machine-architecture
+* https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+* https://jamesdefabia.github.io/docs/user-guide/kubectl/kubectl_logs/

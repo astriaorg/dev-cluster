@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: astria-dev-cluster-ingress
+  namespace: astria-dev-cluster
+spec:
+  rules:
+  - host: executor.astria.localdev.me
+    http:
+      paths:
+        - path: "/"
+          pathType: Prefix
+          backend:
+            service:
+              name: astria-dev-cluster-service
+              port:
+                number: 8545
+---

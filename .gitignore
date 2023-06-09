@@ -21,6 +21,3 @@ ConductorConfig.toml
 # env
 .env
 tests/docker/.env
-
-# generated yaml
-/templates/astria_stack.yaml
