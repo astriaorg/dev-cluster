@@ -26,6 +26,6 @@ configMapGenerator:
 - name: executor-scripts
   namespace: astria-dev-cluster
   files:
-  - scripts/configure-geth.sh
+  - genesis/geth-genesis.json
   - scripts/init-geth.sh
   - scripts/start-geth.sh

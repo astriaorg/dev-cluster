@@ -36,7 +36,7 @@ just deploy-astria
 * add custom network
   * network name: `astria-local`
   * rpc url: `http://executor.astria.localdev.me`
-  * chain id: `1337`
+  * chain id: `912559`
   * currency symbol: `ETH`
 
 ### Helpful commands

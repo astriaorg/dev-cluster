@@ -58,18 +58,6 @@ spec:
             - configMapRef:
                 name: metro-env
         - command:
-          - /scripts/configure-geth.sh
-          name: configure-geth
-          image: "ghcr.io/astriaorg/go-ethereum:0.0.6"
-          volumeMounts:
-            - mountPath: /scripts/
-              name: executor-scripts-volume
-            - mountPath: /home/geth
-              name: executor-home-vol
-          envFrom:
-            - configMapRef:
-                name: geth-env
-        - command:
           - /scripts/init-geth.sh
           name: init-geth
           image: "ghcr.io/astriaorg/go-ethereum:0.0.6"
