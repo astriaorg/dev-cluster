@@ -49,7 +49,7 @@ spec:
               name: json-rpc-svc
             - containerPort: 50051
         - name: conductor
-          image: "ghcr.io/astriaorg/conductor:v0.0.6--conductor"
+          image: "ghcr.io/astriaorg/conductor:0.0.6--conductor"
           command: ["/usr/local/bin/astria-conductor"]
           args:
             - "--tendermint-url=http://sequencer-service:1318"
