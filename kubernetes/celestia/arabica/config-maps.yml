@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: celestia-env
+  namespace: astria-dev-cluster
+data:
+  home_dir: "/home/celestia"
+  gateway_port: "26659"
+  gateway_addr: "127.0.0.1"
+  core_ip: "consensus-full-arabica-8.celestia-arabica.com/"

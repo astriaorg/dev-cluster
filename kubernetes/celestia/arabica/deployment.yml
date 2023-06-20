@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celestia-local
+  labels:
+    app: astria-dev-cluster
+  namespace: astria-dev-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: astria-dev-cluster
+  template:
+    metadata:
+      name: celestia-light-arabica
+      labels:
+        app: astria-dev-cluster
+    spec:
+      containers:
+        - name: celestia-node
+          command:
+          - /scripts/start-node.sh
+          image: "ghcr.io/celestiaorg/celestia-node:v0.11.0-rc2"
+          volumeMounts:
+            - mountPath: /home/celestia
+              name: celestia-home-vol
+          envFrom:
+            - configMapRef:
+                name: celestia-env
+          ports:
+            - containerPort: 26659
+              name: node-svc
+      volumes:
+      - name: bridge-scripts-volume
+        configMap:
+          name: bridge-scripts
+          defaultMode: 0500
+      - emptyDir: {}
+        name: celestia-home-vol
+      - name: celestia-appd-scripts-volume
+        configMap:
+          name: celestia-appd-scripts
+          defaultMode: 0500

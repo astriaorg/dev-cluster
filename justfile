@@ -13,8 +13,10 @@ wait-for-ingress-controller:
 deploy-namespace:
   kubectl apply -f kubernetes/namespace.yml
 
-deploy-celestia-local:
-  kubectl apply -k kubernetes/celestia-local
+celestia-default: "local"
+
+deploy-celestia type=celestia_default:
+  kubectl apply -k kubernetes/celestia/{{type}}
 
 deploy-sequencer:
   kubectl apply -k kubernetes/sequencer
