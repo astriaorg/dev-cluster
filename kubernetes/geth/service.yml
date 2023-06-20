@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: evm-service
+  namespace: astria-dev-cluster
+spec:
+  selector:
+    app: astria-dev-cluster
+  ports:
+    - name: json-rpc-svc
+      port: 8545
+      targetPort: json-rpc-svc
+    - name: gossipnet
+      port: 33900
+      targetPort: gossipnet

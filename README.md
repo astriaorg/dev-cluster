@@ -16,6 +16,8 @@ For contract deployment:
 
 ## Setup
 
+In order to startup you will need to have docker running on your machine
+
 ```bash
 # create control plane cluster
 just create-control-plane
@@ -29,29 +31,41 @@ just deploy-ingress-controller
 just wait-for-ingress-controller
 
 # deploy
-just deploy-astria
+just deploy-astria-local
 ```
 
+### Configuring Funding of Geth
+
+By default running this local node will fund a wallet address `0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30` which you can add to your preferred wallet using the private key in `kubernetes/geth/key/private_key.txt`. This account should never be used for anything but test transactions.
+
+To change the wallet account which receives funds alter the `alloc` section of `kubernetes/geth/genesis/geth-genesis.json`
+
 ### Connecting Metamask
+
 * add custom network
   * network name: `astria-local`
   * rpc url: `http://executor.astria.localdev.me`
   * chain id: `912559`
   * currency symbol: `ETH`
 
+## Deployments and Containers
+
+| Deployment | Containers |
+| --- | --- |
+| `celestia-local` | celestia-app, celestia-bridge |
+| `sequencer` | metro, sequencer-relayer |
+| `geth` | geth, conductor |
+
 ### Helpful commands
 
 The following commands are helpful for interacting with the cluster and its resources. These may be useful for debugging and development, but are not necessary for running the cluster.
 
 ```bash
-# list all containers by name
-kubectl get -n astria-dev-cluster deployments/astria-dev-cluster-deployment -o json | jq -r ".spec.template.spec.containers[] | .name"
+# list all containers within a deployment
+kubectl get -n astria-dev-cluster deployments/DEPLOYMENT_NAME -o json | jq -r ".spec.template.spec.containers[] | .name"
 
 # log the entire astria cluster
 kubectl logs -n astria-dev-cluster -l app=astria-dev-cluster -f
-
-# log a specific container
-kubectl logs -n astria-dev-cluster -l app=astria-dev-cluster -f --container CONTAINER_NAME
 
 # log nginx controller
 kubectl logs -n ingress-nginx -f deployment/ingress-nginx-controller
@@ -62,6 +76,9 @@ kubectl get -n astria-dev-cluster nodes
 # list pods
 kubectl get --all-namespaces pods
 kubectl get -n astria-dev-cluster pods
+
+# to log a container you need to first grab the pod name from above
+kubectl logs -n astria-dev-cluster -c CONTAINER_NAME POD_NAME
 
 # delete cluster and resources
 just clean

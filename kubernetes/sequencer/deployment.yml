@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sequencer
+  labels:
+    app: astria-dev-cluster
+  namespace: astria-dev-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: astria-dev-cluster
+  template:
+    metadata:
+        name: metro-sequencer
+        labels:
+          app: astria-dev-cluster
+    spec:
+      initContainers:
+        - command:
+          - /scripts/init-metro.sh
+          name: init-metro
+          image: "ghcr.io/astriaorg/metro:0.0.6"
+          volumeMounts:
+            - mountPath: /scripts/
+              name: metro-scripts-volume
+            - mountPath: /home/metro
+              name: metro-home-vol
+          envFrom:
+            - configMapRef:
+                name: metro-env
+        - command:
+          - /scripts/configure-metro.sh
+          name: configure-metro
+          image: "ghcr.io/tomwright/dasel:alpine"
+          envFrom:
+            - configMapRef:
+                name: metro-env
+          volumeMounts:
+            - mountPath: /scripts/
+              name: metro-scripts-volume
+            - mountPath: /home/metro
+              name: metro-home-vol
+      containers:
+        - name: metro
+          command: ["/scripts/start-metro.sh"]
+          image: "ghcr.io/astriaorg/metro:0.0.6"
+          ports:
+            - containerPort: 1318
+              name: sequencer-svc
+            - containerPort: 9100
+              name: transaction-svc
+            - containerPort: 33900
+              name: gossipnet
+          volumeMounts:
+            - mountPath: /scripts/
+              name: metro-scripts-volume
+            - mountPath: /home/metro
+              name: metro-home-vol
+          envFrom:
+            - configMapRef:
+                name: metro-env
+        - name: sequencer-relayer
+          image: "ghcr.io/astriaorg/sequencer-relayer:v0.0.6--sequencer-relayer"
+          command: ["/usr/local/bin/astria-sequencer-relayer"]
+          args:
+            - "--sequencer-endpoint=http://localhost:1318"
+            - "--celestia-endpoint=http://celestia-service:26659"
+            - "--validator-key-file=/root/.metro/config/priv_validator_key.json"
+          volumeMounts:
+            - mountPath: /home/relayer
+              name: relayer-home-vol
+            - mountPath: /root/.metro
+              name: metro-home-vol
+              readOnly: true
+      volumes:
+      - name: metro-scripts-volume
+        configMap:
+          name: metro-scripts
+          defaultMode: 0500
+      - emptyDir: {}
+        name: metro-home-vol
+      - emptyDir: {}
+        name: relayer-home-vol

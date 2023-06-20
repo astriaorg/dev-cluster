@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: astria-dev-cluster
+resources:
+- config-maps.yml
+- deployment.yml
+- service.yml
+configMapGenerator:
+- name: executor-scripts
+  namespace: astria-dev-cluster
+  files:
+  - genesis/geth-genesis.json
+  - scripts/init-geth.sh
+  - scripts/start-geth.sh

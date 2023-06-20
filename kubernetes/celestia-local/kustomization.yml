@@ -5,14 +5,7 @@ resources:
 - config-maps.yml
 - deployment.yml
 - service.yml
-- ingress.yml
 configMapGenerator:
-- name: metro-scripts
-  namespace: astria-dev-cluster
-  files:
-  - scripts/configure-metro.sh
-  - scripts/init-metro.sh
-  - scripts/start-metro.sh
 - name: celestia-appd-scripts
   namespace: astria-dev-cluster
   files:
@@ -23,9 +16,3 @@ configMapGenerator:
   files:
   - scripts/init-bridge.sh
   - scripts/start-bridge.sh
-- name: executor-scripts
-  namespace: astria-dev-cluster
-  files:
-  - genesis/geth-genesis.json
-  - scripts/init-geth.sh
-  - scripts/start-geth.sh

@@ -12,7 +12,6 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: astria-dev-cluster-service
+              name: evm-service
               port:
-                number: 8545
----
+                name: json-rpc-svc

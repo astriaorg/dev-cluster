@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: astria-dev-cluster-service
+  name: sequencer-service
   namespace: astria-dev-cluster
 spec:
   selector:
@@ -10,10 +10,9 @@ spec:
     - name: sequencer-svc
       port: 1318
       targetPort: sequencer-svc
-    - name: bridge-svc
-      port: 26659
-      targetPort: bridge-svc
-    - name: executor-svc
-      port: 8545
-      targetPort: executor-svc
----
+    - name: transaction-svc
+      port: 9100
+      targetPort: transaction-svc
+    - name: gossipnet
+      port: 33900
+      targetPort: gossipnet
