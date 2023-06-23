@@ -36,9 +36,9 @@ just deploy-astria-local
 
 ### Configuring Funding of Geth
 
-By default running this local node will fund a wallet address `0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30` which you can add to your preferred wallet using the private key in `kubernetes/geth/key/private_key.txt`. This account should never be used for anything but test transactions.
+By default, running this local node will fund a wallet address `0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30`, which you can add to your preferred wallet using the private key in `kubernetes/geth/key/private_key.txt`. This account should never be used for anything but test transactions.
 
-To change the wallet account which receives funds alter the `alloc` section of `kubernetes/geth/genesis/geth-genesis.json`
+To change the wallet account which receives funds, alter the `alloc` section of `kubernetes/geth/genesis/geth-genesis.json`
 
 ### Connecting Metamask
 
