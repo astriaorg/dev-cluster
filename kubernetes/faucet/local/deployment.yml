@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: faucet
+  labels:
+    app: astria-dev-cluster
+  namespace: astria-dev-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: astria-dev-cluster
+  template:
+    metadata:
+      name: faucet-local
+      labels:
+        app: astria-dev-cluster
+    spec:
+      containers:
+        - name: faucet
+          command: [ "/scripts/start-faucet.sh" ]
+          image: "ghcr.io/astriaorg/ria-faucet:0.0.1"
+          volumeMounts:
+            - mountPath: /scripts/
+              name: faucet-scripts-volume
+              readOnly: true
+            - mountPath: /home/faucet
+              name: faucet-home-vol
+          envFrom:
+            - configMapRef:
+                name: faucet-env
+          ports:
+            - containerPort: 8080
+              name: faucet-svc
+      volumes:
+        - name: faucet-scripts-volume
+          configMap:
+            name: faucet-scripts
+            defaultMode: 0500
+        - emptyDir: { }
+          name: faucet-home-vol

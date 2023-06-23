@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: faucet-env
+  namespace: astria-dev-cluster
+data:
+  private_key: "0x8b3a7999072c9c9314c084044fe705db11714c6c4ed7cddb64da18ea270dd203"
+  rpc_url: "http://executor.astria.localdev.me"

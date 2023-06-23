@@ -22,6 +22,11 @@ deploy-sequencer:
 deploy-geth:
   kubectl apply -k kubernetes/geth
 
+faucet-default := 'local'
+
+deploy-faucet type=faucet-default:
+  kubectl apply -k kubernetes/faucet/{{type}}
+
 deploy-ingress-local:
   kubectl apply -f kubernetes/local-ingress.yml
 
