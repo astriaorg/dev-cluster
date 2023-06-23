@@ -19,7 +19,8 @@ spec:
       containers:
         - name: faucet
           command: [ "/scripts/start-faucet.sh" ]
-          image: "ghcr.io/astriaorg/ria-faucet:0.0.1"
+          # TODO - use 0.0.1 after eth-faucet is tagged
+          image: "ghcr.io/astriaorg/ria-faucet:latest"
           volumeMounts:
             - mountPath: /scripts/
               name: faucet-scripts-volume
