@@ -50,7 +50,7 @@ To change the wallet account which receives funds alter the `alloc` section of `
 
 ### Faucet
 
-* The faucet is reachable at http://faucet.astria.localdev.me
+* The faucet is reachable at http://executor.astria.localdev.me/faucet
 
 ## Deployments and Containers
 
