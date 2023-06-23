@@ -15,7 +15,7 @@ deploy-namespace:
 
 celestia-default := 'local'
 
-deploy-celestia type=celestia_default:
+deploy-celestia type=celestia-default:
   kubectl apply -k kubernetes/celestia/{{type}}
 
 deploy-sequencer:
