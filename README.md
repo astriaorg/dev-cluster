@@ -32,6 +32,9 @@ just wait-for-ingress-controller
 
 # deploy
 just deploy-astria-local
+
+# deploy faucet (optional)
+just deploy-faucet
 ```
 
 ### Configuring Funding of Geth
@@ -43,18 +46,23 @@ To change the wallet account which receives funds alter the `alloc` section of `
 ### Connecting Metamask
 
 * add custom network
-  * network name: `astria-local`
-  * rpc url: `http://executor.astria.localdev.me`
-  * chain id: `912559`
-  * currency symbol: `ETH`
+    * network name: `astria-local`
+    * rpc url: `http://executor.astria.localdev.me`
+    * chain id: `912559`
+    * currency symbol: `ETH`
+
+### Faucet
+
+* If deployed, the faucet is reachable at http://faucet.astria.localdev.me
 
 ## Deployments and Containers
 
-| Deployment | Containers |
-| --- | --- |
+| Deployment       | Containers                    |
+|------------------|-------------------------------|
 | `celestia-local` | celestia-app, celestia-bridge |
-| `sequencer` | metro, sequencer-relayer |
-| `geth` | geth, conductor |
+| `sequencer`      | metro, sequencer-relayer      |
+| `geth`           | geth, conductor               |
+| `faucet`         | faucet                        |
 
 ### Helpful commands
 
