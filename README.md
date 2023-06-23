@@ -32,9 +32,6 @@ just wait-for-ingress-controller
 
 # deploy
 just deploy-astria-local
-
-# deploy faucet (optional)
-just deploy-faucet
 ```
 
 ### Configuring Funding of Geth
@@ -53,7 +50,7 @@ To change the wallet account which receives funds alter the `alloc` section of `
 
 ### Faucet
 
-* If deployed, the faucet is reachable at http://faucet.astria.localdev.me
+* The faucet is reachable at http://faucet.astria.localdev.me
 
 ## Deployments and Containers
 
