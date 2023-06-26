@@ -42,7 +42,7 @@ To change the wallet account which receives funds, alter the `alloc` section of 
 
 ### Faucet
 
-The faucet is reachable at http://executor.astria.localdev.me/faucet. 
+The faucet is reachable at http://faucet.astria.localdev.me. 
 
 By default, the faucet is funded by the account that is funded during geth genesis. This is configured by using the private key of the funded account in `start-faucet.sh`. This key is defined in `kubernetes/faucet/config-maps.yml` and is identical to the key in `kubernetes/geth/key/private_key.txt`.
 
