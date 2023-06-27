@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: faucet-service
+  namespace: astria-dev-cluster
+spec:
+  selector:
+    app: astria-dev-cluster
+  ports:
+    - name: faucet-svc-port
+      port: 8080
+      targetPort: faucet-svc

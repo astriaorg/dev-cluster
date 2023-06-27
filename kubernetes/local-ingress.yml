@@ -5,13 +5,23 @@ metadata:
   namespace: astria-dev-cluster
 spec:
   rules:
-  - host: executor.astria.localdev.me
-    http:
-      paths:
-        - path: "/"
-          pathType: Prefix
-          backend:
-            service:
-              name: evm-service
-              port:
-                name: json-rpc-svc
+    - host: executor.astria.localdev.me
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: evm-service
+                port:
+                  name: json-rpc-svc
+    - host: faucet.astria.localdev.me
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: faucet-service
+                port:
+                  name: faucet-svc
