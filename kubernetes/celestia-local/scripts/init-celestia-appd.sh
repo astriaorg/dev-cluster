@@ -2,9 +2,11 @@
 
 set -o errexit -o nounset
 
+# FIXME - why is --overwrite needed now? did celestia-app change how it handles genesis.json creation?
 celestia-appd init "$chainid" \
   --chain-id "$chainid" \
-  --home "$home_dir"
+  --home "$home_dir" \
+  --overwrite
 
 celestia-appd keys add \
   "$validator_key_name" \

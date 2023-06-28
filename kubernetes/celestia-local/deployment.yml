@@ -17,10 +17,13 @@ spec:
         app: astria-dev-cluster
     spec:
       initContainers:
-        - command:
-          - /scripts/init-celestia-appd.sh
-          name: init-celestia-app
-          image: "ghcr.io/astriaorg/celestia-app:v0.11.0"
+        - name: init-celestia-app
+#          securityContext:
+#            # `celestia` user as defined in the Dockerfile for celestia-app
+#            runAsUser: 10001
+#            runAsGroup: 10001
+          command: [ "/scripts/init-celestia-appd.sh" ]
+          image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc5"
           volumeMounts:
             - mountPath: /scripts/
               name: celestia-appd-scripts-volume
@@ -29,10 +32,13 @@ spec:
           envFrom:
             - configMapRef:
                 name: celestia-env
-        - command:
-          - /scripts/init-bridge.sh
-          name: init-bridge
-          image: "ghcr.io/astriaorg/celestia-node:test-sha-07fa3e7"
+        - name: init-bridge
+#          securityContext:
+#            # `celestia` user as defined in the Dockerfile for celestia-node
+#            runAsUser: 10001
+#            runAsGroup: 10001
+          command: [ "/scripts/init-bridge.sh" ]
+          image: "ghcr.io/astriaorg/celestia-node:v0.11.0-rc5"
           volumeMounts:
             - mountPath: /scripts/
               name: bridge-scripts-volume
@@ -43,8 +49,12 @@ spec:
                 name: celestia-env
       containers:
         - name: celestia-app
-          command: ["/scripts/start-celestia-appd.sh"]
-          image: "ghcr.io/astriaorg/celestia-app:v0.11.0"
+#          securityContext:
+#            # `celestia` user as defined in the Dockerfile for celestia-app
+#            runAsUser: 10001
+#            runAsGroup: 10001
+          command: [ "/scripts/start-celestia-appd.sh" ]
+          image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc5"
           envFrom:
             - configMapRef:
                 name: celestia-env
@@ -56,9 +66,12 @@ spec:
           ports:
             - containerPort: 26657
         - name: celestia-bridge
-          command:
-          - /scripts/start-bridge.sh
-          image: "ghcr.io/astriaorg/celestia-node:test-sha-07fa3e7"
+#          securityContext:
+#            # `celestia` user as defined in the Dockerfile for celestia-node
+#            runAsUser: 10001
+#            runAsGroup: 10001
+          command: [ "/scripts/start-bridge.sh" ]
+          image: "ghcr.io/astriaorg/celestia-node:v0.11.0-rc5"
           volumeMounts:
             - mountPath: /scripts/
               name: bridge-scripts-volume
@@ -71,13 +84,15 @@ spec:
             - containerPort: 26659
               name: node-svc
       volumes:
-      - name: bridge-scripts-volume
-        configMap:
-          name: bridge-scripts
-          defaultMode: 0500
-      - emptyDir: {}
-        name: celestia-home-vol
-      - name: celestia-appd-scripts-volume
-        configMap:
-          name: celestia-appd-scripts
-          defaultMode: 0500
+        - name: bridge-scripts-volume
+          configMap:
+            name: bridge-scripts
+            # FIXME - ideally this is 0500 or 0550, but i couldn't get runAsUser to work
+            defaultMode: 0777
+        - emptyDir: { }
+          name: celestia-home-vol
+        - name: celestia-appd-scripts-volume
+          configMap:
+            name: celestia-appd-scripts
+            # FIXME - ideally this is 0500 or 0550, but i couldn't get runAsUser to work
+            defaultMode: 0777
