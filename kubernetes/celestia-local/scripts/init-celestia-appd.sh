@@ -27,3 +27,6 @@ celestia-appd gentx \
   --evm-address "$evm_address"
 
 celestia-appd collect-gentxs --home "$home_dir"
+
+# update timeout_propose in config.toml
+sed -i'.bak' 's/timeout_propose = "10s"/timeout_propose = "1s"/g' $home_dir/config/config.toml
