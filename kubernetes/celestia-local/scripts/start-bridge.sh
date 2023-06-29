@@ -14,7 +14,7 @@ fi
 export CELESTIA_CUSTOM="test:$genesis_hash"
   # --p2p.network "test:$celestia_custom"
 export GOLOG_LOG_LEVEL="debug"
-exec ./celestia bridge start \
+exec celestia bridge start \
   --node.store "$home_dir/bridge" \
   --gateway \
   --keyring.accname "$validator_key_name"

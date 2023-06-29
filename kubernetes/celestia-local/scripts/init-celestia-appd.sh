@@ -5,8 +5,7 @@ set -o errexit -o nounset
 rm -rf "$home_dir/config/*"
 celestia-appd init "$chainid" \
   --chain-id "$chainid" \
-  --home "$home_dir" \
-  --overwrite
+  --home "$home_dir"
 
 celestia-appd keys add \
   "$validator_key_name" \
