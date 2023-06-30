@@ -14,7 +14,12 @@ fi
 export CELESTIA_CUSTOM="test:$genesis_hash"
   # --p2p.network "test:$celestia_custom"
 export GOLOG_LOG_LEVEL="debug"
+
 exec celestia bridge start \
   --node.store "$home_dir/bridge" \
+  --core.ip 127.0.0.1 \
+  --core.rpc.port "$celestia_app_host_port" \
   --gateway \
+  --gateway.port "$bridge_host_port" \
+  --gateway.deprecated-endpoints \
   --keyring.accname "$validator_key_name"
