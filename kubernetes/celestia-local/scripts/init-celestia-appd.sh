@@ -2,7 +2,9 @@
 
 set -o errexit -o nounset
 
+# start with clean config directory.
 rm -rf "$home_dir/config/*"
+
 celestia-appd init "$chainid" \
   --chain-id "$chainid" \
   --home "$home_dir"
