@@ -15,5 +15,6 @@ data:
   home_dir: "/home/geth"
   executor_host_http_port: "8545"
   executor_host_grpc_port: "50051"
+  executor_host_ws_port: "8546"
   sequencer_host_grpc_port: "9100"
 ---
