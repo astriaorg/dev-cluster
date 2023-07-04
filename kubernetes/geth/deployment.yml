@@ -47,6 +47,8 @@ spec:
           ports:
             - containerPort: 8545
               name: json-rpc-svc
+            - containerPort: 8546
+              name: ws-rpc-svc
             - containerPort: 50051
         - name: conductor
           image: "ghcr.io/astriaorg/conductor:0.0.6--conductor"

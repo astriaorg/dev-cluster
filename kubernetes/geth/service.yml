@@ -10,6 +10,9 @@ spec:
     - name: json-rpc-svc
       port: 8545
       targetPort: json-rpc-svc
+    - name: ws-rpc-svc
+      port: 8546
+      targetPort: ws-rpc-svc
     - name: gossipnet
       port: 33900
       targetPort: gossipnet

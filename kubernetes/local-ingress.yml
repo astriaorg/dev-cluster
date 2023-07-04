@@ -15,6 +15,13 @@ spec:
                 name: evm-service
                 port:
                   name: json-rpc-svc
+          - path: "/ws"
+            pathType: Prefix
+            backend:
+              service:
+                name: evm-service
+                port:
+                  name: ws-rpc-svc
     - host: faucet.astria.localdev.me
       http:
         paths:
