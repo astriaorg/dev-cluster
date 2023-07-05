@@ -23,7 +23,7 @@ spec:
 #            runAsUser: 10001
 #            runAsGroup: 10001
           command: [ "/scripts/init-celestia-appd.sh" ]
-          image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc5"
+          image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc7"
           volumeMounts:
             - mountPath: /scripts/
               name: celestia-appd-scripts-volume
@@ -38,7 +38,7 @@ spec:
 #            runAsUser: 10001
 #            runAsGroup: 10001
           command: [ "/scripts/init-bridge.sh" ]
-          image: "ghcr.io/astriaorg/celestia-node:v0.11.0-rc5"
+          image: "ghcr.io/astriaorg/celestia-node:v0.11.0-rc6"
           volumeMounts:
             - mountPath: /scripts/
               name: bridge-scripts-volume
@@ -54,7 +54,7 @@ spec:
 #            runAsUser: 10001
 #            runAsGroup: 10001
           command: [ "/scripts/start-celestia-appd.sh" ]
-          image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc5"
+          image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc7"
           envFrom:
             - configMapRef:
                 name: celestia-env
@@ -71,7 +71,7 @@ spec:
 #            runAsUser: 10001
 #            runAsGroup: 10001
           command: [ "/scripts/start-bridge.sh" ]
-          image: "ghcr.io/astriaorg/celestia-node:v0.11.0-rc5"
+          image: "ghcr.io/astriaorg/celestia-node:v0.11.0-rc6"
           volumeMounts:
             - mountPath: /scripts/
               name: bridge-scripts-volume
