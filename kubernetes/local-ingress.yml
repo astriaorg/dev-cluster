@@ -49,3 +49,13 @@ spec:
                 name: celestia-service
                 port:
                   name: token-svc
+    - host: blockscout.astria.localdev.me
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: blockscout-service
+                port:
+                  name: blockscout-svc

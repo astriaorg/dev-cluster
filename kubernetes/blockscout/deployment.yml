@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blockscout
+  labels:
+    app: astria-dev-cluster
+  namespace: astria-dev-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: astria-dev-cluster
+  template:
+    metadata:
+      name: blockscout-local
+      labels:
+        app: astria-dev-cluster
+    spec:
+      containers:
+        - name: blockscout
+          command: ["bash"]
+          args:
+            - -c
+            - bin/blockscout eval "Elixir.Explorer.ReleaseTasks.create_and_migrate()" && bin/blockscout start
+          image: blockscout/blockscout:5.1.0
+          volumeMounts:
+            - mountPath: /app/logs
+              name: blockscout-logs-vol
+          envFrom:
+            - configMapRef:
+                name: blockscout-env
+          ports:
+            - containerPort: 4000
+              name: blockscout-svc
+        - name: postgres
+          command: ["postgres"]
+          args:
+            - -c
+            - max_connections=200
+          env:
+            - name: POSTGRES_HOST_AUTH_METHOD
+              value: trust
+            - name: POSTGRES_PASSWORD
+            - name: POSTGRES_USER
+              value: postgres
+          image: postgres:14
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-vol
+        - name: redis
+          command: ["redis-server"]
+          image: redis:alpine  
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - mountPath: /data
+              name: redis-vol
+        - name: sig-provider
+          image: ghcr.io/blockscout/sig-provider:main
+          ports:
+            - containerPort: 8050
+        - name: smart-contract-verifier
+          image: ghcr.io/blockscout/smart-contract-verifier:main
+          envFrom:
+            - configMapRef:
+                name: smart-contract-verifier-env
+          ports:
+            - containerPort: 8150
+        - name: visualizer
+          image: ghcr.io/blockscout/visualizer:main
+          envFrom:
+            - configMapRef:
+                name: visualizer-env
+          ports:
+            - containerPort: 8151
+      volumes:
+        - emptyDir: {}
+          name: blockscout-logs-vol
+        - emptyDir: {}
+          name: postgres-vol
+        - emptyDir: {}
+          name: redis-vol
+        
