@@ -22,7 +22,7 @@ spec:
           args:
             - -c
             - bin/blockscout eval "Elixir.Explorer.ReleaseTasks.create_and_migrate()" && bin/blockscout start
-          image: blockscout/blockscout:5.1.0
+          image: docker.io/blockscout/blockscout:5.1.0
           volumeMounts:
             - mountPath: /app/logs
               name: blockscout-logs-vol
@@ -33,7 +33,7 @@ spec:
             - containerPort: 4000
               name: blockscout-svc
         - name: postgres
-          command: ["postgres"]
+          command: ["docker-entrypoint.sh"]
           args:
             - -c
             - max_connections=200
@@ -43,7 +43,34 @@ spec:
             - name: POSTGRES_PASSWORD
             - name: POSTGRES_USER
               value: postgres
-          image: postgres:14
+          image: docker.io/library/postgres:14
+          readinessProbe:
+            exec:
+              command:
+                - "psql"
+                - "-w"
+                - "-U"
+                - "postgres"
+                - "-d"
+                - "postgres"
+                - "-c"
+                - "SELECT 1"
+            initialDelaySeconds: 15
+            timeoutSeconds: 2
+          livenessProbe:
+            exec:
+              command:
+                - "psql"
+                - "-w"
+                - "postgres"
+                - "-U"
+                - "postgres"
+                - "-d"
+                - "postgres"
+                - "-c"
+                - "SELECT 1"
+            initialDelaySeconds: 45
+            timeoutSeconds: 2
           ports:
             - containerPort: 5432
           volumeMounts:
@@ -51,7 +78,7 @@ spec:
               name: postgres-vol
         - name: redis
           command: ["redis-server"]
-          image: redis:alpine  
+          image: docker.io/library/redis:alpine 
           ports:
             - containerPort: 6379
           volumeMounts:
@@ -59,10 +86,12 @@ spec:
               name: redis-vol
         - name: sig-provider
           image: ghcr.io/blockscout/sig-provider:main
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8050
         - name: smart-contract-verifier
           image: ghcr.io/blockscout/smart-contract-verifier:main
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: smart-contract-verifier-env
@@ -70,6 +99,7 @@ spec:
             - containerPort: 8150
         - name: visualizer
           image: ghcr.io/blockscout/visualizer:main
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: visualizer-env
