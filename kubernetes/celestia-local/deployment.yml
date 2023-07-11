@@ -16,6 +16,10 @@ spec:
       labels:
         app: astria-dev-cluster
     spec:
+      securityContext:
+        runAsUser: 10001
+        fsGroup: 10001
+        fsGroupChangePolicy: "OnRootMismatch"
       initContainers:
         - name: init-celestia-app
           command: [ "/scripts/init-celestia-appd.sh" ]
@@ -66,17 +70,27 @@ spec:
                 name: celestia-env
           ports:
             - containerPort: 26659
-              name: node-svc
+              name: bridge-rest
+          startupProbe:
+            httpGet:
+              path: /header/1
+              port: bridge-rest
+            failureThreshold: 30
+            periodSeconds: 10
+          lifecycle:
+            postStart:
+              exec:
+                command: [ "/scripts/generate-token.sh" ]
       volumes:
         - name: bridge-scripts-volume
           configMap:
             name: bridge-scripts
             # FIXME - ideally this is 0500 or 0550, but i couldn't get runAsUser to work
-            defaultMode: 0777
+            defaultMode: 0550
         - emptyDir: { }
           name: celestia-home-vol
         - name: celestia-appd-scripts-volume
           configMap:
             name: celestia-appd-scripts
             # FIXME - ideally this is 0500 or 0550, but i couldn't get runAsUser to work
-            defaultMode: 0777
+            defaultMode: 0550
