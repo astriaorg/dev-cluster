@@ -7,6 +7,9 @@ spec:
   selector:
     app: astria-dev-cluster
   ports:
-    - name: node-svc
+    - name: bridge-rest
       port: 26659
-      targetPort: node-svc
+      targetPort: bridge-rest
+    - name: bridge-jsonrpc
+      port: 26658
+      targetPort: bridge-jsonrpc
