@@ -56,6 +56,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: blockscout-service
+                name: blockscout-svc
                 port:
-                  name: blockscout-svc
+                  name: blockscout

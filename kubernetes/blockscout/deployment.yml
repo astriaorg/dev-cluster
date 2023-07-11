@@ -31,7 +31,7 @@ spec:
                 name: blockscout-env
           ports:
             - containerPort: 4000
-              name: blockscout-svc
+              name: blockscout
         - name: postgres
           command: ["docker-entrypoint.sh"]
           args:
@@ -44,33 +44,6 @@ spec:
             - name: POSTGRES_USER
               value: postgres
           image: docker.io/library/postgres:14
-          readinessProbe:
-            exec:
-              command:
-                - "psql"
-                - "-w"
-                - "-U"
-                - "postgres"
-                - "-d"
-                - "postgres"
-                - "-c"
-                - "SELECT 1"
-            initialDelaySeconds: 15
-            timeoutSeconds: 2
-          livenessProbe:
-            exec:
-              command:
-                - "psql"
-                - "-w"
-                - "postgres"
-                - "-U"
-                - "postgres"
-                - "-d"
-                - "postgres"
-                - "-c"
-                - "SELECT 1"
-            initialDelaySeconds: 45
-            timeoutSeconds: 2
           ports:
             - containerPort: 5432
           volumeMounts:
@@ -85,21 +58,18 @@ spec:
             - mountPath: /data
               name: redis-vol
         - name: sig-provider
-          image: ghcr.io/blockscout/sig-provider:main
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/blockscout/sig-provider:latest@sha256:ae371ce8d0a20993bf61ca81b3394416f4778c9edd398250fd4d81a8d6820950
           ports:
             - containerPort: 8050
         - name: smart-contract-verifier
-          image: ghcr.io/blockscout/smart-contract-verifier:main
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/blockscout/smart-contract-verifier:v1.3.0@sha256:f07b2d874c28d45f5ba81f297c868a746a03771e8b6d9b8e96f0eba0beeb1016
           envFrom:
             - configMapRef:
                 name: smart-contract-verifier-env
           ports:
             - containerPort: 8150
         - name: visualizer
-          image: ghcr.io/blockscout/visualizer:main
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/blockscout/visualizer:v0.2.0@sha256:99479da126248e0aba5c32b1e32625f8c527b72924f55cb510b50e5f854b2d15
           envFrom:
             - configMapRef:
                 name: visualizer-env
