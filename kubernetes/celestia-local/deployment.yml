@@ -30,7 +30,7 @@ spec:
                 name: celestia-env
         - name: init-bridge
           command: [ "/scripts/init-bridge.sh" ]
-          image: "ghcr.io/astriaorg/celestia-node:v0.11.0-rc6"
+          image: "ghcr.io/astriaorg/test-images-celestia-node:v0.11.0-rc7"
           volumeMounts:
             - mountPath: /scripts/
               name: bridge-scripts-volume
@@ -55,7 +55,7 @@ spec:
             - containerPort: 26657
         - name: celestia-bridge
           command: [ "/scripts/start-bridge.sh" ]
-          image: "ghcr.io/astriaorg/celestia-node:v0.11.0-rc6"
+          image: "ghcr.io/astriaorg/test-images-celestia-node:v0.11.0-rc7"
           volumeMounts:
             - mountPath: /scripts/
               name: bridge-scripts-volume
