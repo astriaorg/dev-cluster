@@ -85,12 +85,10 @@ spec:
         - name: bridge-scripts-volume
           configMap:
             name: bridge-scripts
-            # FIXME - ideally this is 0500 or 0550, but i couldn't get runAsUser to work
             defaultMode: 0550
         - emptyDir: { }
           name: celestia-home-vol
         - name: celestia-appd-scripts-volume
           configMap:
             name: celestia-appd-scripts
-            # FIXME - ideally this is 0500 or 0550, but i couldn't get runAsUser to work
             defaultMode: 0550
