@@ -27,6 +27,9 @@ faucet-default := 'local'
 deploy-faucet type=faucet-default:
   kubectl apply -k kubernetes/faucet/{{type}}
 
+deploy-blockscout:
+  kubectl apply -k kubernetes/blockscout
+
 deploy-ingress-local:
   kubectl apply -f kubernetes/local-ingress.yml
 

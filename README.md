@@ -69,9 +69,6 @@ By default, the faucet is funded by the account that is funded during geth genes
 The following commands are helpful for interacting with the cluster and its resources. These may be useful for debugging and development, but are not necessary for running the cluster.
 
 ```bash
-# list all containers within a deployment
-kubectl get -n astria-dev-cluster deployments/DEPLOYMENT_NAME -o json | jq -r ".spec.template.spec.containers[] | .name"
-
 # log the entire astria cluster
 kubectl logs -n astria-dev-cluster -l app=astria-dev-cluster -f
 
@@ -84,6 +81,9 @@ kubectl get -n astria-dev-cluster nodes
 # list pods
 kubectl get --all-namespaces pods
 kubectl get -n astria-dev-cluster pods
+
+# list all containers within a pod
+kubectl get -n astria-dev-cluster POD_NAME -o jsonpath='{.spec.containers[*].name}'
 
 # to log a container you need to first grab the pod name from above
 kubectl logs -n astria-dev-cluster -c CONTAINER_NAME POD_NAME
