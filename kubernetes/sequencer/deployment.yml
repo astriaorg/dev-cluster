@@ -79,9 +79,9 @@ spec:
         configMap:
           name: metro-scripts
           defaultMode: 0500
-      - emptyDir: {}
-        name: metro-home-vol
       - name: relayer-home-vol
         configMap:
           name: relayer-files
           defaultMode: 0500
+      - emptyDir: {}
+        name: metro-home-vol
