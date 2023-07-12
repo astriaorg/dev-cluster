@@ -11,10 +11,6 @@ else
   echo "genesis hash received: $genesis_hash"
 fi
 
-export CELESTIA_CUSTOM="test:$genesis_hash"
-  # --p2p.network "test:$celestia_custom"
-export GOLOG_LOG_LEVEL="debug"
-
 # NOTE - this is a hack to get the token to the token-server.
 # busybox's httpd doesn't support url rewriting, so to make
 # the ingress rule path `/` we write the token to index.html
@@ -23,6 +19,10 @@ TOKEN=$(celestia bridge auth admin \
   --keyring.accname validator)
 mkdir -p "$home_dir"/token-server
 echo "$TOKEN" > "$home_dir"/token-server/index.html
+
+export CELESTIA_CUSTOM="test:$genesis_hash"
+  # --p2p.network "test:$celestia_custom"
+export GOLOG_LOG_LEVEL="debug"
 
 exec celestia bridge start \
   --node.store "$home_dir/bridge" \

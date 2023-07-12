@@ -79,10 +79,6 @@ spec:
               port: bridge-rest
             failureThreshold: 30
             periodSeconds: 10
-          lifecycle:
-            postStart:
-              exec:
-                command: [ "/scripts/generate-token.sh" ]
         - name: token-server
           image: "busybox:1.35.0-musl"
           command: [ "/bin/httpd", "-v", "-f", "-p", "5353", "-h", "/home/celestia/token-server/" ]
