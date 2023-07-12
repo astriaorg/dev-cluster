@@ -95,7 +95,7 @@ kubectl get --all-namespaces pods
 kubectl get -n astria-dev-cluster pods
 
 # list all containers within a pod
-kubectl get -n astria-dev-cluster POD_NAME  -o jsonpath='{.spec.containers[*].name}'
+kubectl get -n astria-dev-cluster POD_NAME -o jsonpath='{.spec.containers[*].name}'
 
 # to log a container you need to first grab the pod name from above
 kubectl logs -n astria-dev-cluster -c CONTAINER_NAME POD_NAME

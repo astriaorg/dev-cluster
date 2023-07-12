@@ -82,4 +82,3 @@ spec:
           name: postgres-vol
         - emptyDir: {}
           name: redis-vol
-        
