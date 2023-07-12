@@ -16,4 +16,3 @@ configMapGenerator:
   files:
   - scripts/init-bridge.sh
   - scripts/start-bridge.sh
-  - scripts/generate-token.sh
