@@ -61,12 +61,13 @@ spec:
             - configMapRef:
                 name: metro-env
         - name: sequencer-relayer
-          image: "ghcr.io/astriaorg/sequencer-relayer:0.0.6--sequencer-relayer"
+          image: "ghcr.io/astriaorg/sequencer-relayer:pr-155
           command: ["/usr/local/bin/astria-sequencer-relayer"]
           args:
             - "--sequencer-endpoint=http://localhost:1318"
             - "--celestia-endpoint=http://celestia-service:26659"
             - "--validator-key-file=/root/.metro/config/priv_validator_key.json"
+            --"--libp2p-private-key=/home/relayer/libp2p.key"
           volumeMounts:
             - mountPath: /home/relayer
               name: relayer-home-vol
@@ -80,5 +81,7 @@ spec:
           defaultMode: 0500
       - emptyDir: {}
         name: metro-home-vol
-      - emptyDir: {}
-        name: relayer-home-vol
+      - name: relayer-home-vol
+        configMap:
+          name: relayer-files
+          defaultMode: 0500
