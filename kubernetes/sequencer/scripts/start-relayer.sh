@@ -1,0 +1,26 @@
+#!/bin/sh -x
+
+# request token from http://celestia-token.astria.localdev.me/ and save to SequencerRelayerConfig.toml
+
+# FIXME - move this installation to the Dockerfile
+apt update
+apt install wget -y
+
+# FIXME - how to use `token-svc` port here instead of hardcoding?
+BEARER_TOKEN=$(wget -qO- http://celestia-service:5353)
+
+if [ -z "$BEARER_TOKEN" ]; then
+    echo "Failed to fetch the bearer token."
+    exit 1
+fi
+
+echo "Celestia Bearer token fetched successfully."
+
+echo "celestia_bearer_token = \"$BEARER_TOKEN\"" > "$home_dir"/SequencerRelayerConfig.toml
+
+export ASTRIA_SEQUENCER_RELAYER_celestia_bearer_token="$BEARER_TOKEN"
+
+/usr/local/bin/astria-sequencer-relayer \
+  --sequencer-endpoint=http://localhost:1318 \
+  --celestia-endpoint=http://celestia-service:26659 \
+  --validator-key-file=/root/.metro/config/priv_validator_key.json

@@ -12,3 +12,7 @@ configMapGenerator:
   - scripts/configure-metro.sh
   - scripts/init-metro.sh
   - scripts/start-metro.sh
+- name: relayer-scripts
+  namespace: astria-dev-cluster
+  files:
+  - scripts/start-relayer.sh
