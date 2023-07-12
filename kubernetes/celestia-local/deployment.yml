@@ -71,6 +71,8 @@ spec:
           ports:
             - containerPort: 26659
               name: bridge-rest
+            - containerPort: 26658
+              name: bridge-jsonrpc
           startupProbe:
             httpGet:
               path: /header/1
@@ -81,6 +83,22 @@ spec:
             postStart:
               exec:
                 command: [ "/scripts/generate-token.sh" ]
+        - name: token-server
+          image: "busybox:1.35.0-musl"
+          command: [ "/bin/httpd", "-v", "-f", "-p", "5353", "-h", "/home/celestia/token-server/" ]
+          ports:
+            - containerPort: 5353
+              name: token-svc
+          volumeMounts:
+            - mountPath: /home/celestia
+              name: celestia-home-vol
+              readOnly: true
+          startupProbe:
+            httpGet:
+              path: /
+              port: token-svc
+            failureThreshold: 30
+            periodSeconds: 5
       volumes:
         - name: bridge-scripts-volume
           configMap:

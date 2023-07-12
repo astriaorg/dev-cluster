@@ -13,3 +13,6 @@ spec:
     - name: bridge-jsonrpc
       port: 26658
       targetPort: bridge-jsonrpc
+    - name: token-svc
+      port: 5353
+      targetPort: token-svc
