@@ -12,3 +12,7 @@ configMapGenerator:
   - genesis/geth-genesis.json
   - scripts/init-geth.sh
   - scripts/start-geth.sh
+- name: conductor-scripts
+  namespace: astria-dev-cluster
+  files:
+  - scripts/start-conductor.sh

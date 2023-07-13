@@ -39,3 +39,13 @@ spec:
                 name: faucet-service
                 port:
                   name: faucet-svc
+    - host: celestia-token.astria.localdev.me
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: celestia-service
+                port:
+                  name: token-svc

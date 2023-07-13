@@ -2,7 +2,7 @@
 
 set -o errexit -o nounset
 
-./celestia bridge init \
+celestia bridge init \
   --node.store "$home_dir/bridge" \
   --core.ip 127.0.0.1 \
   --core.rpc.port $celestia_app_host_port \
