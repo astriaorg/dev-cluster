@@ -61,8 +61,9 @@ spec:
             - configMapRef:
                 name: metro-env
         - name: sequencer-relayer
-          image: "sequencer-relayer:local-w-certs"
+          image: "sequencer-relayer:local-w-certs-higher-fee"
           command: [ "/scripts/start-relayer.sh" ]
+#          image: "sequencer-relayer:local-w-certs"
 #          image: "ghcr.io/astriaorg/sequencer-relayer:0.1.0--sequencer-relayer"
 #          command: ["/usr/local/bin/astria-sequencer-relayer"]
           volumeMounts:
@@ -73,6 +74,9 @@ spec:
               readOnly: true
             - mountPath: /scripts/
               name: relayer-scripts-volume
+          envFrom:
+            - configMapRef:
+                name: relayer-env
       volumes:
       - name: metro-scripts-volume
         configMap:

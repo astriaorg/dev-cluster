@@ -49,16 +49,18 @@ spec:
               name: json-rpc-svc
             - containerPort: 50051
         - name: conductor
-          image: "ghcr.io/astriaorg/conductor:0.1.0--conductor"
-          command: ["/usr/local/bin/astria-conductor"]
-          args:
-            - "--tendermint-url=http://sequencer-service:1318"
-            - "--celestia-node-url=http://celestia-service:26659"
-            - "--chain-id=ethereum"
-            - "--execution-rpc-url=http://localhost:50051"
+          image: "conductor:local-w-certs-wget"
+          command: ["/scripts/start-conductor.sh"]
+#          image: "ghcr.io/astriaorg/conductor:0.1.0--conductor"
           volumeMounts:
+            - mountPath: /scripts/
+              name: conductor-scripts-volume
+              readOnly: true
             - mountPath: /home/conductor
               name: conductor-home-vol
+          envFrom:
+            - configMapRef:
+                name: conductor-env
           ports:
             - containerPort: 33900
               name: gossipnet
@@ -66,6 +68,10 @@ spec:
       - name: executor-scripts-volume
         configMap:
           name: executor-scripts
+          defaultMode: 0500
+      - name: conductor-scripts-volume
+        configMap:
+          name: conductor-scripts
           defaultMode: 0500
       - emptyDir: {}
         name: metro-home-vol

@@ -16,9 +16,10 @@ echo "Celestia Bearer token fetched successfully."
 
 echo "celestia_bearer_token = \"$BEARER_TOKEN\"" > "$home_dir"/SequencerRelayerConfig.toml
 
-export ASTRIA_SEQUENCER_RELAYER_celestia_bearer_token="$BEARER_TOKEN"
+export ASTRIA_celestia_bearer_token="$BEARER_TOKEN"
 
-/usr/local/bin/astria-sequencer-relayer \
-  --sequencer-endpoint=http://localhost:1318 \
-  --celestia-endpoint=http://celestia-service:26658 \
-  --validator-key-file=/root/.metro/config/priv_validator_key.json
+/usr/local/bin/astria-conductor \
+  --tendermint-url=http://sequencer-service:1318 \
+  --celestia-node-url=http://celestia-service:26658 \
+  --chain-id=ethereum \
+  --execution-rpc-url=http://localhost:50051
