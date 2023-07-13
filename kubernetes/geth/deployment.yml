@@ -51,13 +51,15 @@ spec:
               name: ws-rpc-svc
             - containerPort: 50051
         - name: conductor
-          image: "ghcr.io/astriaorg/conductor:0.0.6--conductor"
+          image: "ghcr.io/astriaorg/conductor:pr-155"
           command: ["/usr/local/bin/astria-conductor"]
           args:
             - "--tendermint-url=http://sequencer-service:1318"
             - "--celestia-node-url=http://celestia-service:26659"
             - "--chain-id=ethereum"
             - "--execution-rpc-url=http://localhost:50051"
+            - "--libp2p-private-key=/home/conductor/libp2p.key"
+            - "--bootnodes=/ip4/sequencer-service/tcp/33900/p2p/12D3KooWJGy9JbZyi4JLF2PsBsuUm8Jn72qrHiQ5it5wygAAvHYb"
           volumeMounts:
             - mountPath: /home/conductor
               name: conductor-home-vol
@@ -69,9 +71,11 @@ spec:
         configMap:
           name: executor-scripts
           defaultMode: 0500
+      - name: conductor-home-vol
+        configMap:
+          name: conductor-files
+          defaultMode: 0500
       - emptyDir: {}
         name: metro-home-vol
       - emptyDir: {}
         name: executor-home-vol
-      - emptyDir: {}
-        name: conductor-home-vol

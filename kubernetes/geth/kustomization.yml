@@ -12,3 +12,7 @@ configMapGenerator:
   - genesis/geth-genesis.json
   - scripts/init-geth.sh
   - scripts/start-geth.sh
+- name: conductor-files
+  namespace: astria-dev-cluster
+  files:
+  - libp2p.key
