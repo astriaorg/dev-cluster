@@ -16,4 +16,3 @@ configMapGenerator:
   namespace: astria-dev-cluster
   files:
   - libp2p.key
-  
