@@ -49,9 +49,8 @@ spec:
               name: json-rpc-svc
             - containerPort: 50051
         - name: conductor
-          image: "conductor:local-w-certs-wget"
+          image: "ghcr.io/astriaorg/conductor:0.2.0--conductor"
           command: ["/scripts/start-conductor.sh"]
-#          image: "ghcr.io/astriaorg/conductor:0.1.0--conductor"
           volumeMounts:
             - mountPath: /scripts/
               name: conductor-scripts-volume

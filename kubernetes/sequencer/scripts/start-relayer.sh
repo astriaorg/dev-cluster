@@ -8,7 +8,7 @@ set -o errexit -o nounset -o pipefail
 BEARER_TOKEN=$(wget -qO- http://celestia-service:5353)
 
 if [ -z "$BEARER_TOKEN" ]; then
-    echo "Failed to fetch the bearer token."
+    echo "Failed to fetch the Celestia bearer token."
     exit 1
 fi
 
