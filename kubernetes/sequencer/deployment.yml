@@ -67,7 +67,7 @@ spec:
             - "--sequencer-endpoint=http://localhost:1318"
             - "--celestia-endpoint=http://celestia-service:26659"
             - "--validator-key-file=/root/.metro/config/priv_validator_key.json"
-            --"--libp2p-private-key=/home/relayer/libp2p.key"
+            - "--libp2p-private-key=/home/relayer/libp2p.key"
           volumeMounts:
             - mountPath: /home/relayer
               name: relayer-home-vol
