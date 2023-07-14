@@ -42,7 +42,7 @@ To change the wallet account which receives funds, alter the `alloc` section of 
 
 ### Faucet
 
-The faucet is reachable at http://faucet.astria.localdev.me. 
+The faucet is reachable at http://faucet.astria.localdev.me.
 
 By default, the faucet is funded by the account that is funded during geth genesis. This is configured by using the private key of the funded account in `start-faucet.sh`. This key is defined in `kubernetes/faucet/config-maps.yml` and is identical to the key in `kubernetes/geth/key/private_key.txt`.
 
@@ -54,7 +54,6 @@ By default, the faucet is funded by the account that is funded during geth genes
     * chain id: `912559`
     * currency symbol: `ETH`
 
-
 ## Deployments and Containers
 
 | Deployment       | Containers                    |
@@ -63,6 +62,16 @@ By default, the faucet is funded by the account that is funded during geth genes
 | `sequencer`      | metro, sequencer-relayer      |
 | `geth`           | geth, conductor               |
 | `faucet`         | faucet                        |
+
+### Restarting Deployments
+
+It is possible to restart running pods without restarting the entire cluster. This is useful for debugging and development.
+
+NOTE: when restarting `celestia-local`, you will also need to restart `sequencer` and `geth`.
+
+```bash
+kubectl rollout restart deployment -n astria-dev-cluster [deployment-name]
+```
 
 ### Helpful commands
 

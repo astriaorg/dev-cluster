@@ -61,22 +61,27 @@ spec:
             - configMapRef:
                 name: metro-env
         - name: sequencer-relayer
-          image: "ghcr.io/astriaorg/sequencer-relayer:0.0.6--sequencer-relayer"
-          command: ["/usr/local/bin/astria-sequencer-relayer"]
-          args:
-            - "--sequencer-endpoint=http://localhost:1318"
-            - "--celestia-endpoint=http://celestia-service:26659"
-            - "--validator-key-file=/root/.metro/config/priv_validator_key.json"
+          image: "ghcr.io/astriaorg/sequencer-relayer:0.2.0--sequencer-relayer"
+          command: [ "/scripts/start-relayer.sh" ]
           volumeMounts:
             - mountPath: /home/relayer
               name: relayer-home-vol
             - mountPath: /root/.metro
               name: metro-home-vol
               readOnly: true
+            - mountPath: /scripts/
+              name: relayer-scripts-volume
+          envFrom:
+            - configMapRef:
+                name: relayer-env
       volumes:
       - name: metro-scripts-volume
         configMap:
           name: metro-scripts
+          defaultMode: 0500
+      - name: relayer-scripts-volume
+        configMap:
+          name: relayer-scripts
           defaultMode: 0500
       - emptyDir: {}
         name: metro-home-vol

@@ -2,6 +2,9 @@
 
 set -o errexit -o nounset
 
+# start with clean config directory.
+rm -rf "$home_dir/config/*"
+
 celestia-appd init "$chainid" \
   --chain-id "$chainid" \
   --home "$home_dir"
@@ -23,7 +26,10 @@ celestia-appd gentx \
   --keyring-backend="$keyring_backend" \
   --chain-id "$chainid" \
   --home "$home_dir" \
-  --orchestrator-address "$validator_key" \
   --evm-address "$evm_address"
 
 celestia-appd collect-gentxs --home "$home_dir"
+
+# speed up celestia block times
+sed -i'.bak' 's/timeout_propose = "10s"/timeout_propose = "1s"/g' $home_dir/config/config.toml
+sed -i'.bak' 's/timeout_commit = "11s"/timeout_commit = "1s"/g' $home_dir/config/config.toml

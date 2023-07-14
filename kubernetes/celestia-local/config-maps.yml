@@ -14,4 +14,5 @@ data:
   evm_address: "0x966e6f22781EF6a6A82BBB4DB3df8E225DfD9488"
   home_dir: "/home/celestia"
   bridge_host_port: "26659"
+  bridge_rpc_port: "26658"
   celestia_app_host_port: "26657"
