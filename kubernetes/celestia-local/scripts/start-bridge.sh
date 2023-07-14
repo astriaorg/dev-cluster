@@ -31,4 +31,5 @@ exec celestia bridge start \
   --gateway \
   --gateway.port "$bridge_host_port" \
   --gateway.deprecated-endpoints \
+  --rpc.port "$bridge_rpc_port" \
   --keyring.accname "$validator_key_name"
