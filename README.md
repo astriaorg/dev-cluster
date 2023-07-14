@@ -67,6 +67,8 @@ By default, the faucet is funded by the account that is funded during geth genes
 
 It is possible to restart running pods without restarting the entire cluster. This is useful for debugging and development.
 
+NOTE: when restarting `celestia-local`, you will also need to restart `sequencer` and `geth`.
+
 ```bash
 kubectl rollout restart deployment -n astria-dev-cluster [deployment-name]
 ```
