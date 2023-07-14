@@ -23,7 +23,7 @@ spec:
       initContainers:
         - name: init-celestia-app
           command: [ "/scripts/init-celestia-appd.sh" ]
-          image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc7"
+          image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc9"
           volumeMounts:
             - mountPath: /scripts/
               name: celestia-appd-scripts-volume
@@ -46,7 +46,7 @@ spec:
       containers:
         - name: celestia-app
           command: [ "/scripts/start-celestia-appd.sh" ]
-          image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc7"
+          image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc9"
           envFrom:
             - configMapRef:
                 name: celestia-env
