@@ -22,7 +22,7 @@ In order to startup you will need to have docker running on your machine
 # create control plane cluster
 just create-control-plane
 
-# ingress
+# ingress controller
 just deploy-ingress-controller
 
 # wait for ingress.
@@ -30,8 +30,11 @@ just deploy-ingress-controller
 #  please retry the command
 just wait-for-ingress-controller
 
-# deploy
+# Deploys Sequencer + local DA
 just deploy-astria-local
+
+# Deploys a geth chain + faucet + ingress
+just deploy-geth
 ```
 
 ### Configuring Funding of Geth
