@@ -24,4 +24,4 @@ export ASTRIA_celestia_bearer_token="$BEARER_TOKEN"
   --chain-id=ethereum \
   --execution-rpc-url=http://localhost:50051
   # --libp2p-private-key=/keys/libp2p.key \
-  # --bootnodes=/ip4/sequencer-service/tcp/33900/p2p/12D3KooWJGy9JbZyi4JLF2PsBsuUm8Jn72qrHiQ5it5wygAAvHYb
+  # --bootnodes=/dnsaddr/sequencer-service/tcp/33900/p2p/12D3KooWJGy9JbZyi4JLF2PsBsuUm8Jn72qrHiQ5it5wygAAvHYb
