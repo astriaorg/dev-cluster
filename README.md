@@ -34,7 +34,7 @@ just wait-for-ingress-controller
 just deploy-astria-local
 
 # Deploys a geth chain + faucet + ingress
-just deploy-geth
+just deploy-geth-local
 ```
 
 ### Configuring Funding of Geth
