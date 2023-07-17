@@ -33,7 +33,7 @@ just wait-for-ingress-controller
 # Deploys Sequencer + local DA
 just deploy-astria-local
 
-# Deploys a geth chain + faucet + ingress
+# Deploys a geth chain + faucet + blockscout + ingress
 just deploy-geth-local
 ```
 
@@ -65,6 +65,7 @@ By default, the faucet is funded by the account that is funded during geth genes
 | `sequencer`      | metro, sequencer-relayer      |
 | `geth`           | geth, conductor               |
 | `faucet`         | faucet                        |
+| `blockscout`     | blockscout + more             |
 
 ### Restarting Deployments
 
@@ -82,7 +83,7 @@ The following commands are helpful for interacting with the cluster and its reso
 
 ```bash
 # list all containers within a deployment
-kubectl get -n astria-dev-cluster deployments/DEPLOYMENT_NAME -o json | jq -r ".spec.template.spec.containers[] | .name"
+kubectl get -n astria-dev-cluster deployment DEPLOYMENT_NAME -o jsonpath='{.spec.template.spec.containers[*].name}'
 
 # log the entire astria cluster
 kubectl logs -n astria-dev-cluster -l app=astria-dev-cluster -f

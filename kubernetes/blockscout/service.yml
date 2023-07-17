@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: blockscout-svc
+  namespace: astria-dev-cluster
+spec:
+  selector:
+    app: astria-dev-cluster
+  ports:
+    - name: blockscout
+      port: 4000
+      targetPort: blockscout
