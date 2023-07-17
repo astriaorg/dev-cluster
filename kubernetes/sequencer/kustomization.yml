@@ -6,13 +6,20 @@ resources:
 - deployment.yml
 - service.yml
 configMapGenerator:
-- name: metro-scripts
+- name: cometbft-scripts
   namespace: astria-dev-cluster
   files:
-  - scripts/configure-metro.sh
-  - scripts/init-metro.sh
-  - scripts/start-metro.sh
+  - scripts/init-cometbft.sh
+  - scripts/start-cometbft.sh
+- name: sequencer-genesis
+  namespace: astria-dev-cluster
+  files:
+  - genesis/local.json
 - name: relayer-scripts
   namespace: astria-dev-cluster
   files:
   - scripts/start-relayer.sh
+- name: relayer-keys
+  namespace: astria-dev-cluster
+  files:
+  - key/libp2p.key

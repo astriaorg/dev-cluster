@@ -19,7 +19,9 @@ echo "celestia_bearer_token = \"$BEARER_TOKEN\"" > "$home_dir"/SequencerRelayerC
 export ASTRIA_celestia_bearer_token="$BEARER_TOKEN"
 
 /usr/local/bin/astria-conductor \
-  --tendermint-url=http://sequencer-service:1318 \
+  --tendermint-url=http://sequencer-service:26657 \
   --celestia-node-url=http://celestia-service:26658 \
   --chain-id=ethereum \
   --execution-rpc-url=http://localhost:50051
+  # --libp2p-private-key=/keys/libp2p.key \
+  # --bootnodes=/ip4/sequencer-service/tcp/33900/p2p/12D3KooWJGy9JbZyi4JLF2PsBsuUm8Jn72qrHiQ5it5wygAAvHYb

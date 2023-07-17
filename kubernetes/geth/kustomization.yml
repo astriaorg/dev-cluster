@@ -16,3 +16,7 @@ configMapGenerator:
   namespace: astria-dev-cluster
   files:
   - scripts/start-conductor.sh
+- name: conductor-keys
+  namespace: astria-dev-cluster
+  files:
+  - keys/libp2p.key

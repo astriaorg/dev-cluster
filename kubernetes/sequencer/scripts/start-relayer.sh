@@ -19,6 +19,8 @@ echo "celestia_bearer_token = \"$BEARER_TOKEN\"" > "$home_dir"/SequencerRelayerC
 export ASTRIA_SEQUENCER_RELAYER_celestia_bearer_token="$BEARER_TOKEN"
 
 /usr/local/bin/astria-sequencer-relayer \
-  --sequencer-endpoint=http://localhost:1318 \
+  --sequencer-endpoint=http://localhost:26657 \
   --celestia-endpoint=http://celestia-service:26658 \
-  --validator-key-file=/root/.metro/config/priv_validator_key.json
+  --validator-key-file=/cometbft/config/priv_validator_key.json
+  # --libp2p-private-key=/keys/libp2p.key \
+  # --bootnodes=/ip4/evm-service/tcp/33900/p2p/12D3KooWGZ6aLzPyX1uSetAxLjYjas6Yf52bhpRmXMDnNusLV9ST
