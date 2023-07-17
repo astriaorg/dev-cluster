@@ -20,7 +20,7 @@ spec:
         - command:
           - /scripts/init-geth.sh
           name: init-geth
-          image: "ghcr.io/astriaorg/go-ethereum:0.0.6"
+          image: "ghcr.io/astriaorg/go-ethereum:0.1.0"
           volumeMounts:
             - mountPath: /scripts/
               name: executor-scripts-volume
@@ -32,15 +32,13 @@ spec:
       containers:
         - name: geth
           command: ["/scripts/start-geth.sh"]
-          image: "ghcr.io/astriaorg/go-ethereum:0.0.6"
+          image: "ghcr.io/astriaorg/go-ethereum:0.1.0"
           volumeMounts:
             - mountPath: /scripts/
               name: executor-scripts-volume
               readOnly: true
             - mountPath: /home/geth
-              name: executor-home-vol
-            - mountPath: /root/.metro
-              name: metro-home-vol
+              name: executor-home-vol 
           envFrom:
             - configMapRef:
                 name: geth-env
@@ -51,11 +49,14 @@ spec:
               name: ws-rpc-svc
             - containerPort: 50051
         - name: conductor
-          image: "ghcr.io/astriaorg/conductor:0.2.0--conductor"
+          image: "ghcr.io/astriaorg/conductor:0.3.0--conductor"
           command: ["/scripts/start-conductor.sh"]
           volumeMounts:
             - mountPath: /scripts/
               name: conductor-scripts-volume
+              readOnly: true
+            - mountPath: /keys/
+              name: conductor-keys-volume
               readOnly: true
             - mountPath: /home/conductor
               name: conductor-home-vol
@@ -74,8 +75,10 @@ spec:
         configMap:
           name: conductor-scripts
           defaultMode: 0500
-      - emptyDir: {}
-        name: metro-home-vol
+      - name: conductor-keys-volume
+        configMap:
+          name: conductor-keys
+          defaultMode: 0500
       - emptyDir: {}
         name: executor-home-vol
       - emptyDir: {}

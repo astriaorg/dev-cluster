@@ -30,7 +30,9 @@ deploy-faucet type=faucet-default:
 deploy-ingress-local:
   kubectl apply -f kubernetes/local-ingress.yml
 
-deploy-astria-local: deploy-namespace deploy-celestia-local deploy-sequencer deploy-geth deploy-faucet deploy-ingress-local
+deploy-astria-local: deploy-namespace deploy-celestia-local deploy-sequencer
+
+deploy-geth: deploy-geth deploy-faucet deploy-ingress-local
 
 wait-for-astria:
   kubectl wait -n astria-dev-cluster deployment geth --for=condition=Available=True --timeout=600s

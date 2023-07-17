@@ -7,12 +7,9 @@ spec:
   selector:
     app: astria-dev-cluster
   ports:
-    - name: sequencer-svc
-      port: 1318
-      targetPort: sequencer-svc
-    - name: transaction-svc
-      port: 9100
-      targetPort: transaction-svc
+    - name: cometbft-rpc
+      port: 26657
+      targetPort: cometbft-rpc
     - name: gossipnet
       port: 33900
       targetPort: gossipnet

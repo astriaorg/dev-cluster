@@ -13,6 +13,7 @@ metadata:
   namespace: astria-dev-cluster
 data:
   home_dir: "/home/geth"
+  COMETBFT_RPC_ENDPOINT: "http://sequencer-service:26657"
   executor_host_http_port: "8545"
   executor_host_grpc_port: "50051"
   executor_host_ws_port: "8546"
