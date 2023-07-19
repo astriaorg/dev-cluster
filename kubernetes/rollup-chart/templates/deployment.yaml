@@ -21,7 +21,6 @@ spec:
           - /scripts/init-geth.sh
           name: {{ .Values.rollupName }}-init-geth
           image: "ghcr.io/astriaorg/go-ethereum:0.1.0"
-          imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-executor-scripts-volume
@@ -34,7 +33,6 @@ spec:
         - name: {{ .Values.rollupName }}-geth
           command: ["/scripts/start-geth.sh"]
           image: "ghcr.io/astriaorg/go-ethereum:0.1.0"
-          imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-executor-scripts-volume
@@ -44,6 +42,13 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-geth-env
+          env:
+            # NOTE - envar used in geth code
+            - name: CHAIN_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.rollupName }}-geth-env
+                  key: evm_chain_id
           ports:
             - containerPort: {{ .Values.ports.jsonRPC }}
               name: json-rpc
@@ -53,7 +58,6 @@ spec:
               name: execution-grpc
         - name: conductor
           image: "ghcr.io/astriaorg/conductor:0.3.0--conductor"
-          imagePullPolicy: IfNotPresent
           command: ["/scripts/start-conductor.sh"]
           volumeMounts:
             - mountPath: /scripts/

@@ -2,4 +2,4 @@
 
 set -o errexit -o nounset
 
-geth --datadir $home_dir/.astriageth/ init /scripts/geth-genesis.json
+geth --datadir $data_dir/ init /scripts/geth-genesis.json
