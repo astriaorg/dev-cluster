@@ -9,4 +9,4 @@ ports:
   jsonRPC: 8545
   wsRPC: 8546
   executionGRPC: 50051
-  gossipnet: 33900
+  gossipnet: 2451
