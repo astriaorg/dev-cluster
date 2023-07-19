@@ -1,0 +1,12 @@
+# default name for the rollup chain
+rollupName: astria-chain
+# This is the default address where funds get allocated on genesis
+genesisAllocAddress: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
+# Default chain id (0xDECAF in decimal)
+chainId: "912559"
+
+ports:
+  jsonRPC: 8545
+  wsRPC: 8546
+  executionGRPC: 50051
+  gossipnet: 33900

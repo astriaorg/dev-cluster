@@ -1,0 +1,36 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.rollupName }}-evm-service
+  namespace: astria-dev-cluster
+spec:
+  selector:
+    app: astria-dev-cluster
+  ports:
+    - name: json-rpc-svc
+      port: {{ .Values.ports.jsonRPC }}
+      targetPort: json-rpc
+    - name: ws-rpc-svc
+      port: {{ .Values.ports.wsRPC }}
+      targetPort: ws-rpc
+    - name: gossipnet-svc
+      port: {{ .Values.ports.gossipnet }}
+      targetPort: gossipnet
+
+{{/* FIXME - will i need variable ports here? */}}
+
+{{/*apiVersion: v1*/}}
+{{/*kind: Service*/}}
+{{/*metadata:*/}}
+{{/*  name: {{ include "rollup-chart.fullname" . }}*/}}
+{{/*  labels:*/}}
+{{/*    {{- include "rollup-chart.labels" . | nindent 4 }}*/}}
+{{/*spec:*/}}
+{{/*  type: {{ .Values.service.type }}*/}}
+{{/*  ports:*/}}
+{{/*    - port: {{ .Values.service.port }}*/}}
+{{/*      targetPort: http*/}}
+{{/*      protocol: TCP*/}}
+{{/*      name: http*/}}
+{{/*  selector:*/}}
+{{/*    {{- include "rollup-chart.selectorLabels" . | nindent 4 }}*/}}

@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.rollupName }}-geth
+  labels:
+    app: astria-dev-cluster
+  namespace: astria-dev-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: astria-dev-cluster
+  template:
+    metadata:
+        name: {{ .Values.rollupName }}-execution-chain
+        labels:
+          app: astria-dev-cluster
+    spec:
+      initContainers:
+        - command:
+          - /scripts/init-geth.sh
+          name: {{ .Values.rollupName }}-init-geth
+          image: "ghcr.io/astriaorg/go-ethereum:0.1.0"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /scripts/
+              name: {{ .Values.rollupName }}-executor-scripts-volume
+            - mountPath: /home/geth
+              name: {{ .Values.rollupName }}-executor-home-vol
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.rollupName }}-geth-env
+      containers:
+        - name: {{ .Values.rollupName }}-geth
+          command: ["/scripts/start-geth.sh"]
+          image: "ghcr.io/astriaorg/go-ethereum:0.1.0"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /scripts/
+              name: {{ .Values.rollupName }}-executor-scripts-volume
+              readOnly: true
+            - mountPath: /home/geth
+              name: {{ .Values.rollupName }}-executor-home-vol
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.rollupName }}-geth-env
+          ports:
+            - containerPort: {{ .Values.ports.jsonRPC }}
+              name: json-rpc
+            - containerPort: {{ .Values.ports.wsRPC }}
+              name: ws-rpc
+            - containerPort: {{ .Values.ports.executionGRPC }}
+              name: execution-grpc
+        - name: conductor
+          image: "ghcr.io/astriaorg/conductor:0.3.0--conductor"
+          imagePullPolicy: IfNotPresent
+          command: ["/scripts/start-conductor.sh"]
+          volumeMounts:
+            - mountPath: /scripts/
+              name: {{ .Values.rollupName }}-conductor-scripts-volume
+              readOnly: true
+            - mountPath: /keys/
+              name: {{ .Values.rollupName }}-conductor-keys-volume
+              readOnly: true
+            - mountPath: /home/conductor
+              name: {{ .Values.rollupName }}-conductor-home-vol
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.rollupName }}-conductor-env
+          ports:
+            - containerPort: {{ .Values.ports.gossipnet }}
+              name: gossipnet
+      volumes:
+      - name: {{ .Values.rollupName }}-executor-scripts-volume
+        configMap:
+          name: {{ .Values.rollupName }}-executor-scripts
+          defaultMode: 0500
+      - name: {{ .Values.rollupName }}-conductor-scripts-volume
+        configMap:
+          name: {{ .Values.rollupName }}-conductor-scripts
+          defaultMode: 0500
+      - name: {{ .Values.rollupName }}-conductor-keys-volume
+        configMap:
+          name: {{ .Values.rollupName }}-conductor-keys
+          defaultMode: 0500
+      - emptyDir: {}
+        name: {{ .Values.rollupName }}-executor-home-vol
+      - emptyDir: {}
+        name: {{ .Values.rollupName }}-conductor-home-vol
