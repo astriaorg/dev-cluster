@@ -24,6 +24,7 @@ spec:
         - name: init-celestia-app
           command: [ "/scripts/init-celestia-appd.sh" ]
           image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc9"
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /scripts/
               name: celestia-appd-scripts-volume
@@ -35,6 +36,7 @@ spec:
         - name: init-bridge
           command: [ "/scripts/init-bridge.sh" ]
           image: "ghcr.io/astriaorg/test-images-celestia-node:v0.11.0-rc7"
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /scripts/
               name: bridge-scripts-volume
@@ -47,6 +49,7 @@ spec:
         - name: celestia-app
           command: [ "/scripts/start-celestia-appd.sh" ]
           image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc9"
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: celestia-env
@@ -60,6 +63,7 @@ spec:
         - name: celestia-bridge
           command: [ "/scripts/start-bridge.sh" ]
           image: "ghcr.io/astriaorg/test-images-celestia-node:v0.11.0-rc7"
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /scripts/
               name: bridge-scripts-volume
@@ -81,6 +85,7 @@ spec:
             periodSeconds: 10
         - name: token-server
           image: "busybox:1.35.0-musl"
+          imagePullPolicy: IfNotPresent
           command: [ "/bin/httpd", "-v", "-f", "-p", "5353", "-h", "/home/celestia/token-server/" ]
           ports:
             - containerPort: 5353

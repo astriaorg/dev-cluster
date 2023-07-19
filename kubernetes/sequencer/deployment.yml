@@ -20,6 +20,7 @@ spec:
         - command: [ "/scripts/init-cometbft.sh" ]
           name: init-cometbft
           image: "ghcr.io/astriaorg/cometbft:0.0.2"
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /scripts/
               name: cometbft-scripts-volume
@@ -28,6 +29,7 @@ spec:
       containers:
         - name: sequencer
           image: "ghcr.io/astriaorg/sequencer:0.1.0--sequencer"
+          imagePullPolicy: IfNotPresent
           command: [ "/usr/local/bin/astria-sequencer" ]
           args:
             - --genesis-file=/genesis/local.json
@@ -39,6 +41,7 @@ spec:
         - name: cometbft
           command: [ "/scripts/start-cometbft.sh" ]
           image: "ghcr.io/astriaorg/cometbft:0.0.2"
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /scripts/
               name: cometbft-scripts-volume
@@ -51,6 +54,7 @@ spec:
               name: cometbft-rpc
         - name: sequencer-relayer
           image: "ghcr.io/astriaorg/sequencer-relayer:0.3.0--sequencer-relayer"
+          imagePullPolicy: IfNotPresent
           command: [ "/scripts/start-relayer.sh" ]
           volumeMounts:
             - mountPath: /home/relayer

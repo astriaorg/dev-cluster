@@ -21,6 +21,7 @@ spec:
           - /scripts/init-geth.sh
           name: init-geth
           image: "ghcr.io/astriaorg/go-ethereum:0.1.0"
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /scripts/
               name: executor-scripts-volume
@@ -33,6 +34,7 @@ spec:
         - name: geth
           command: ["/scripts/start-geth.sh"]
           image: "ghcr.io/astriaorg/go-ethereum:0.1.0"
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /scripts/
               name: executor-scripts-volume
@@ -50,6 +52,7 @@ spec:
             - containerPort: 50051
         - name: conductor
           image: "ghcr.io/astriaorg/conductor:0.3.0--conductor"
+          imagePullPolicy: IfNotPresent
           command: ["/scripts/start-conductor.sh"]
           volumeMounts:
             - mountPath: /scripts/
