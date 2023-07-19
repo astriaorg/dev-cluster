@@ -1,9 +1,10 @@
 default:
   @just --list
 
-create-control-plane:
+create-cluster:
   kind create cluster --config ./kubernetes/kind-cluster-config.yml
   kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml
+  kubectl apply -f kubernetes/namespace.yml
 
 deploy-ingress-controller:
   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
@@ -13,37 +14,31 @@ wait-for-ingress-controller:
     sleep 1; \
   done
 
-deploy-namespace:
-  kubectl apply -f kubernetes/namespace.yml
+deploy pod:
+  kubectl apply -k kubernetes/{{pod}}
 
-deploy-celestia-local:
-  kubectl apply -k kubernetes/celestia-local
+delete pod:
+  kubectl delete -n astria-dev-cluster deployment {{pod}}
 
-deploy-sequencer:
-  kubectl apply -k kubernetes/sequencer
+restart pod:
+  kubectl rollout restart -n astria-dev-cluster deployment {{pod}}
 
-deploy-geth:
-  kubectl apply -k kubernetes/geth
+redeploy deployment:
+  kubectl delete -n astria-dev-cluster deployment {{pod}}
+  kubectl apply -k kubernetes/{{pod}}
 
-faucet-default := 'local'
-
-deploy-faucet type=faucet-default:
-  kubectl apply -k kubernetes/faucet/{{type}}
-
-deploy-blockscout:
-  kubectl apply -k kubernetes/blockscout
-
-deploy-ingress-local:
+config-ingress-local:
   kubectl apply -f kubernetes/local-ingress.yml
 
-deploy-astria-local: deploy-namespace deploy-celestia-local deploy-sequencer
+deploy-astria-local: (deploy "celestia-local") (deploy "sequencer")
 
-deploy-rollup: deploy-geth deploy-faucet deploy-blockscout deploy-ingress-local
-
-deploy-all-local: create-control-plane deploy-ingress-controller wait-for-ingress-controller deploy-astria-local deploy-geth-local wait-for-sequencer
+deploy-rollup: (deploy "geth") (deploy "faucet/local") (deploy "blockscout") config-ingress-local
 
 wait-for-sequencer:
   kubectl wait -n astria-dev-cluster deployment sequencer --for=condition=Available=True --timeout=600s
+
+wait-for-geth:
+  kubectl wait -n astria-dev-cluster deployment geth --for=condition=Available=True --timeout=600s
 
 clean:
   kind delete cluster --name astria-dev-cluster
