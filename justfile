@@ -3,6 +3,7 @@ default:
 
 create-control-plane:
   kind create cluster --config ./kubernetes/kind-cluster-config.yml
+  kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml
 
 deploy-ingress-controller:
   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
@@ -37,7 +38,7 @@ deploy-ingress-local:
 
 deploy-astria-local: deploy-namespace deploy-celestia-local deploy-sequencer
 
-deploy-geth-local: deploy-geth deploy-faucet deploy-blockscout deploy-ingress-local
+deploy-rollup: deploy-geth deploy-faucet deploy-blockscout deploy-ingress-local
 
 deploy-all-local: create-control-plane deploy-ingress-controller wait-for-ingress-controller deploy-astria-local deploy-geth-local wait-for-sequencer
 

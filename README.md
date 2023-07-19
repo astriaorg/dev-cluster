@@ -33,8 +33,8 @@ just wait-for-ingress-controller
 # Deploys Sequencer + local DA
 just deploy-astria-local
 
-# Deploys a geth chain + faucet + blockscout + ingress
-just deploy-geth-local
+# Deploys a geth rollup chain + faucet + blockscout + ingress
+just deploy-rollup
 ```
 
 ### Configuring Funding of Geth
