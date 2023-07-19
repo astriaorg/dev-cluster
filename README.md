@@ -20,7 +20,7 @@ In order to startup you will need to have docker running on your machine
 
 ```bash
 # create control plane cluster
-just create-control-plane
+just create-cluster
 
 # ingress controller
 just deploy-ingress-controller
@@ -33,8 +33,8 @@ just wait-for-ingress-controller
 # Deploys Sequencer + local DA
 just deploy-astria-local
 
-# Deploys a geth chain + faucet + blockscout + ingress
-just deploy-geth-local
+# Deploys a geth rollup chain + faucet + blockscout + ingress
+just deploy-rollup
 ```
 
 ### Configuring Funding of Geth
@@ -74,7 +74,15 @@ It is possible to restart running pods without restarting the entire cluster. Th
 NOTE: when restarting `celestia-local`, you will also need to restart `sequencer` and `geth`.
 
 ```bash
-kubectl rollout restart deployment -n astria-dev-cluster [deployment-name]
+just restart [deployment-name]
+```
+
+### Redeploying Deployments
+
+When deploying pods which participate in p2p (`sequencer`, `geth`) you must completely redeployd
+
+```bash
+just redeploy [deployment-name]
 ```
 
 ### Helpful commands
@@ -100,6 +108,9 @@ kubectl get -n astria-dev-cluster pods
 
 # to log a container you need to first grab the pod name from above
 kubectl logs -n astria-dev-cluster -c CONTAINER_NAME POD_NAME
+
+# delete a single deployment
+just delete DEPLOYMENT
 
 # delete cluster and resources
 just clean
