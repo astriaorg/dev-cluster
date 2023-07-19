@@ -37,6 +37,13 @@ just deploy-astria-local
 just deploy-rollup
 ```
 
+To run everything above in one go, you can use the following:
+
+```bash
+# deploy the whole stack locally
+just deploy-all-local
+```
+
 ### Configuring Funding of Geth
 
 By default, running this local node will fund a wallet address `0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30`, which you can add to your preferred wallet using the private key in `kubernetes/geth/key/private_key.txt`. This account should never be used for anything but test transactions.
