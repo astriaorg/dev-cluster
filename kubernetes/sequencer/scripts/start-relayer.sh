@@ -22,4 +22,6 @@ export ASTRIA_SEQUENCER_RELAYER_celestia_bearer_token="$BEARER_TOKEN"
   --sequencer-endpoint=http://localhost:26657 \
   --celestia-endpoint=http://celestia-service:26658 \
   --validator-key-file=/cometbft/config/priv_validator_key.json \
-  --libp2p-private-key=/keys/libp2p.key
+  --libp2p-private-key=/keys/libp2p.key \
+  --bootnodes=/ip4/192.168.65.121/tcp/2451/p2p/12D3KooWGZ6aLzPyX1uSetAxLjYjas6Yf52bhpRmXMDnNusLV9ST
+

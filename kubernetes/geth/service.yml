@@ -14,5 +14,5 @@ spec:
       port: 8546
       targetPort: ws-rpc-svc
     - name: gossipnet
-      port: 33900
+      port: 2451
       targetPort: gossipnet
