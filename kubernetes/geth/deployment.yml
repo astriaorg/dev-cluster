@@ -51,7 +51,7 @@ spec:
               name: ws-rpc-svc
             - containerPort: 50051
         - name: conductor
-          image: "ghcr.io/astriaorg/conductor:sha-b026a92"
+          image: "ghcr.io/astriaorg/conductor:sha-4970432"
           command: ["/scripts/start-conductor.sh"]
           stdin: true
           tty: true
