@@ -20,6 +20,7 @@ spec:
         - name: faucet
           command: [ "/scripts/start-faucet.sh" ]
           image: "ghcr.io/astriaorg/ria-faucet:0.0.1"
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /scripts/
               name: faucet-scripts-volume
