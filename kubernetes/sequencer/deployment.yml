@@ -12,9 +12,11 @@ spec:
       app: astria-dev-cluster
   template:
     metadata:
-        name: metro-sequencer
-        labels:
-          app: astria-dev-cluster
+      annotations:
+        cni.projectcalico.org/ipAddrs: '["192.168.65.120"]'
+      name: metro-sequencer
+      labels:
+        app: astria-dev-cluster
     spec:
       initContainers:
         - command: [ "/scripts/init-cometbft.sh" ]
@@ -31,6 +33,8 @@ spec:
           image: "ghcr.io/astriaorg/sequencer:0.1.0--sequencer"
           imagePullPolicy: IfNotPresent
           command: [ "/usr/local/bin/astria-sequencer" ]
+          stdin: true
+          tty: true
           args:
             - --genesis-file=/genesis/local.json
           volumeMounts:
@@ -53,9 +57,11 @@ spec:
             - containerPort: 26657
               name: cometbft-rpc
         - name: sequencer-relayer
-          image: "ghcr.io/astriaorg/sequencer-relayer:0.3.0--sequencer-relayer"
+          image: "ghcr.io/astriaorg/sequencer-relayer:0.4.0--sequencer-relayer"
           imagePullPolicy: IfNotPresent
           command: [ "/scripts/start-relayer.sh" ]
+          stdin: true
+          tty: true
           volumeMounts:
             - mountPath: /home/relayer
               name: relayer-home-vol

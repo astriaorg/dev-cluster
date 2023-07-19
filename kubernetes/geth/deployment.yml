@@ -12,15 +12,17 @@ spec:
       app: astria-dev-cluster
   template:
     metadata:
-        name: execution-chain
-        labels:
-          app: astria-dev-cluster
+      annotations:
+        cni.projectcalico.org/ipAddrs: '["192.168.65.121"]'
+      name: execution-chain
+      labels:
+        app: astria-dev-cluster
     spec:
       initContainers:
         - command:
           - /scripts/init-geth.sh
           name: init-geth
-          image: "ghcr.io/astriaorg/go-ethereum:0.1.0"
+          image: "ghcr.io/astriaorg/go-ethereum:0.1.1"
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /scripts/
@@ -33,7 +35,7 @@ spec:
       containers:
         - name: geth
           command: ["/scripts/start-geth.sh"]
-          image: "ghcr.io/astriaorg/go-ethereum:0.1.0"
+          image: "ghcr.io/astriaorg/go-ethereum:0.1.1"
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /scripts/
@@ -51,9 +53,11 @@ spec:
               name: ws-rpc-svc
             - containerPort: 50051
         - name: conductor
-          image: "ghcr.io/astriaorg/conductor:0.3.0--conductor"
+          image: "ghcr.io/astriaorg/conductor:0.4.0--conductor"
           imagePullPolicy: IfNotPresent
           command: ["/scripts/start-conductor.sh"]
+          stdin: true
+          tty: true
           volumeMounts:
             - mountPath: /scripts/
               name: conductor-scripts-volume
@@ -67,7 +71,7 @@ spec:
             - configMapRef:
                 name: conductor-env
           ports:
-            - containerPort: 33900
+            - containerPort: 2451
               name: gossipnet
       volumes:
       - name: executor-scripts-volume
