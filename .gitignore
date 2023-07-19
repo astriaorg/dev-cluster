@@ -21,3 +21,7 @@ ConductorConfig.toml
 # env
 .env
 tests/docker/.env
+
+# helm chart value file overrides
+kubernetes/rollup-chart/valuesoverride.yaml
+
