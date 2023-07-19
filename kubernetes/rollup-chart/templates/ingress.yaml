@@ -5,7 +5,7 @@ metadata:
   namespace: astria-dev-cluster
 spec:
   rules:
-    - host: {{ .Values.rollupName }}-executor.astria.localdev.me
+    - host: executor.{{ .Values.rollupName }}.localdev.me
       http:
         paths:
           - path: "/"
