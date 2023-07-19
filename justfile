@@ -23,7 +23,7 @@ delete pod:
 restart pod:
   kubectl rollout restart -n astria-dev-cluster deployment {{pod}}
 
-redeploy deployment:
+redeploy pod:
   kubectl delete -n astria-dev-cluster deployment {{pod}}
   kubectl apply -k kubernetes/{{pod}}
 
