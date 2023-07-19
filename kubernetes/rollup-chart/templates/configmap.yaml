@@ -47,7 +47,7 @@ metadata:
   namespace: astria-dev-cluster
 data:
   geth-genesis.json: |
-    {{- .Files.Get "files/genesis/geth-genesis.json" | nindent 4 }}
+    {{- tpl (.Files.Get "files/genesis/geth-genesis.json") $ | nindent 4 }}
   init-geth.sh: |
     {{- .Files.Get "files/scripts/init-geth.sh" | nindent 4 }}
   start-geth.sh: |
