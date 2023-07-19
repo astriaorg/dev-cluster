@@ -54,7 +54,7 @@ spec:
             - containerPort: 26657
               name: cometbft-rpc
         - name: sequencer-relayer
-          image: "ghcr.io/astriaorg/sequencer-relayer:sha-4970432"
+          image: "ghcr.io/astriaorg/sequencer-relayer:v0.4.0--sequencer-relayer"
           command: [ "/scripts/start-relayer.sh" ]
           stdin: true
           tty: true
