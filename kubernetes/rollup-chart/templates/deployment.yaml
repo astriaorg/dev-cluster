@@ -12,14 +12,13 @@ spec:
       app: astria-dev-cluster
   template:
     metadata:
-        name: {{ .Values.rollupName }}-execution-chain
-        labels:
-          app: astria-dev-cluster
+      name: {{ .Values.rollupName }}-execution-chain
+      labels:
+        app: astria-dev-cluster
     spec:
       initContainers:
-        - command:
-          - /scripts/init-geth.sh
-          name: {{ .Values.rollupName }}-init-geth
+        - name: {{ .Values.rollupName }}-init-geth
+          command: [ "/scripts/init-geth.sh" ]
           image: "ghcr.io/astriaorg/go-ethereum:0.1.0"
           volumeMounts:
             - mountPath: /scripts/
@@ -31,7 +30,7 @@ spec:
                 name: {{ .Values.rollupName }}-geth-env
       containers:
         - name: {{ .Values.rollupName }}-geth
-          command: ["/scripts/start-geth.sh"]
+          command: [ "/scripts/start-geth.sh" ]
           image: "ghcr.io/astriaorg/go-ethereum:0.1.0"
           volumeMounts:
             - mountPath: /scripts/
@@ -58,7 +57,7 @@ spec:
               name: execution-grpc
         - name: conductor
           image: "ghcr.io/astriaorg/conductor:0.3.0--conductor"
-          command: ["/scripts/start-conductor.sh"]
+          command: [ "/scripts/start-conductor.sh" ]
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-conductor-scripts-volume
@@ -75,19 +74,19 @@ spec:
             - containerPort: {{ .Values.ports.gossipnet }}
               name: gossipnet
       volumes:
-      - name: {{ .Values.rollupName }}-executor-scripts-volume
-        configMap:
-          name: {{ .Values.rollupName }}-executor-scripts
-          defaultMode: 0500
-      - name: {{ .Values.rollupName }}-conductor-scripts-volume
-        configMap:
-          name: {{ .Values.rollupName }}-conductor-scripts
-          defaultMode: 0500
-      - name: {{ .Values.rollupName }}-conductor-keys-volume
-        configMap:
-          name: {{ .Values.rollupName }}-conductor-keys
-          defaultMode: 0500
-      - emptyDir: {}
-        name: {{ .Values.rollupName }}-executor-home-vol
-      - emptyDir: {}
-        name: {{ .Values.rollupName }}-conductor-home-vol
+        - name: {{ .Values.rollupName }}-executor-scripts-volume
+          configMap:
+            name: {{ .Values.rollupName }}-executor-scripts
+            defaultMode: 0500
+        - name: {{ .Values.rollupName }}-conductor-scripts-volume
+          configMap:
+            name: {{ .Values.rollupName }}-conductor-scripts
+            defaultMode: 0500
+        - name: {{ .Values.rollupName }}-conductor-keys-volume
+          configMap:
+            name: {{ .Values.rollupName }}-conductor-keys
+            defaultMode: 0500
+        - emptyDir: { }
+          name: {{ .Values.rollupName }}-executor-home-vol
+        - emptyDir: { }
+          name: {{ .Values.rollupName }}-conductor-home-vol
