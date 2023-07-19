@@ -1,6 +1,6 @@
 {
     "config": {
-        "chainId": {{ .Values.chainId }},
+        "chainId": {{ .Values.evmChainId }},
         "homesteadBlock": 0,
         "eip150Block": 0,
         "eip155Block": 0,

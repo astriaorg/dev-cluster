@@ -3,7 +3,7 @@ rollupName: astria-chain
 # This is the default address where funds get allocated on genesis
 genesisAllocAddress: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
 # Default chain id (0xDECAF in decimal)
-chainId: "912559"
+evmChainId: "912559"
 
 ports:
   jsonRPC: 8545

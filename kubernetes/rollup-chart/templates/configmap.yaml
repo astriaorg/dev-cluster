@@ -38,7 +38,7 @@ data:
   executor_host_ws_port: "{{ .Values.ports.wsRPC }}"
   sequencer_host_grpc_port: "9100"
   genesis_alloc_address: "{{ .Values.genesisAllocAddress }}"
-  chain_id: "{{ .Values.chainId }}"
+  evm_chain_id: "{{ .Values.evmChainId }}"
 ---
 apiVersion: v1
 kind: ConfigMap
