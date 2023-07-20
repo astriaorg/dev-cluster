@@ -31,7 +31,7 @@ spec:
       containers:
         - name: {{ .Values.rollupName }}-geth
           command: [ "/scripts/start-geth.sh" ]
-          image: "ghcr.io/astriaorg/go-ethereum:0.1.0"
+          image: "ghcr.io/astriaorg/go-ethereum:0.1.1"
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-executor-scripts-volume
@@ -41,13 +41,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-geth-env
-          env:
-            # NOTE - envar used in geth code
-            - name: CHAIN_ID
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ .Values.rollupName }}-geth-env
-                  key: evm_chain_id
           ports:
             - containerPort: {{ .Values.ports.jsonRPC }}
               name: json-rpc
@@ -56,8 +49,10 @@ spec:
             - containerPort: {{ .Values.ports.executionGRPC }}
               name: execution-grpc
         - name: {{ .Values.rollupName }}-conductor
-          image: "ghcr.io/astriaorg/conductor:0.3.0--conductor"
+          image: "ghcr.io/astriaorg/conductor:0.4.0--conductor"
           command: [ "/scripts/start-conductor.sh" ]
+          stdin: true
+          tty: true
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-conductor-scripts-volume
@@ -68,9 +63,7 @@ spec:
             - configMapRef:
                 name: {{ .Values.rollupName }}-conductor-env
           ports:
-            # FIXME - should use port from .Values
-            # - containerPort: {{ .Values.ports.gossipnet }}
-            - containerPort: 33900
+            - containerPort: {{ .Values.ports.gossipnet }}
               name: gossipnet
       volumes:
         - name: {{ .Values.rollupName }}-executor-scripts-volume

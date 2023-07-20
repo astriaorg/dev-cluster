@@ -34,6 +34,7 @@ data:
   genesis_alloc_address: "{{ .Values.genesisAllocAddress }}"
   evm_network_id: "{{ .Values.evmNetworkId }}"
   evm_chain_id: "{{ .Values.evmChainId }}"
+  cometbft_rpc_endpoint: "http://sequencer-service:26657"
 ---
 apiVersion: v1
 kind: ConfigMap
