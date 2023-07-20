@@ -5,7 +5,7 @@ metadata:
   namespace: astria-dev-cluster
 spec:
   selector:
-    node: astria-sequencer0
+    node: sequencer0
     app: astria-dev-cluster
   ports:
     - name: cometbft-p2p
@@ -25,7 +25,7 @@ metadata:
   namespace: astria-dev-cluster
 spec:
   selector:
-    node: astria-sequencer1
+    node: sequencer1
     app: astria-dev-cluster
   ports:
     - name: cometbft-p2p
@@ -45,7 +45,7 @@ metadata:
   namespace: astria-dev-cluster
 spec:
   selector:
-    node: astria-sequencer2
+    node: sequencer2
     app: astria-dev-cluster
   ports:
     - name: cometbft-p2p
