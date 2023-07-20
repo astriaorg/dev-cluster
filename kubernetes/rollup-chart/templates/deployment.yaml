@@ -17,7 +17,7 @@ spec:
         app: astria-dev-cluster
     spec:
       initContainers:
-        - name: {{ .Values.rollupName }}-init-geth
+        - name: init-geth
           command: [ "/scripts/init-geth.sh" ]
           image: "ghcr.io/astriaorg/go-ethereum:0.1.0"
           volumeMounts:
@@ -29,7 +29,7 @@ spec:
             - configMapRef:
                 name: {{ .Values.rollupName }}-geth-env
       containers:
-        - name: {{ .Values.rollupName }}-geth
+        - name: geth
           command: [ "/scripts/start-geth.sh" ]
           image: "ghcr.io/astriaorg/go-ethereum:0.1.1"
           volumeMounts:
@@ -48,7 +48,7 @@ spec:
               name: ws-rpc
             - containerPort: {{ .Values.ports.executionGRPC }}
               name: execution-grpc
-        - name: {{ .Values.rollupName }}-conductor
+        - name: conductor
           image: "ghcr.io/astriaorg/conductor:0.4.0--conductor"
           command: [ "/scripts/start-conductor.sh" ]
           stdin: true
@@ -78,3 +78,39 @@ spec:
           name: {{ .Values.rollupName }}-executor-home-vol
         - emptyDir: { }
           name: {{ .Values.rollupName }}-conductor-home-vol
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.rollupName }}-faucet
+  labels:
+    app: astria-dev-cluster
+  namespace: astria-dev-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: astria-dev-cluster
+  template:
+    metadata:
+      name: {{ .Values.rollupName }}-faucet
+      labels:
+        app: astria-dev-cluster
+    spec:
+      containers:
+        - name: faucet
+          command: [ "/app/eth-faucet" ]
+          args: 
+            - -httpport={{ .Values.ports.faucet }}
+            - -wallet.provider=http://{{ .Values.rollupName }}-evm-service:{{ .Values.ports.jsonRPC }}
+            - -wallet.privkey={{ .Values.privateKey }}
+          image: "ghcr.io/astriaorg/ria-faucet:0.0.1"
+          volumeMounts:
+            - mountPath: /home/faucet
+              name: {{ .Values.rollupName }}-faucet-home-vol
+          ports:
+            - containerPort: {{ .Values.ports.faucet }}
+              name: faucet
+      volumes:
+        - emptyDir: { }
+          name: {{ .Values.rollupName }}-faucet-home-vol

@@ -49,3 +49,12 @@ data:
   start-geth.sh: |
     {{- .Files.Get "files/scripts/start-geth.sh" | nindent 4 }}
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.rollupName }}-faucet-scripts
+  namespace: astria-dev-cluster
+data:
+  start-faucet.sh: |
+    {{- .Files.Get "files/scripts/start-faucet.sh" | nindent 4 }}
+---

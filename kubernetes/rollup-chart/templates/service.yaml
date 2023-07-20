@@ -16,3 +16,16 @@ spec:
     - name: gossipnet-svc
       port: {{ .Values.ports.gossipnet }}
       targetPort: gossipnet
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.rollupName }}-faucet-service
+  namespace: astria-dev-cluster
+spec:
+  selector:
+    app: astria-dev-cluster
+  ports:
+    - name: faucet
+      port: {{ .Values.ports.faucet }}
+      targetPort: faucet
