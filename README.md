@@ -38,6 +38,7 @@ just deploy-rollup
 
 # Deploy a second rollup
 just deploy-rollup-chart <rollup_name> <chain_id>
+just deploy-rollup-chart <rollup_name> <chain_id> <evm_funding_address> <evm_funding_private_key>
 # Remove the second rollup
 just delete-rollup-chart <rollup_name>
 ```
