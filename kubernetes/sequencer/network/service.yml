@@ -1,0 +1,56 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: sequencer-service
+  namespace: astria-dev-cluster
+spec:
+  selector:
+    app: astria-dev-cluster
+  ports:
+    - name: cometbft-p2p
+      port: 26656
+      targetPort: cometbft-n0-p2p
+    - name: cometbft-rpc
+      port: 26657
+      targetPort: cometbft-n0-rpc
+    - name: gossipnet
+      port: 33900
+      targetPort: gossipnet-node0
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sequencer-node1-service
+  namespace: astria-dev-cluster
+spec:
+  selector:
+    app: astria-dev-cluster
+  ports:
+    - name: cometbft-p2p
+      port: 26656
+      targetPort: cometbft-n1-p2p
+    - name: cometbft-rpc
+      port: 26657
+      targetPort: cometbft-n1-rpc
+    - name: gossipnet
+      port: 33900
+      targetPort: gossipnet-node1
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sequencer-node2-service
+  namespace: astria-dev-cluster
+spec:
+  selector:
+    app: astria-dev-cluster
+  ports:
+    - name: cometbft-p2p
+      port: 26656
+      targetPort: cometbft-n2-p2p
+    - name: cometbft-rpc
+      port: 26657
+      targetPort: cometbft-n2-rpc
+    - name: gossipnet
+      port: 33900
+      targetPort: gossipnet-node2

@@ -12,8 +12,6 @@ spec:
       app: astria-dev-cluster
   template:
     metadata:
-      annotations:
-        cni.projectcalico.org/ipAddrs: '["192.168.65.121"]'
       name: execution-chain
       labels:
         app: astria-dev-cluster

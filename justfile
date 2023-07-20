@@ -30,7 +30,7 @@ redeploy pod:
 config-ingress-local:
   kubectl apply -f kubernetes/local-ingress.yml
 
-deploy-astria-local: (deploy "celestia-local") (deploy "sequencer")
+deploy-astria-local: (deploy "celestia-local") (deploy "sequencer/single")
 
 deploy-rollup: (deploy "geth") (deploy "faucet/local") (deploy "blockscout") config-ingress-local
 

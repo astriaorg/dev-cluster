@@ -1,0 +1,62 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: astria-dev-cluster
+resources:
+- config-maps.yml
+- deployment.yml
+- service.yml
+configMapGenerator:
+- name: sequencer-genesis
+  namespace: astria-dev-cluster
+  files:
+  - genesis/sequencer-local.json
+- name: relayer-nodes-scripts
+  namespace: astria-dev-cluster
+  files:
+  - scripts/start-relayer-nodes.sh
+- name: cometbft-scripts
+  namespace: astria-dev-cluster
+  files:
+  - scripts/config-cometbft.sh
+- name: relayer-node0-scripts
+  namespace: astria-dev-cluster
+  files:
+  - scripts/start-relayer-node0.sh
+- name: relayer-node0-keys
+  namespace: astria-dev-cluster
+  files:
+  - genesis/node0/key/libp2p.key
+- name: cometbft-node0-config
+  namespace: astria-dev-cluster
+  files:
+  - genesis/node0/config/config.toml
+  - genesis/node0/config/genesis.json
+  - genesis/node0/config/node_key.json
+  - genesis/node0/config/priv_validator_key.json
+- name: cometbft-node0-data
+  namespace: astria-dev-cluster
+  files:
+  - genesis/node0/data/priv_validator_state.json
+- name: cometbft-node1-config
+  namespace: astria-dev-cluster
+  files:
+  - genesis/node1/config/config.toml
+  - genesis/node1/config/genesis.json
+  - genesis/node1/config/node_key.json
+  - genesis/node1/config/priv_validator_key.json
+- name: cometbft-node1-data
+  namespace: astria-dev-cluster
+  files:
+  - genesis/node1/data/priv_validator_state.json
+- name: cometbft-node2-config
+  namespace: astria-dev-cluster
+  files:
+  - genesis/node2/config/config.toml
+  - genesis/node2/config/genesis.json
+  - genesis/node2/config/node_key.json
+  - genesis/node2/config/priv_validator_key.json
+- name: cometbft-node2-data
+  namespace: astria-dev-cluster
+  files:
+  - genesis/node2/data/priv_validator_state.json
+

@@ -1,0 +1,305 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sequencer0
+  labels:
+    app: astria-dev-cluster
+  namespace: astria-dev-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: astria-dev-cluster
+  template:
+    metadata:
+      annotations:
+        cni.projectcalico.org/ipAddrs: '["192.168.65.120"]'
+      name: metro-sequencer
+      labels:
+        app: astria-dev-cluster
+    spec:
+      initContainers:
+        - command: [ "/bin/sh" ]
+          args:
+          - -c
+          - cp -Lr /data /cometbft/data && cp -Lr /config /cometbft/config && chmod -R 0777 /cometbft
+          name: config-cometbft
+          image: "ghcr.io/tomwright/dasel:alpine"
+          volumeMounts:
+            - mountPath: /config/
+              name: cometbft-config-volume
+            - mountPath: /data/
+              name: cometbft-data-volume
+            - mountPath: /cometbft
+              name: cometbft-home-vol
+      containers:
+        - name: sequencer
+          image: "ghcr.io/astriaorg/sequencer:0.1.0--sequencer"
+          command: [ "/usr/local/bin/astria-sequencer" ]
+          stdin: true
+          tty: true
+          args:
+            - --genesis-file=/genesis/sequencer-local.json
+          volumeMounts:
+            - mountPath: /genesis/
+              name: sequencer-genesis-volume
+          ports:
+            - containerPort: 26658
+        - name: cometbft
+          command: [ "cometbft" ]
+          args:
+          - start
+          image: "ghcr.io/astriaorg/cometbft:0.0.2"
+          volumeMounts:
+            - mountPath: /cometbft
+              name: cometbft-home-vol
+          ports:
+            - containerPort: 26656
+              name: cometbft-n0-p2p
+            - containerPort: 26657
+              name: cometbft-n0-rpc
+        - name: sequencer-relayer
+          image: "ghcr.io/astriaorg/sequencer-relayer:0.4.0--sequencer-relayer"
+          command: [ "/scripts/start-relayer-node0.sh" ]
+          stdin: true
+          tty: true
+          volumeMounts:
+            - mountPath: /home/relayer
+              name: relayer-home-vol
+            - mountPath: /cometbft
+              name: cometbft-home-vol
+              readOnly: true
+            - mountPath: /scripts/
+              name: relayer-scripts-volume
+            - mountPath: /keys/
+              name: relayer-keys-volume
+              readOnly: true
+          envFrom:
+            - configMapRef:
+                name: relayer-env
+          ports:
+            - containerPort: 33900
+              name: gossipnet-node0
+      volumes:
+      - name: sequencer-genesis-volume
+        configMap:
+          name: sequencer-genesis
+          defaultMode: 0500
+      - name: relayer-scripts-volume
+        configMap:
+          name: relayer-node0-scripts
+          defaultMode: 0500
+      - name: relayer-keys-volume
+        configMap:
+          name: relayer-node0-keys
+          defaultMode: 0500
+      - name: cometbft-config-volume
+        configMap:
+          name: cometbft-node0-config
+          defaultMode: 0700
+      - name: cometbft-data-volume
+        configMap:
+          name: cometbft-node0-data
+          defaultMode: 0700
+      - emptyDir: {}
+        name: relayer-home-vol
+      - emptyDir: {}
+        name: cometbft-home-vol
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sequencer1
+  labels:
+    app: astria-dev-cluster
+  namespace: astria-dev-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: astria-dev-cluster
+  template:
+    metadata:
+      name: metro-sequencer
+      labels:
+        app: astria-dev-cluster
+    spec:
+      initContainers:
+        - command: [ "/bin/sh" ]
+          args:
+          - -c
+          - cp -Lr /data /cometbft/data && cp -Lr /config /cometbft/config && chmod -R 0777 /cometbft
+          name: config-cometbft
+          image: "ghcr.io/tomwright/dasel:alpine"
+          volumeMounts:
+            - mountPath: /config/
+              name: cometbft-config-volume
+            - mountPath: /data/
+              name: cometbft-data-volume
+            - mountPath: /cometbft
+              name: cometbft-home-vol
+      containers:
+        - name: sequencer
+          image: "ghcr.io/astriaorg/sequencer:0.1.0--sequencer"
+          command: [ "/usr/local/bin/astria-sequencer" ]
+          stdin: true
+          tty: true
+          args:
+            - --genesis-file=/genesis/sequencer-local.json
+          volumeMounts:
+            - mountPath: /genesis/
+              name: sequencer-genesis-volume
+          ports:
+            - containerPort: 26658
+        - name: cometbft
+          command: [ "cometbft" ]
+          args:
+          - start
+          image: "ghcr.io/astriaorg/cometbft:0.0.2"
+          volumeMounts:
+            - mountPath: /cometbft
+              name: cometbft-home-vol
+          ports:
+            - containerPort: 26656
+              name: cometbft-n1-p2p
+            - containerPort: 26657
+              name: cometbft-n1-rpc
+        - name: sequencer-relayer
+          image: "ghcr.io/astriaorg/sequencer-relayer:0.4.0--sequencer-relayer"
+          command: [ "/scripts/start-relayer-nodes.sh" ]
+          stdin: true
+          tty: true
+          volumeMounts:
+            - mountPath: /home/relayer
+              name: relayer-home-vol
+            - mountPath: /cometbft
+              name: cometbft-home-vol
+              readOnly: true
+            - mountPath: /scripts/
+              name: relayer-scripts-volume
+          envFrom:
+            - configMapRef:
+                name: relayer-env
+          ports:
+            - containerPort: 33900
+              name: gossipnet-node1
+      volumes:
+      - name: sequencer-genesis-volume
+        configMap:
+          name: sequencer-genesis
+          defaultMode: 0500
+      - name: relayer-scripts-volume
+        configMap:
+          name: relayer-nodes-scripts
+          defaultMode: 0500
+      - name: cometbft-config-volume
+        configMap:
+          name: cometbft-node1-config
+          defaultMode: 0700
+      - name: cometbft-data-volume
+        configMap:
+          name: cometbft-node1-data
+          defaultMode: 0700
+      - emptyDir: {}
+        name: relayer-home-vol
+      - emptyDir: {}
+        name: cometbft-home-vol
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sequencer2
+  labels:
+    app: astria-dev-cluster
+  namespace: astria-dev-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: astria-dev-cluster
+  template:
+    metadata:
+      name: metro-sequencer
+      labels:
+        app: astria-dev-cluster
+    spec:
+      initContainers:
+        - command: [ "/bin/sh" ]
+          args:
+          - -c
+          - cp -Lr /data /cometbft/data && cp -Lr /config /cometbft/config && chmod -R 0777 /cometbft
+          name: config-cometbft
+          image: "ghcr.io/tomwright/dasel:alpine"
+          volumeMounts:
+            - mountPath: /config/
+              name: cometbft-config-volume
+            - mountPath: /data/
+              name: cometbft-data-volume
+            - mountPath: /cometbft
+              name: cometbft-home-vol
+      containers:
+        - name: sequencer
+          image: "ghcr.io/astriaorg/sequencer:0.1.0--sequencer"
+          command: [ "/usr/local/bin/astria-sequencer" ]
+          stdin: true
+          tty: true
+          args:
+            - --genesis-file=/genesis/sequencer-local.json
+          volumeMounts:
+            - mountPath: /genesis/
+              name: sequencer-genesis-volume
+          ports:
+            - containerPort: 26658
+        - name: cometbft
+          command: [ "cometbft" ]
+          args:
+          - start
+          image: "ghcr.io/astriaorg/cometbft:0.0.2"
+          volumeMounts:
+            - mountPath: /cometbft
+              name: cometbft-home-vol
+          ports:
+            - containerPort: 26656
+              name: cometbft-n2-p2p
+            - containerPort: 26657
+              name: cometbft-n2-rpc
+        - name: sequencer-relayer
+          image: "ghcr.io/astriaorg/sequencer-relayer:0.4.0--sequencer-relayer"
+          command: [ "/scripts/start-relayer-nodes.sh" ]
+          stdin: true
+          tty: true
+          volumeMounts:
+            - mountPath: /home/relayer
+              name: relayer-home-vol
+            - mountPath: /cometbft
+              name: cometbft-home-vol
+              readOnly: true
+            - mountPath: /scripts/
+              name: relayer-scripts-volume
+          envFrom:
+            - configMapRef:
+                name: relayer-env
+          ports:
+            - containerPort: 33900
+              name: gossipnet-node2
+      volumes:
+      - name: sequencer-genesis-volume
+        configMap:
+          name: sequencer-genesis
+          defaultMode: 0500
+      - name: relayer-scripts-volume
+        configMap:
+          name: relayer-nodes-scripts
+          defaultMode: 0500
+      - name: cometbft-config-volume
+        configMap:
+          name: cometbft-node1-config
+          defaultMode: 0500
+      - name: cometbft-data-volume
+        configMap:
+          name: cometbft-node1-data
+          defaultMode: 0500
+      - emptyDir: {}
+        name: relayer-home-vol
+      - emptyDir: {}
+        name: cometbft-home-vol
