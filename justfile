@@ -44,7 +44,7 @@ clean:
   kind delete cluster --name astria-dev-cluster
 
 # FIXME - i dont like having defaults here. is there a better way to have optional arguments here?
-defaultGenesisAllocAddress := "0xb04f3ca3Ef3d2c7c0d1d6d165951caBb16B5B2fB"
+defaultGenesisAllocAddress := "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
 defaultPrivateKey          := "8b3a7999072c9c9314c084044fe705db11714c6c4ed7cddb64da18ea270dd203"
 deploy-rollup-chart rollupName networkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey:
   helm install --debug \
