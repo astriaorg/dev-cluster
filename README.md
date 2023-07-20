@@ -34,13 +34,15 @@ just wait-for-ingress-controller
 just deploy-astria-local
 
 # Deploys a geth rollup chain + faucet + blockscout + ingress
+# w/ defaults
 just deploy-rollup
+# w/ custom name and id
+just deploy-rollup <rollup_name> <chain_id>
+# w/ custom name, id, and funding address
+just deploy-rollup <rollup_name> <chain_id> <evm_funding_address> <evm_funding_private_key>
 
-# Deploy a second rollup
-just deploy-rollup-chart <rollup_name> <chain_id>
-just deploy-rollup-chart <rollup_name> <chain_id> <evm_funding_address> <evm_funding_private_key>
-# Remove the second rollup
-just delete-rollup-chart <rollup_name>
+# Delete rollup
+just delete-rollup <rollup_name>
 ```
 
 ### Configuring Funding of Geth
