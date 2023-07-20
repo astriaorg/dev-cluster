@@ -34,4 +34,14 @@ spec:
               service:
                 name: {{ .Values.rollupName }}-faucet-service
                 port:
-                  name: faucet
+                  name: faucet-svc
+    - host: blockscout.{{ .Values.rollupName }}.localdev.me
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.rollupName }}-blockscout-svc
+                port:
+                  name: blockscout-svc

@@ -16,3 +16,4 @@ ports:
   executionGRPC: 50051
   gossipnet: 2451
   faucet: 8080
+  blockscout: 4000
