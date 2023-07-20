@@ -5,7 +5,7 @@ genesisAllocAddress: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
 # Default chain id
 evmChainId: "otherchain"
 # Default network id (0xDECAF in decimal)
-evmNetworkId: 912559
+evmNetworkId: 913559
 
 # Default service ports
 ports:

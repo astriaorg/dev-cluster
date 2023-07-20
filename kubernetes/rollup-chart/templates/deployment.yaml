@@ -55,7 +55,7 @@ spec:
               name: ws-rpc
             - containerPort: {{ .Values.ports.executionGRPC }}
               name: execution-grpc
-        - name: conductor
+        - name: {{ .Values.rollupName }}-conductor
           image: "ghcr.io/astriaorg/conductor:0.3.0--conductor"
           command: [ "/scripts/start-conductor.sh" ]
           volumeMounts:
@@ -68,7 +68,9 @@ spec:
             - configMapRef:
                 name: {{ .Values.rollupName }}-conductor-env
           ports:
-            - containerPort: {{ .Values.ports.gossipnet }}
+            # FIXME - should use port from .Values
+            # - containerPort: {{ .Values.ports.gossipnet }}
+            - containerPort: 33900
               name: gossipnet
       volumes:
         - name: {{ .Values.rollupName }}-executor-scripts-volume
