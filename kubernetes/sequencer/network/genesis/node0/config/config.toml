@@ -209,13 +209,13 @@ laddr = "tcp://0.0.0.0:26656"
 # and will introspect on the listener or use UPnP
 # to figure out the address. ip and port are required
 # example: 159.89.10.97:26656
-external_address = "sequencer-service:26656"
+external_address = "192.168.65.120:26656"
 
 # Comma separated list of seed nodes to connect to
 seeds = ""
 
 # Comma separated list of nodes to keep persistent connections to
-persistent_peers = "2490c1fc41736a357c523fe049c319386d59d759@sequencer-service:26656,96c652f63b5d5d5027b42e9af906082ee7c598d9@sequencer-node1-service:26656,4a4345939744d64ca370dff266e2913dd41b4e88@sequencer-node2-service:26656"
+persistent_peers = "2490c1fc41736a357c523fe049c319386d59d759@192.168.65.120:26656,96c652f63b5d5d5027b42e9af906082ee7c598d9@192.168.65.121:26656,4a4345939744d64ca370dff266e2913dd41b4e88@192.168.65.122:26656"
 
 # UPNP port forwarding
 upnp = false

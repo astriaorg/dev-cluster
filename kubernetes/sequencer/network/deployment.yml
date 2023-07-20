@@ -9,13 +9,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
+      node: sequencer0
       app: astria-dev-cluster
   template:
     metadata:
       annotations:
         cni.projectcalico.org/ipAddrs: '["192.168.65.120"]'
-      name: metro-sequencer
+      name: sequencer0
       labels:
+        node: sequencer0
         app: astria-dev-cluster
     spec:
       initContainers:
@@ -117,11 +119,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
+      node: sequencer1
       app: astria-dev-cluster
   template:
     metadata:
-      name: metro-sequencer
+      name: sequencer1
+      annotations:
+        cni.projectcalico.org/ipAddrs: '["192.168.65.121"]'
       labels:
+        node: sequencer1
         app: astria-dev-cluster
     spec:
       initContainers:
@@ -216,11 +222,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
+      node: sequencer2
       app: astria-dev-cluster
   template:
     metadata:
-      name: metro-sequencer
+      name: sequencer2
+      annotations:
+        cni.projectcalico.org/ipAddrs: '["192.168.65.122"]'
       labels:
+        node: sequencer2
         app: astria-dev-cluster
     spec:
       initContainers:
@@ -293,11 +303,11 @@ spec:
           defaultMode: 0500
       - name: cometbft-config-volume
         configMap:
-          name: cometbft-node1-config
+          name: cometbft-node2-config
           defaultMode: 0500
       - name: cometbft-data-volume
         configMap:
-          name: cometbft-node1-data
+          name: cometbft-node2-data
           defaultMode: 0500
       - emptyDir: {}
         name: relayer-home-vol
