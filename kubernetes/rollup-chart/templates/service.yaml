@@ -5,7 +5,7 @@ metadata:
   namespace: astria-dev-cluster
 spec:
   selector:
-    app: astria-dev-cluster
+    app: {{ .Values.rollupName }}-astria-dev-cluster
   ports:
     - name: json-rpc-svc
       port: {{ .Values.ports.jsonRPC }}
@@ -16,3 +16,29 @@ spec:
     - name: gossipnet-svc
       port: {{ .Values.ports.gossipnet }}
       targetPort: gossipnet
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.rollupName }}-faucet-service
+  namespace: astria-dev-cluster
+spec:
+  selector:
+    app: {{ .Values.rollupName }}-astria-dev-cluster
+  ports:
+    - name: faucet-svc
+      port: {{ .Values.ports.faucet }}
+      targetPort: faucet
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.rollupName }}-blockscout-svc
+  namespace: astria-dev-cluster
+spec:
+  selector:
+    app: {{ .Values.rollupName }}-astria-dev-cluster
+  ports:
+    - name: blockscout-svc
+      port: {{ .Values.ports.blockscout }}
+      targetPort: blockscout
