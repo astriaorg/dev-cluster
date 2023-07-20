@@ -15,6 +15,16 @@ spec:
                 name: {{ .Values.rollupName }}-evm-service
                 port:
                   name: json-rpc-svc
+    - host: ws-executor.{{ .Values.rollupName }}.localdev.me
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.rollupName }}-evm-service
+                port:
+                  name: ws-rpc-svc
     - host: faucet.{{ .Values.rollupName }}.localdev.me
       http:
         paths:
