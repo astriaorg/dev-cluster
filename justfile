@@ -43,6 +43,7 @@ wait-for-geth:
 clean:
   kind delete cluster --name astria-dev-cluster
 
+# TODO - add arg for genesisAllocAddress
 deploy-rollup-chart rollupName networkId:
   helm install --debug \
     --set rollupName={{rollupName}} \
