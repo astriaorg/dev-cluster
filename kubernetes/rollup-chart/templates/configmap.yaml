@@ -6,6 +6,7 @@ metadata:
 data:
   home_dir: "/home/conductor"
   executor_host_grpc_port: "{{ .Values.ports.executionGRPC }}"
+  gossipnet_port: "{{ .Values.ports.gossipnet }}"
   cometbft_rpc_endpoint: "http://sequencer-service:26657"
   celestia_node_url: "http://celestia-service:26658"
   evm_chain_id: "{{ .Values.evmChainId }}"
@@ -22,15 +23,6 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.rollupName }}-conductor-keys
-  namespace: astria-dev-cluster
-data:
-  libp2p.key: |
-    {{- .Files.Get "files/keys/libp2p.key" | nindent 4 }}
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
   name: {{ .Values.rollupName }}-geth-env
   namespace: astria-dev-cluster
 data:
@@ -39,7 +31,6 @@ data:
   executor_host_http_port: "{{ .Values.ports.jsonRPC }}"
   executor_host_grpc_port: "{{ .Values.ports.executionGRPC }}"
   executor_host_ws_port: "{{ .Values.ports.wsRPC }}"
-  sequencer_host_grpc_port: "9100"
   genesis_alloc_address: "{{ .Values.genesisAllocAddress }}"
   evm_network_id: "{{ .Values.evmNetworkId }}"
   evm_chain_id: "{{ .Values.evmChainId }}"

@@ -62,9 +62,6 @@ spec:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-conductor-scripts-volume
               readOnly: true
-            - mountPath: /keys/
-              name: {{ .Values.rollupName }}-conductor-keys-volume
-              readOnly: true
             - mountPath: /home/conductor
               name: {{ .Values.rollupName }}-conductor-home-vol
           envFrom:
@@ -81,10 +78,6 @@ spec:
         - name: {{ .Values.rollupName }}-conductor-scripts-volume
           configMap:
             name: {{ .Values.rollupName }}-conductor-scripts
-            defaultMode: 0500
-        - name: {{ .Values.rollupName }}-conductor-keys-volume
-          configMap:
-            name: {{ .Values.rollupName }}-conductor-keys
             defaultMode: 0500
         - emptyDir: { }
           name: {{ .Values.rollupName }}-executor-home-vol
