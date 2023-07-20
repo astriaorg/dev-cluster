@@ -2,7 +2,7 @@
 
 set -o errexit -o nounset
 
-export CHAIN_ID=$evm_network_id
+export CHAIN_ID=$evm_chain_id
 export COMETBFT_RPC_ENDPOINT=$cometbft_rpc_endpoint
 
 geth --datadir $data_dir/ --networkid=$evm_network_id \
