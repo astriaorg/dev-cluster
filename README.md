@@ -35,6 +35,11 @@ just deploy-astria-local
 
 # Deploys a geth rollup chain + faucet + blockscout + ingress
 just deploy-rollup
+
+# Deploy a second rollup
+just deploy-rollup-chart <rollup_name> <chain_id>
+# Remove the second rollup
+just delete-rollup-chart <rollup_name>
 ```
 
 ### Configuring Funding of Geth

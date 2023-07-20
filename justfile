@@ -42,3 +42,13 @@ wait-for-geth:
 
 clean:
   kind delete cluster --name astria-dev-cluster
+
+deploy-rollup-chart rollupName networkId:
+  helm install --debug \
+    --set rollupName={{rollupName}} \
+    --set evmChainId={{rollupName}}chain \
+    --set evmNetworkId={{networkId}} \
+    {{rollupName}}chain-chart-deploy ./kubernetes/rollup-chart
+
+delete-rollup-chart rollupName:
+  helm uninstall {{rollupName}}chain-chart-deploy
