@@ -16,10 +16,10 @@ echo "Celestia Bearer token fetched successfully."
 
 export ASTRIA_celestia_bearer_token="$BEARER_TOKEN"
 
-# TODO - use $gossipnet_port instead of hardcoded 33900
 /usr/local/bin/astria-conductor \
   --tendermint-url=$cometbft_rpc_endpoint \
   --celestia-node-url=$celestia_node_url \
   --chain-id=$evm_chain_id \
+  --libp2p-port=$gossipnet_port \
   --execution-rpc-url=http://localhost:$executor_host_grpc_port \
   --bootnodes=/ip4/192.168.65.120/tcp/33900/p2p/12D3KooWJGy9JbZyi4JLF2PsBsuUm8Jn72qrHiQ5it5wygAAvHYb
