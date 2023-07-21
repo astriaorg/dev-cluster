@@ -14,14 +14,12 @@ fi
 
 echo "Celestia Bearer token fetched successfully."
 
-echo "celestia_bearer_token = \"$BEARER_TOKEN\"" > "$home_dir"/SequencerRelayerConfig.toml
-
 export ASTRIA_celestia_bearer_token="$BEARER_TOKEN"
 
 /usr/local/bin/astria-conductor \
-  --tendermint-url=http://sequencer-service:26657 \
-  --celestia-node-url=http://celestia-service:26658 \
-  --chain-id=ethereum \
-  --execution-rpc-url=http://localhost:50051 \
-  --libp2p-private-key=/keys/libp2p.key \
+  --tendermint-url=$cometbft_rpc_endpoint \
+  --celestia-node-url=$celestia_node_url \
+  --chain-id=$evm_chain_id \
+  --libp2p-port=$gossipnet_port \
+  --execution-rpc-url=http://localhost:$executor_host_grpc_port \
   --bootnodes=/ip4/192.168.65.120/tcp/33900/p2p/12D3KooWJGy9JbZyi4JLF2PsBsuUm8Jn72qrHiQ5it5wygAAvHYb
