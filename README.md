@@ -41,11 +41,12 @@ just deploy-astria-local
 
 # Deploys a geth rollup chain + faucet + blockscout + ingress
 # w/ defaults
+# NOTE - default values can be found in `kubernetes/rollup/values.yaml`
 just deploy-rollup
 # w/ custom name and id
-just deploy-rollup <rollup_name> <chain_id>
+just deploy-rollup <rollup_name> <network_id>
 # w/ custom name, id, and funding address
-just deploy-rollup <rollup_name> <chain_id> <evm_funding_address> <evm_funding_private_key>
+just deploy-rollup <rollup_name> <network_id> <evm_funding_address> <evm_funding_private_key>
 
 # Delete rollup
 just delete-rollup <rollup_name>
@@ -62,7 +63,7 @@ By default, the faucet is funded by the account that is funded during geth genes
 * add custom network
     * network name: `<rollup_name>`
     * rpc url: `http://executor.<rollup_name>.localdev.me`
-    * chain id: `<chain_id>`
+    * chain id: `<network_id>`
     * currency symbol: `RIA`
 
 ## Deployments and Containers
