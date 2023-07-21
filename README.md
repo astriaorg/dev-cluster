@@ -8,6 +8,7 @@ Main dependencies
 
 * docker - https://docs.docker.com/get-docker/
 * kubectl - https://kubernetes.io/docs/tasks/tools/
+* helm - https://helm.sh/docs/intro/install/
 * kind - https://kind.sigs.k8s.io/docs/user/quick-start/#installation
 * just - https://just.systems/man/en/chapter_4.html
 
