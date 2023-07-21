@@ -27,33 +27,23 @@ redeploy pod:
   kubectl delete -n astria-dev-cluster deployment {{pod}}
   kubectl apply -k kubernetes/{{pod}}
 
-config-ingress-local:
-  kubectl apply -f kubernetes/local-ingress.yml
-
 deploy-astria-local: (deploy "celestia-local") (deploy "sequencer")
 
-deploy-rollup: (deploy "geth") (deploy "faucet/local") (deploy "blockscout") config-ingress-local
+defaultRollupName          := "astria"
+defaultNetworkId           := ""
+defaultGenesisAllocAddress := ""
+defaultPrivateKey          := ""
+deploy-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey:
+  helm install --debug \
+    {{ if rollupName          != '' { replace('--set rollupName=# --set evmChainId=#chain', '#', rollupName) } else { '' } }} \
+    {{ if networkId           != '' { replace('--set evmNetworkId=#', '#', networkId) } else { '' } }} \
+    {{ if genesisAllocAddress != '' { replace('--set genesisAllocAddress=#', '#', genesisAllocAddress) } else { '' } }} \
+    {{ if privateKey          != '' { replace('--set privateKey=#', '#', privateKey) } else { '' } }} \
+    {{rollupName}}chain-chart-deploy ./kubernetes/rollup
 
-wait-for-sequencer:
-  kubectl wait -n astria-dev-cluster deployment sequencer --for=condition=Available=True --timeout=600s
-
-wait-for-geth:
-  kubectl wait -n astria-dev-cluster deployment geth --for=condition=Available=True --timeout=600s
+defaultRollupNameForDelete := "astria"
+delete-rollup rollupName=defaultRollupNameForDelete:
+  helm uninstall {{rollupName}}chain-chart-deploy
 
 clean:
   kind delete cluster --name astria-dev-cluster
-
-# FIXME - i dont like having defaults here. is there a better way to have optional arguments here?
-defaultGenesisAllocAddress := "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
-defaultPrivateKey          := "8b3a7999072c9c9314c084044fe705db11714c6c4ed7cddb64da18ea270dd203"
-deploy-rollup-chart rollupName networkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey:
-  helm install --debug \
-    --set rollupName={{rollupName}} \
-    --set evmChainId={{rollupName}}chain \
-    --set evmNetworkId={{networkId}} \
-    --set genesisAllocAddress={{genesisAllocAddress}} \
-    --set privateKey={{privateKey}} \
-    {{rollupName}}chain-chart-deploy ./kubernetes/rollup-chart
-
-delete-rollup-chart rollupName:
-  helm uninstall {{rollupName}}chain-chart-deploy

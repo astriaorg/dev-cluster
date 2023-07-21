@@ -18,6 +18,12 @@ For contract deployment:
 
 In order to startup you will need to have docker running on your machine
 
+### Configuring Funding of Geth
+
+By default, running this local rollup will fund a wallet address `0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30`, which you can add to your preferred wallet using the private key in `kubernetes/rollup/files/keys/private_key.txt`. This account should never be used for anything but test transactions.
+
+To change the wallet account which receives funds, use the `deploy-rollup` command with the optional arguments `evm_funding_address` and `evm_funding_private_key`.
+
 ```bash
 # create control plane cluster
 just create-cluster
@@ -34,34 +40,30 @@ just wait-for-ingress-controller
 just deploy-astria-local
 
 # Deploys a geth rollup chain + faucet + blockscout + ingress
+# w/ defaults
 just deploy-rollup
+# w/ custom name and id
+just deploy-rollup <rollup_name> <chain_id>
+# w/ custom name, id, and funding address
+just deploy-rollup <rollup_name> <chain_id> <evm_funding_address> <evm_funding_private_key>
 
-# Deploy a second rollup
-just deploy-rollup-chart <rollup_name> <chain_id>
-just deploy-rollup-chart <rollup_name> <chain_id> <evm_funding_address> <evm_funding_private_key>
-# Remove the second rollup
-just delete-rollup-chart <rollup_name>
+# Delete rollup
+just delete-rollup <rollup_name>
 ```
-
-### Configuring Funding of Geth
-
-By default, running this local node will fund a wallet address `0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30`, which you can add to your preferred wallet using the private key in `kubernetes/geth/key/private_key.txt`. This account should never be used for anything but test transactions.
-
-To change the wallet account which receives funds, alter the `alloc` section of `kubernetes/geth/genesis/geth-genesis.json`
 
 ### Faucet
 
-The faucet is reachable at http://faucet.astria.localdev.me.
+The faucet is reachable at http://faucet.<rollup_name>.localdev.me.
 
 By default, the faucet is funded by the account that is funded during geth genesis. This is configured by using the private key of the funded account in `start-faucet.sh`. This key is defined in `kubernetes/faucet/config-maps.yml` and is identical to the key in `kubernetes/geth/key/private_key.txt`.
 
 ### Connecting Metamask
 
 * add custom network
-    * network name: `astria-local`
-    * rpc url: `http://executor.astria.localdev.me`
-    * chain id: `912559`
-    * currency symbol: `ETH`
+    * network name: `<rollup_name>`
+    * rpc url: `http://executor.<rollup_name>.localdev.me`
+    * chain id: `<chain_id>`
+    * currency symbol: `RIA`
 
 ## Deployments and Containers
 
