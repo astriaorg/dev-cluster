@@ -43,11 +43,12 @@ just deploy-astria-local
 
 # Deploys a geth rollup chain + faucet + blockscout + ingress
 # w/ defaults
+# NOTE - default values can be found in `kubernetes/rollup/values.yaml`
 just deploy-rollup
 # w/ custom name and id
-just deploy-rollup <rollup_name> <chain_id>
+just deploy-rollup <rollup_name> <network_id>
 # w/ custom name, id, and funding address
-just deploy-rollup <rollup_name> <chain_id> <evm_funding_address> <evm_funding_private_key>
+just deploy-rollup <rollup_name> <network_id> <evm_funding_address> <evm_funding_private_key>
 
 # Delete rollup
 just delete-rollup <rollup_name>
@@ -64,7 +65,7 @@ By default, the faucet is funded by the account that is funded during geth genes
 * add custom network
     * network name: `<rollup_name>`
     * rpc url: `http://executor.<rollup_name>.localdev.me`
-    * chain id: `<chain_id>`
+    * chain id: `<network_id>`
     * currency symbol: `RIA`
 
 ## Deployments and Containers
@@ -84,7 +85,7 @@ It is possible to restart running pods without restarting the entire cluster. Th
 NOTE: when restarting `celestia-local`, you will also need to restart `sequencer` and `geth`.
 
 ```bash
-just restart [deployment-name]
+just restart <DEPLOYMENT_NAME>
 ```
 
 ### Redeploying Deployments
@@ -92,7 +93,7 @@ just restart [deployment-name]
 When deploying pods which participate in p2p (`sequencer`, `geth`) you must completely redeployd
 
 ```bash
-just redeploy [deployment-name]
+just redeploy <DEPLOYMENT_NAME>
 ```
 
 ### Helpful commands
@@ -101,7 +102,7 @@ The following commands are helpful for interacting with the cluster and its reso
 
 ```bash
 # list all containers within a deployment
-kubectl get -n astria-dev-cluster deployment DEPLOYMENT_NAME -o jsonpath='{.spec.template.spec.containers[*].name}'
+kubectl get -n astria-dev-cluster deployment <DEPLOYMENT_NAME> -o jsonpath='{.spec.template.spec.containers[*].name}'
 
 # log the entire astria cluster
 kubectl logs -n astria-dev-cluster -l app=astria-dev-cluster -f
@@ -117,10 +118,10 @@ kubectl get --all-namespaces pods
 kubectl get -n astria-dev-cluster pods
 
 # to log a container you need to first grab the pod name from above
-kubectl logs -n astria-dev-cluster -c CONTAINER_NAME POD_NAME
+kubectl logs -n astria-dev-cluster -c <CONTAINER_NAME> <POD_NAME>
 
 # delete a single deployment
-just delete DEPLOYMENT
+just delete -n astria-dev-cluster deployment <DEPLOYMENT_NAME>
 
 # delete cluster and resources
 just clean
