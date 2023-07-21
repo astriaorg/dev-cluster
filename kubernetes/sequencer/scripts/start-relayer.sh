@@ -14,8 +14,6 @@ fi
 
 echo "Celestia Bearer token fetched successfully."
 
-echo "celestia_bearer_token = \"$BEARER_TOKEN\"" > "$home_dir"/SequencerRelayerConfig.toml
-
 export ASTRIA_SEQUENCER_RELAYER_celestia_bearer_token="$BEARER_TOKEN"
 
 /usr/local/bin/astria-sequencer-relayer \
