@@ -27,10 +27,7 @@ redeploy pod:
   kubectl delete -n astria-dev-cluster deployment {{pod}}
   kubectl apply -k kubernetes/{{pod}}
 
-config-ingress-local:
-  kubectl apply -f kubernetes/local-ingress.yml
-
-deploy-astria-local: (deploy "celestia-local") (deploy "sequencer") config-ingress-local
+deploy-astria-local: (deploy "celestia-local") (deploy "sequencer")
 
 defaultRollupName          := "astria"
 defaultNetworkId           := ""
