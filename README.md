@@ -34,8 +34,6 @@ just create-cluster
 just deploy-ingress-controller
 
 # wait for ingress.
-# NOTE: this may fail quickly with "error: no matching resources found".
-#  please retry the command
 just wait-for-ingress-controller
 
 # Deploys Sequencer + local DA

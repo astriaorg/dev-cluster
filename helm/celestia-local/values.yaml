@@ -1,0 +1,33 @@
+# Default values for celestia-local.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+podSecurityContext:
+  runAsUser: 10001
+  fsGroup: 10001
+  fsGroupChangePolicy: "OnRootMismatch"
+
+### Custom
+
+# Default address where funds get allocated on genesis
+evmAddress: "0x966e6f22781EF6a6A82BBB4DB3df8E225DfD9488"
+# Default private key, must correspond with above address
+privateKey: "da6ed55cb2894ac2c9c10209c09de8e8b9d109b910338d5bf3d747a7e1fc9eb9"
+# Default chain id
+chainId: "test"
+# Signer info
+keyringBackend: "test"
+validatorKeyName: "validator"
+# Genesis amount
+coins: "1000000000000000utia"
+# Staking amount
+validatorStake: "5000000000utia"
+
+# Default service ports
+ports:
+  celestiaAppHostPort: 26657
+  celestiaTokenService: 5353
+  bridgeRPC: 26658
+  bridgeHTTP: 26659
+
+

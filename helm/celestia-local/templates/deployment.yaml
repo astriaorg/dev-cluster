@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celestia-local
+  labels:
+    app: astria-dev-cluster
+  namespace: astria-dev-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: astria-dev-cluster
+  template:
+    metadata:
+      name: celestia-local
+      labels:
+        app: astria-dev-cluster
+    spec:
+      securityContext:
+        runAsUser: 10001
+        fsGroup: 10001
+        fsGroupChangePolicy: "OnRootMismatch"
+      initContainers:
+        - name: init-celestia
+          command: [ "/scripts/init-celestia-appd.sh" ]
+          image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc9"
+          volumeMounts:
+            - mountPath: /scripts/
+              name: celestia-appd-scripts-volume
+            - mountPath: /home/celestia
+              name: celestia-home-vol
+          envFrom:
+            - configMapRef:
+                name: celestia-local-env
+        - name: init-bridge
+          command: [ "/scripts/init-bridge.sh" ]
+          image: "ghcr.io/astriaorg/test-images-celestia-node:v0.11.0-rc7"
+          volumeMounts:
+            - mountPath: /scripts/
+              name: bridge-scripts-volume
+            - mountPath: /home/celestia
+              name: celestia-home-vol
+          envFrom:
+            - configMapRef:
+                name: celestia-local-env
+      containers:
+        - name: celestia-app
+          command: [ "/scripts/start-celestia-appd.sh" ]
+          image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc9"
+          volumeMounts:
+            - mountPath: /scripts/
+              name: celestia-appd-scripts-volume
+            - mountPath: /home/celestia
+              name: celestia-home-vol
+          envFrom:
+            - configMapRef:
+                name: celestia-local-env
+          ports:
+            - containerPort: {{ .Values.ports.celestiaAppHostPort }}
+        - name: celestia-bridge
+          command: [ "/scripts/start-bridge.sh" ]
+          image: "ghcr.io/astriaorg/test-images-celestia-node:v0.11.0-rc7"
+          volumeMounts:
+            - mountPath: /scripts/
+              name: bridge-scripts-volume
+            - mountPath: /home/celestia
+              name: celestia-home-vol
+          envFrom:
+            - configMapRef:
+                name: celestia-local-env
+          ports:
+            - containerPort: {{ .Values.ports.bridgeHTTP }}
+              name: bridge-rest
+            - containerPort: {{ .Values.ports.bridgeRPC }}
+              name: bridge-jsonrpc
+          startupProbe:
+            httpGet:
+              path: /header/1
+              port: bridge-rest
+            failureThreshold: 30
+            periodSeconds: 10
+        - name: token-server
+          image: "busybox:1.35.0-musl"
+          command: [ "/bin/httpd", "-v", "-f", "-p", "5353", "-h", "/home/celestia/token-server/" ]
+          ports:
+            - containerPort: {{ .Values.ports.celestiaTokenService }}
+              name: token-svc
+          volumeMounts:
+            - mountPath: /home/celestia
+              name: celestia-home-vol
+              readOnly: true
+          startupProbe:
+            httpGet:
+              path: /
+              port: token-svc
+            failureThreshold: 30
+            periodSeconds: 5
+      volumes:
+        - name: bridge-scripts-volume
+          configMap:
+            name: celestia-local-bridge-scripts
+            defaultMode: 0550
+        - emptyDir: { }
+          name: celestia-home-vol
+        - name: celestia-appd-scripts-volume
+          configMap:
+            name: celestia-local-appd-scripts
+            defaultMode: 0550
