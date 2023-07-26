@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: celestia-local-service
+  name: celestia-service
   namespace: astria-dev-cluster
 spec:
   selector:

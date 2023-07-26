@@ -21,7 +21,7 @@ spec:
         fsGroup: 10001
         fsGroupChangePolicy: "OnRootMismatch"
       initContainers:
-        - name: init-celestia
+        - name: init-celestia-app
           command: [ "/scripts/init-celestia-appd.sh" ]
           image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc9"
           volumeMounts:
@@ -100,9 +100,9 @@ spec:
           configMap:
             name: celestia-local-bridge-scripts
             defaultMode: 0550
-        - emptyDir: { }
-          name: celestia-home-vol
         - name: celestia-appd-scripts-volume
           configMap:
             name: celestia-local-appd-scripts
             defaultMode: 0550
+        - emptyDir: { }
+          name: celestia-home-vol

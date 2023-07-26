@@ -21,6 +21,7 @@ metadata:
   name: celestia-local-bridge-scripts
   namespace: astria-dev-cluster
 data:
+{{/*  NOTE - Example of templating a script file: */}}
 {{/*  geth-genesis.json: |*/}}
 {{/*    {{- tpl (.Files.Get "files/genesis/geth-genesis.json") $ | nindent 4 }}*/}}
   init-bridge.sh: |

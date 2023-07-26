@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['celestia-local-service:{{ .Values.ports.celestiaTokenService }}']
+      args: ['celestia-service:{{ .Values.ports.celestiaTokenService }}']
   restartPolicy: Never
