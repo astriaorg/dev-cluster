@@ -25,11 +25,11 @@ This document outlines what each of the components do, and provides some basic i
 
 ## Architecture
 If you have seen any of [Josh's](https://twitter.com/Jskybowen) recent presentations about Astria, you will likely have seen this image:
-![Astria at a high level](/images/astria-high-level.png "Astria at a high level")
+![Astria at a high level](images/astria-high-level.png)
 This shows the basic structure of what a shared sequencer is but purposely doesn't dive into any of the details of Astria to keep things simple. However, Astria's general architecture does break down into the basic items shown above.
 
 When expanded to show more detail, Astria's architecture looks like this:
-![Astria Architecture](/images/astria-architecture.png "Astria Architecture")
+![Astria Architecture](images/astria-architecture.png)
 Given the diagram above, we can take a look at each of the components that make up Astria in more detail.
 
 ### Users
@@ -46,7 +46,7 @@ When developing a rollup that utilizes Astria, there are only two interfaces tha
 
 The [Composer](#composer) and [Conductor](#conductor) are explained in more detail in future sections.
 
-![Astria Rollup](/images/astria-rollups "A rollup deployed on Astria")
+![Astria Rollup](images/astria-rollups.png)
 These interfaces utilize [gRPC](https://grpc.io/) to allow for rollup developers to use a wide range of languages for their application. Check out the [astria-protos](https://github.com/astriaorg/astria/tree/main/crates/astria-proto) repo for specific implementation details. This ultimately results in tremendous freedom for developers, giving them control over their own execution and state without needing to worry about the underlying sequencer and data availability infrastructure.
 
 The current dev-cluster deploys a fork of [Geth](https://github.com/astriaorg/go-ethereum) as an EVM rollup. 
@@ -139,7 +139,7 @@ You may be asking, "What are the limitations here? How many rollups can I deploy
 
 ### What's Going on Under the Hood?
 One last thing to mention is what is actually happening when you deploy a new rollup in the dev-cluster. When you you deploy a new rollup the only new containers that are getting spun up in the cluster are a new rollup node, a conductor, block explorer, and faucet. Only one instance of the shared sequencer and the DA layer remain running and the transactions from all the rollups are collectively getting run though those networks. This can be shown in the following diagram:
-![Running multiple rollups using Astria](/images/multiple-rollup.png "Running multiple rollups using Astria")
+![Running multiple rollups using Astria](images/multiple-rollups.png)
 
 ## Summary
 Hopefully this document helped shed some light on the inner workings of the Astria dev-cluster. Check us out on [Twitter](https://twitter.com/AstriaOrg), [github](https://github.com/astriaorg), and our [website](stria.org).
