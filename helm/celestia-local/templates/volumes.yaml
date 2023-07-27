@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: celestia-app-pv-claim
+  namespace: astria-dev-cluster
+  labels:
+    "app.kubernetes.io/name": "celestia-local"
+    "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
+    "helm.sh/chart": {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  {{- if .Values.appStorageClassOverride }}
+  storageClassName: "{{ .Values.appStorageClassOverride }}"
+  {{- else }}
+  storageClassName: "{{ .Release.Name }}-app-storage"
+  {{- end }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      # FIXME - what should this be?
+      storage: "2Gi"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: celestia-bridge-pv-claim
+  namespace: astria-dev-cluster
+  labels:
+    "app.kubernetes.io/name": "celestia-local"
+    "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
+    "helm.sh/chart": {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  {{- if .Values.bridgeStorageClassOverride }}
+  storageClassName: "{{ .Values.bridgeStorageClassOverride }}"
+    {{- else }}
+  storageClassName: "{{ .Release.Name }}-bridge-storage"
+    {{- end }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      # FIXME - what should this be?
+      storage: "2Gi"
+---

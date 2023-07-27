@@ -2,12 +2,16 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Default storage type for local development workflow.
+storageType: "local"
+# Allows to override storage class for when the storage class already exists.
+appStorageClassOverride: ""
+bridgeStorageClassOverride: ""
+
 podSecurityContext:
   runAsUser: 10001
   fsGroup: 10001
   fsGroupChangePolicy: "OnRootMismatch"
-
-### Custom
 
 # Default address where funds get allocated on genesis
 evmAddress: "0x966e6f22781EF6a6A82BBB4DB3df8E225DfD9488"
