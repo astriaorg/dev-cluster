@@ -29,6 +29,10 @@ redeploy pod:
 
 deploy-astria-local: (deploy "celestia-local") (deploy "sequencer")
 
+wait-for-sequencer:
+  kubectl wait -n astria-dev-cluster deployment celestia-local --for=condition=Available=True --timeout=600s
+  kubectl wait -n astria-dev-cluster deployment sequencer --for=condition=Available=True --timeout=600s
+
 defaultRollupName          := "astria"
 defaultNetworkId           := ""
 defaultGenesisAllocAddress := ""
@@ -41,14 +45,15 @@ deploy-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAll
     {{ if privateKey          != '' { replace('--set privateKey=#', '#', privateKey) } else { '' } }} \
     {{rollupName}}chain-chart-deploy ./kubernetes/rollup
 
+wait-for-rollup rollupName=defaultRollupName:
+  kubectl wait -n astria-dev-cluster deployment {{rollupName}}-geth --for=condition=Available=True --timeout=600s
+  kubectl wait -n astria-dev-cluster deployment {{rollupName}}-blockscout --for=condition=Available=True --timeout=600s
+
 defaultRollupNameForDelete := "astria"
 delete-rollup rollupName=defaultRollupNameForDelete:
   helm uninstall {{rollupName}}chain-chart-deploy
 
-wait-for-blockscout:
-  kubectl wait -n astria-dev-cluster deployment blockscout --for=condition=Available=True --timeout=600s
-
-deploy-all-local: create-cluster deploy-ingress-controller wait-for-ingress-controller deploy-astria-local wait-for-sequencer deploy-rollup wait-for-geth wait-for-blockscout
+deploy-all-local: create-cluster deploy-ingress-controller wait-for-ingress-controller deploy-astria-local wait-for-sequencer deploy-rollup wait-for-rollup
 
 clean:
   kind delete cluster --name astria-dev-cluster
