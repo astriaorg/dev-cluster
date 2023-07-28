@@ -8,7 +8,9 @@ Main dependencies
 
 * docker - https://docs.docker.com/get-docker/
 * kubectl - https://kubernetes.io/docs/tasks/tools/
+* helm - https://helm.sh/docs/intro/install/
 * kind - https://kind.sigs.k8s.io/docs/user/quick-start/#installation
+* just - https://just.systems/man/en/chapter_4.html
 
 For contract deployment:
 
@@ -17,6 +19,12 @@ For contract deployment:
 ## Setup
 
 In order to startup you will need to have docker running on your machine
+
+### Configuring Funding of Geth
+
+By default, running this local rollup will fund a wallet address `0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30`, which you can add to your preferred wallet using the private key in `kubernetes/rollup/files/keys/private_key.txt`. This account should never be used for anything but test transactions.
+
+To change the wallet account which receives funds, use the `deploy-rollup` command with the optional arguments `evm_funding_address` and `evm_funding_private_key`.
 
 ```bash
 # create control plane cluster
@@ -33,36 +41,35 @@ just wait-for-ingress-controller
 # Deploys Sequencer + local DA
 just deploy-astria-local
 
-# Deploys a geth rollup chain + faucet + blockscout + ingress
-just deploy-rollup
-```
-
-To run everything above in one go, you can use the following:
-
-```bash
-# deploy the whole stack locally
+# To deploy the whole stack locally with one command
 just deploy-all-local
+
+# Deploys a geth rollup chain + faucet + blockscout + ingress
+# w/ defaults
+# NOTE - default values can be found in `kubernetes/rollup/values.yaml`
+just deploy-rollup
+# w/ custom name and id
+just deploy-rollup <rollup_name> <network_id>
+# w/ custom name, id, and funding address
+just deploy-rollup <rollup_name> <network_id> <evm_funding_address> <evm_funding_private_key>
+
+# Delete rollup
+just delete-rollup <rollup_name>
 ```
-
-### Configuring Funding of Geth
-
-By default, running this local node will fund a wallet address `0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30`, which you can add to your preferred wallet using the private key in `kubernetes/geth/key/private_key.txt`. This account should never be used for anything but test transactions.
-
-To change the wallet account which receives funds, alter the `alloc` section of `kubernetes/geth/genesis/geth-genesis.json`
 
 ### Faucet
 
-The faucet is reachable at http://faucet.astria.localdev.me.
+The faucet is reachable at http://faucet.<rollup_name>.localdev.me.
 
 By default, the faucet is funded by the account that is funded during geth genesis. This is configured by using the private key of the funded account in `start-faucet.sh`. This key is defined in `kubernetes/faucet/config-maps.yml` and is identical to the key in `kubernetes/geth/key/private_key.txt`.
 
 ### Connecting Metamask
 
 * add custom network
-    * network name: `astria-local`
-    * rpc url: `http://executor.astria.localdev.me`
-    * chain id: `912559`
-    * currency symbol: `ETH`
+    * network name: `<rollup_name>`
+    * rpc url: `http://executor.<rollup_name>.localdev.me`
+    * chain id: `<network_id>`
+    * currency symbol: `RIA`
 
 ## Deployments and Containers
 
@@ -81,7 +88,7 @@ It is possible to restart running pods without restarting the entire cluster. Th
 NOTE: when restarting `celestia-local`, you will also need to restart `sequencer` and `geth`.
 
 ```bash
-just restart [deployment-name]
+just restart <DEPLOYMENT_NAME>
 ```
 
 ### Redeploying Deployments
@@ -89,7 +96,7 @@ just restart [deployment-name]
 When deploying pods which participate in p2p (`sequencer`, `geth`) you must completely redeployd
 
 ```bash
-just redeploy [deployment-name]
+just redeploy <DEPLOYMENT_NAME>
 ```
 
 ### Helpful commands
@@ -98,7 +105,7 @@ The following commands are helpful for interacting with the cluster and its reso
 
 ```bash
 # list all containers within a deployment
-kubectl get -n astria-dev-cluster deployment DEPLOYMENT_NAME -o jsonpath='{.spec.template.spec.containers[*].name}'
+kubectl get -n astria-dev-cluster deployment <DEPLOYMENT_NAME> -o jsonpath='{.spec.template.spec.containers[*].name}'
 
 # log the entire astria cluster
 kubectl logs -n astria-dev-cluster -l app=astria-dev-cluster -f
@@ -114,10 +121,10 @@ kubectl get --all-namespaces pods
 kubectl get -n astria-dev-cluster pods
 
 # to log a container you need to first grab the pod name from above
-kubectl logs -n astria-dev-cluster -c CONTAINER_NAME POD_NAME
+kubectl logs -n astria-dev-cluster -c <CONTAINER_NAME> <POD_NAME>
 
 # delete a single deployment
-just delete DEPLOYMENT
+just delete -n astria-dev-cluster deployment <DEPLOYMENT_NAME>
 
 # delete cluster and resources
 just clean

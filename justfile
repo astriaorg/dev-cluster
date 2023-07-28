@@ -27,18 +27,23 @@ redeploy pod:
   kubectl delete -n astria-dev-cluster deployment {{pod}}
   kubectl apply -k kubernetes/{{pod}}
 
-config-ingress-local:
-  kubectl apply -f kubernetes/local-ingress.yml
-
 deploy-astria-local: (deploy "celestia-local") (deploy "sequencer")
 
-deploy-rollup: (deploy "geth") (deploy "faucet/local") (deploy "blockscout") config-ingress-local
+defaultRollupName          := "astria"
+defaultNetworkId           := ""
+defaultGenesisAllocAddress := ""
+defaultPrivateKey          := ""
+deploy-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey:
+  helm install --debug \
+    {{ if rollupName          != '' { replace('--set rollupName=# --set evmChainId=#chain', '#', rollupName) } else { '' } }} \
+    {{ if networkId           != '' { replace('--set evmNetworkId=#', '#', networkId) } else { '' } }} \
+    {{ if genesisAllocAddress != '' { replace('--set genesisAllocAddress=#', '#', genesisAllocAddress) } else { '' } }} \
+    {{ if privateKey          != '' { replace('--set privateKey=#', '#', privateKey) } else { '' } }} \
+    {{rollupName}}chain-chart-deploy ./kubernetes/rollup
 
-wait-for-sequencer:
-  kubectl wait -n astria-dev-cluster deployment sequencer --for=condition=Available=True --timeout=600s
-
-wait-for-geth:
-  kubectl wait -n astria-dev-cluster deployment geth --for=condition=Available=True --timeout=600s
+defaultRollupNameForDelete := "astria"
+delete-rollup rollupName=defaultRollupNameForDelete:
+  helm uninstall {{rollupName}}chain-chart-deploy
 
 wait-for-blockscout:
   kubectl wait -n astria-dev-cluster deployment blockscout --for=condition=Available=True --timeout=600s
