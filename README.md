@@ -41,6 +41,9 @@ just wait-for-ingress-controller
 # Deploys Sequencer + local DA
 just deploy-astria-local
 
+# To deploy the whole stack locally with one command
+just deploy-all-local
+
 # Deploys a geth rollup chain + faucet + blockscout + ingress
 # w/ defaults
 # NOTE - default values can be found in `kubernetes/rollup/values.yaml`

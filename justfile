@@ -45,5 +45,10 @@ defaultRollupNameForDelete := "astria"
 delete-rollup rollupName=defaultRollupNameForDelete:
   helm uninstall {{rollupName}}chain-chart-deploy
 
+wait-for-blockscout:
+  kubectl wait -n astria-dev-cluster deployment blockscout --for=condition=Available=True --timeout=600s
+
+deploy-all-local: create-cluster deploy-ingress-controller wait-for-ingress-controller deploy-astria-local wait-for-sequencer deploy-rollup wait-for-geth wait-for-blockscout
+
 clean:
   kind delete cluster --name astria-dev-cluster
