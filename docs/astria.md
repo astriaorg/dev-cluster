@@ -17,37 +17,32 @@
  - [Summary](#summary)
 
 ## The Astria [dev-cluster](https://github.com/astriaorg/dev-cluster)
-The Astria Shared Sequencer Network replaces centralized sequencers, allowing many rollups to share a single decentralized network of sequencers that’s simple and permissionless to join. This shared sequencer network provides out-of-the-box censorship resistance, fast block confirmations, and atomic cross-rollup composability – all while retaining each rollup’s sovereignty.
+Astria's Shared Sequencer Network allows multiple rollups to share a single decentralized network of sequencers that’s permissionless to join. This shared sequencer network provides out-of-the-box censorship resistance, fast block confirmations, and atomic cross-rollup inclusion guarantees.
 
-The Astria dev-cluster is the collective stack of all of Astria's components packaged together using Kubernetes. Although we refer to Astria as just a shared sequencer, it is composed of many smaller components that each fulfill a specific function to enable the final shared sequencing functionality. Instead of users and developers having to keep track of and manage all the individual components, the dev-cluster is built to make locally deploying and testing Astria as simple and robust as possible. 
+The Astria dev-cluster is the collective stack of all of Astria's components packaged together using Kubernetes. While we generally refer to Astria as the network of shared sequencers, we provide several other components to make it simpler to integrate with the shared sequencer network. The dev-cluster is provided to make developing and testing the Astria network, as well as integrations with Astria, as simple as possible.
 
-This document outlines what each of the components do, and provides some basic instructions for running the dev cluster yourself.
+This document outlines what each of the components in the dev-cluster do, and provides instructions for how to run the dev cluster locally.
 
 ## Architecture
-If you have seen any of [Josh's](https://twitter.com/Jskybowen) recent presentations about Astria, you will likely have seen this image:
-![Astria at a high level](images/astria-high-level.png)
-This shows the basic structure of what a shared sequencer is but purposely doesn't dive into any of the details of Astria to keep things simple. However, Astria's general architecture does break down into the basic items shown above.
+At a high level, Astria breaks out all of the components that are historically combined together in monolithic blockchains into individual components. This results in a modular ecosystem that allows users to swap out components to fit their specific needs.
 
-When expanded to show more detail, Astria's architecture looks like this:
 ![Astria Architecture](images/astria-architecture.png)
-Given the diagram above, we can take a look at each of the components that make up Astria in more detail.
+Astria's architecture follows the structure outlined in the first diagram. Notable differences between Astria and the basic structure are the Composer, Relayer, and Conductor. Astria's Composer handles the order flow operations, and the Relayer and Conductor facilitate the soft and firm commitments. Ultimately, Astria's architecture is just an expanded version of the first diagram.
 
 ### Users
-One of the goals of Astria is to improve the current user experience by having fast finality, Cross Rollup Composability, decentralization, and  sovereignty all in one place and out of the box. There are no hard requirements for rollups to change how their current users interact with what they offer, but additional RPCs would need to be implemented by the rollup in order for their users to take advantage of some of those features.
+One of Astria's goals is to provide rollups with fast finality, atomic cross-rollup inclusion, and decentralization out of the box, without requiring changes to their end user experience. Individual rollups should be able to provide a native experience to their users, Metamask should "just work" with an EVM rollup, and Kepler should "just work" with a cosmos-sdk rollup.
 
 ### Rollups
-Astria is designed for permissionless rollup integration and takes advantage of lazy shared sequencing. This means that rollup developers have total sovereignty over their own execution state and can swap out sequencing layers without fear of being locked in. See the [Introduction to Astria](https://blog.astria.org/introducing-astria/) blog post for more details.
-
-When developing a rollup that utilizes Astria, there are only two interfaces that you need to satisfy:
-1. Rollup <-> Composer: 
+Astria is designed for permissionless rollup integration and takes advantage of lazy shared sequencing. This means that rollup developers have total sovereignty over their own execution state and can swap out sequencing layers without fear of being locked in. You do not need to ask for permission or go through a governance process to gain access. A rollup simply needs to satisfy the following interfaces:
+1. Write Interface (Rollup <-> Composer):
     - For transaction submissions.
-2. Rollup <-> Conductor: 
-    - For receiving data from the sequencing network.
+2. Read Interface (Rollup <-> Conductor):
+    - For receiving blocks from the shared sequencer network.
 
 The [Composer](#composer) and [Conductor](#conductor) are explained in more detail in future sections.
 
 ![Astria Rollup](images/astria-rollups.png)
-These interfaces utilize [gRPC](https://grpc.io/) to allow for rollup developers to use a wide range of languages for their application. Check out the [astria-protos](https://github.com/astriaorg/astria/tree/main/crates/astria-proto) repo for specific implementation details. This ultimately results in tremendous freedom for developers, giving them control over their own execution and state without needing to worry about the underlying sequencer and data availability infrastructure.
+Both composer and conductor expose [gRPC](https://grpc.io/) interfaces. See the [astria-protos](https://github.com/astriaorg/astria/tree/main/crates/astria-proto) repo for specific implementation details.
 
 The current dev-cluster deploys a fork of [Geth](https://github.com/astriaorg/go-ethereum) as an EVM rollup. 
 
@@ -65,7 +60,7 @@ The sequencer can optionally act as a “validator”, meaning it actively parti
 ### Relayer
 The Relayer's responsibility is to take validated blocks from the sequencer and pass them along to both the Conductor and the DA layer. Because the sequencers block times are much faster than those of the DA, the relayer also collects a queue of sequencer blocks before wrapping them for submission to DA.
 
-The individual sequencer blocks sent to the Conductor enable fast finality for an improved UX and also act as soft commits for the execution layer. The collections of blocks sent to the DA layer are used as a source of truth and are ultimately pulled from the DA to be used as firm commits for finality in the rolllups.
+The individual sequencer blocks sent immediately to the Conductor to enable fast finality for an improved UX and also act as soft commits for the execution layer. The collections of blocks sent to the DA layer are used as a source of truth and are ultimately pulled from the DA to be used as firm commits for finality in the rolllups.
 
 ### Data Availability
 The dev-cluster uses [Celestia](https://github.com/celestiaorg) as the data availability layer and is the ultimate destination of all data that has been ordered by the sequencer network. Once written to Celestia, the transaction order is considered final and it is where all data will be pulled from if you need to spin up a new rollup node.
@@ -73,9 +68,7 @@ The dev-cluster uses [Celestia](https://github.com/celestiaorg) as the data avai
 ### Conductor
 The Conductor is the second to last component in the data lifecycle for transaction in the Astria stack, with the rollup itself being both the start and finish for any given transaction. Each rollup runs its own instance of the Conductor. The Conductor's responsibility is to ingest the soft commit sequencer blocks from the relayer and pull in the firm commit data from Celestia to pass transaction data to be executed on the rollup and update the canonical chain.
 The Conductor is effectively stateless but does ephemerally store some information about the blocks it has seen and passed on to be executed. It primarily filters the transactions that are relevant to a given rollup out of the sequencer blocks for execution. The data that it does store is for sending commitment updates to the rollup.
-As mentioned in the Relayer section above, any data received by the Conductor directly from the Relayer is considered a soft commit and is filtered and sent to the rollup for execution and for setting that block to "safe". The Conductor regularly polls Celestia for new data and when it sees the same blocks in Celestia that it has already seen from the Relayer, it sends a firm commit message to the rollup to update that block to "finalized."
-
-And that's it! Hopefully you now have a better understanding of what is actually happening under the hood and what the purpose of each component of Astria is used for. Now it's time to run it yourself!
+As mentioned in the Relayer section above, any data received by the Conductor directly from the Relayer is considered a soft commit. This data is filtered using the rollup's namespace and only transactions that are relevant to the rollup are passed on as blocks for execution. These blocks are also marked as "safe". The Conductor regularly polls Celestia for new data and when it sees the same blocks in Celestia that it has already seen from the Relayer, it sends a firm commit message to the rollup to update that block to "finalized."
 
 ## Running the Cluster
 
@@ -90,7 +83,9 @@ To deploy the full dev-cluster, open a terminal in the dev-cluster directory and
 just deploy-all-local
 ```
 
-This may take a minute or two if this the first time you are deploying as quite a few containers need to be downloaded. Once the command completes, all elements of the dev-cluster will be up and running including a geth rollup, faucet and block explorer. The default deploy only spins up a single rollup but have no fear we'll get to multiple rollups shortly.
+This may take a minute or two if this the first time you are deploying as quite a few containers need to be downloaded. Once the command completes, all elements of the dev-cluster will be up and running including a geth rollup, faucet and block explorer. 
+
+At this stage you will have the full dev-cluster running with one rollup.
 
 ### Faucet, Block Explorer, and Test Data
 With the dev-cluster running, you can access the block explorer and faucet by opening a couple new windows in your browser and going to to the following urls.
@@ -109,15 +104,13 @@ To test out the block explorer, open a terminal in the astria-web3 repo you down
 ```
 just generate-transactions
 ```
-You can now go back to your browser and pull up the block explorer and you will now see transactions and blocks getting created in real time.
-
-But wait... what about 
+You can now go back to your browser and pull up the block explorer and you will now see blocks with transactions getting created in real time.
 
 ### Run Multiple Rollups
-As Astria we believe strongly that deploying a rollup should be as easy as deploying a smart contract. The dev-cluster shows this is indeed possible.
+At Astria we believe strongly that deploying a rollup should be as easy as deploying a smart contract. The dev-cluster shows this is indeed possible.
 
 Navigate back to the dev-cluster repo and run the following command with your own rollup name and network id:
-**NOTE:** The default rollup name and network id are `astria` and `912559`. When deploying your second rollup we recommend you use a different name and number.
+**NOTE:** The default rollup name and network id are `astria` and `912559`. When deploying your second rollup you ___must___ use a different name and number.
 ```
 just deploy-rollup <rollup_name> <network_id>
 ```
@@ -127,15 +120,17 @@ http://blockscout.<rollup_name>.localdev.me/
 ```
 Once everything has spin up you will see a new block explorer for your new rollup.
 
-You can now deploy transaction to that rollup as well independent from the first!
+You can now deploy transaction to that rollup independently.
 In the `evm-test-data` directory open a new terminal and run the following:
 ```
 just generate-transactions <rollup_name> <network_id>
 ```
 As before, this command will deploy test transaction data to your new rollup.
-You can also go back to your other terminal window for the test data deployment on the default rollup and rerun `just generate-transactions` command. If you switch back and forth between the default block explorer window and your new rollup window, you will see transactions showing up on each rollup independently!
+You can also go back to your original terminal window for the test data deployment on the default rollup and rerun the `just generate-transactions` command. If you switch back and forth between the default block explorer window and your new rollup window, you will see transactions showing up on each rollup independently!
 
-You may be asking, "What are the limitations here? How many rollups can I deploy?" In short, as many as your hardware can handle! You just need to pick different rollup names and network ids.
+The only limitations to running numerous rollups are the following:
+ - Can your hardware handle it
+ - There are no rollup name and network id clashes
 
 ### What's Going on Under the Hood?
 One last thing to mention is what is actually happening when you deploy a new rollup in the dev-cluster. When you you deploy a new rollup the only new containers that are getting spun up in the cluster are a new rollup node, a conductor, block explorer, and faucet. Only one instance of the shared sequencer and the DA layer remain running and the transactions from all the rollups are collectively getting run though those networks. This can be shown in the following diagram:
