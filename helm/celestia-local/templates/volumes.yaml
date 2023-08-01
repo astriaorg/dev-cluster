@@ -32,9 +32,9 @@ metadata:
 spec:
   {{- if .Values.bridgeStorageClassOverride }}
   storageClassName: "{{ .Values.bridgeStorageClassOverride }}"
-    {{- else }}
+  {{- else }}
   storageClassName: "{{ .Release.Name }}-bridge-storage"
-    {{- end }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:

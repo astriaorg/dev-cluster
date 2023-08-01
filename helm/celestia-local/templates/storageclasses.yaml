@@ -5,18 +5,17 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: {{ .Release.Name }}-app-storage
-# NOTE - gce-pd has not been tested yet
+# NOTE - gce-pd provisioner has not been tested yet
 provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: Immediate
+volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Delete
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: {{ .Release.Name }}-bridge-storage
-# NOTE - gce-pd has not been tested yet
 provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: Immediate
+volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Delete
 ---
 {{- end}}
