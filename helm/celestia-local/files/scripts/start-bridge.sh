@@ -3,17 +3,19 @@
 set -o errexit -o nounset -o pipefail
 
 function set_token() {
-  # NOTE - this is a hack to get the token to the token-server.
-  # busybox's httpd doesn't support url rewriting, so to make
-  # the ingress rule path `/` we write the token to index.html
+  # NOTE - this is a hack to get the token to the token-server directory.
   TOKEN=$(celestia bridge auth admin \
     --node.store "$home_dir/bridge" \
-    --keyring.accname validator)
+    --keyring.accname $validator_key_name)
+
+  # Busybox's httpd doesn't support url rewriting, so it's not simple to server another file.
+  # To support an ingress rule path of `/`, we write the token to index.html, which httpd serves by default.
   mkdir -p "$home_dir"/token-server
   echo "$TOKEN" >"$home_dir"/token-server/index.html
 }
 
 # only create token if it does not already exist
+# FIXME - would it be bad to get a new token on every start?
 if [ ! -f "$home_dir"/token-server/index.html ]; then
   set_token
 fi
