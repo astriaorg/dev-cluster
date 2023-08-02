@@ -32,6 +32,11 @@ export CELESTIA_CUSTOM="test:$genesis_hash"
 # --p2p.network "test:$celestia_custom"
 export GOLOG_LOG_LEVEL="debug"
 
+# fixes: keystore: permissions of key 'p2p-key' are too relaxed: required: 0600, got: 0660
+# FIXME - how are the perms getting changed from the first start which works fine?
+# NOTE - using `find` here to avoid chmod'ing the keyring-test directory
+find "$home_dir/bridge/keys" -type f -exec chmod 0600 {} \;
+
 echo "staring bridge!"
 exec celestia bridge start \
   --node.store "$home_dir/bridge" \
