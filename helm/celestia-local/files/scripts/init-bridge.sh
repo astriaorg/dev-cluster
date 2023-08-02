@@ -2,7 +2,7 @@
 
 set -o errexit -o nounset
 
- if bridge config already exists then exit early
+# if bridge config already exists then exit early
 if [ -f "$home_dir/bridge/config.toml" ]; then
   exit 0
 fi
