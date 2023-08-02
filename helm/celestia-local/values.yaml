@@ -8,6 +8,8 @@ storageType: "local"
 # Allows to override storage class for when the storage class already exists, like in GKE.
 sharedStorageClassOverride: ""
 
+sharedStorageSize: "2Gi"
+
 podSecurityContext:
   runAsUser: 10001
   fsGroup: 10001
