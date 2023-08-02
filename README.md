@@ -91,6 +91,33 @@ NOTE: when restarting `celestia-local`, you will also need to restart `sequencer
 just restart <DEPLOYMENT_NAME>
 ```
 
+### Using a local image
+
+Deployment files can be updated to use a locally built docker image, for testing of local changes. In order to build an image from the monorepo see docs in the monorepo [here](https://github.com/astriaorg/astria/#docker-build).
+
+Once you have a locally built image, update the image in the relevant deployment to point to your local image. In order to run, you will need to load the locally built image into the cluster. If you don't already have a cluster running, first run:
+
+```bash
+# create control plane cluster
+just create-cluster
+```
+
+Then you can run the load-image command with your image name for instance if we have created a local image `astria-sequencer:local`
+
+```bash
+# load image into cluster
+just load-image astria-sequencer:local
+```
+
+Now you can run the of the startup the full cluster.
+
+If you already had a running cluster, you only need to redeploy the component with the custom image (see below). If the image is a part of a delete it and redeploy:
+
+```
+just delete-rollup <ROLLUP_NAME>
+just deploy-rollup <ROLLUP_NAME> <NETWORK_ID>
+```
+
 ### Redeploying Deployments
 
 When deploying pods which participate in p2p (`sequencer`, `geth`) you must completely redeployd
