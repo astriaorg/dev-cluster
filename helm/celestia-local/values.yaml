@@ -4,9 +4,9 @@
 
 # Default storage type for local development workflow.
 storageType: "local"
-# Allows to override storage class for when the storage class already exists.
-appStorageClassOverride: ""
-bridgeStorageClassOverride: ""
+
+# Allows to override storage class for when the storage class already exists, like in GKE.
+sharedStorageClassOverride: ""
 
 podSecurityContext:
   runAsUser: 10001

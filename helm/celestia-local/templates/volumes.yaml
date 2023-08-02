@@ -1,7 +1,36 @@
+{{/* We need to manually create a PersistentVolume when local. */}}
+{{/* In prod, a PV will be created by the StorageClass' provisioner using dynamic provisioning feature.  */}}
+{{- if eq .Values.storageType "local" }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: celestia-shared-pv
+spec:
+  capacity:
+    storage: 2Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Release.Name }}-shared-storage
+  local:
+    # NOTE - this is the path to the directory in the kind node, not your host machine!
+    # This requires you to have an `extraMounts` section in your kind cluster config.
+    path: /data/celestia-data
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - astria-dev-cluster-control-plane
+{{- end }}
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: celestia-app-pv-claim
+  name: celestia-shared-pv-claim
   namespace: astria-dev-cluster
   labels:
     "app.kubernetes.io/name": "celestia-local"
@@ -11,29 +40,7 @@ spec:
   {{- if .Values.appStorageClassOverride }}
   storageClassName: "{{ .Values.appStorageClassOverride }}"
   {{- else }}
-  storageClassName: "{{ .Release.Name }}-app-storage"
-  {{- end }}
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      # FIXME - what should this be?
-      storage: "2Gi"
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: celestia-bridge-pv-claim
-  namespace: astria-dev-cluster
-  labels:
-    "app.kubernetes.io/name": "celestia-local"
-    "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
-    "helm.sh/chart": {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-spec:
-  {{- if .Values.bridgeStorageClassOverride }}
-  storageClassName: "{{ .Values.bridgeStorageClassOverride }}"
-  {{- else }}
-  storageClassName: "{{ .Release.Name }}-bridge-storage"
+  storageClassName: "{{ .Release.Name }}-shared-storage"
   {{- end }}
   accessModes:
     - ReadWriteOnce

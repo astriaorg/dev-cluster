@@ -7,6 +7,9 @@ networking:
 nodes:
 - role: control-plane
   image: kindest/node:v1.26.3@sha256:61b92f38dff6ccc29969e7aa154d34e38b89443af1a2c14e6cfbd2df6419c66f
+  extraMounts:
+    - hostPath: /tmp/celestia-data
+      containerPath: /data/celestia-data
   kubeadmConfigPatches:
   - |
     kind: InitConfiguration

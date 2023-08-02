@@ -107,11 +107,6 @@ spec:
           configMap:
             name: celestia-local-appd-scripts
             defaultMode: 0550
-        - name: celestia-app-pv-storage
+        - name: celestia-home-vol
           persistentVolumeClaim:
-            claimName: celestia-app-pv-claim
-        - name: celestia-bridge-pv-storage
-          persistentVolumeClaim:
-            claimName: celestia-bridge-pv-claim
-        - emptyDir: { }
-          name: celestia-home-vol
+            claimName: celestia-shared-pv-claim
