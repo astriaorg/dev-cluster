@@ -1,5 +1,5 @@
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
   name: celestia-service
   namespace: astria-dev-cluster
@@ -8,11 +8,11 @@ spec:
     app: astria-dev-cluster
   ports:
     - name: bridge-rest
-      port: 26659
+      port: {{ .Values.ports.bridgeHTTP }}
       targetPort: bridge-rest
     - name: bridge-jsonrpc
-      port: 26658
+      port: {{ .Values.ports.bridgeRPC }}
       targetPort: bridge-jsonrpc
     - name: token-svc
-      port: 5353
+      port: {{ .Values.ports.celestiaTokenService }}
       targetPort: token-svc

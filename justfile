@@ -27,7 +27,17 @@ redeploy pod:
   kubectl delete -n astria-dev-cluster deployment {{pod}}
   kubectl apply -k kubernetes/{{pod}}
 
-deploy-astria-local: (deploy "celestia-local") (deploy "sequencer")
+deploy-chart chart:
+  helm install --debug {{chart}}-chart ./helm/{{chart}}
+
+delete-chart chart:
+  helm uninstall {{chart}}-chart
+
+redeploy-chart chart:
+  helm uninstall {{chart}}-chart
+  helm install --debug {{chart}}-chart ./helm/{{chart}}
+
+deploy-astria-local: (deploy-chart "celestia-local") (deploy "sequencer")
 
 wait-for-sequencer:
   kubectl wait -n astria-dev-cluster deployment celestia-local --for=condition=Available=True --timeout=600s

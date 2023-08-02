@@ -31,7 +31,7 @@ spec:
               name: celestia-home-vol
           envFrom:
             - configMapRef:
-                name: celestia-env
+                name: celestia-local-env
         - name: init-bridge
           command: [ "/scripts/init-bridge.sh" ]
           image: "ghcr.io/astriaorg/test-images-celestia-node:v0.11.0-rc7"
@@ -42,21 +42,21 @@ spec:
               name: celestia-home-vol
           envFrom:
             - configMapRef:
-                name: celestia-env
+                name: celestia-local-env
       containers:
         - name: celestia-app
           command: [ "/scripts/start-celestia-appd.sh" ]
           image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc9"
-          envFrom:
-            - configMapRef:
-                name: celestia-env
           volumeMounts:
             - mountPath: /scripts/
               name: celestia-appd-scripts-volume
             - mountPath: /home/celestia
               name: celestia-home-vol
+          envFrom:
+            - configMapRef:
+                name: celestia-local-env
           ports:
-            - containerPort: 26657
+            - containerPort: {{ .Values.ports.celestiaAppHostPort }}
         - name: celestia-bridge
           command: [ "/scripts/start-bridge.sh" ]
           image: "ghcr.io/astriaorg/test-images-celestia-node:v0.11.0-rc7"
@@ -67,11 +67,11 @@ spec:
               name: celestia-home-vol
           envFrom:
             - configMapRef:
-                name: celestia-env
+                name: celestia-local-env
           ports:
-            - containerPort: 26659
+            - containerPort: {{ .Values.ports.bridgeHTTP }}
               name: bridge-rest
-            - containerPort: 26658
+            - containerPort: {{ .Values.ports.bridgeRPC }}
               name: bridge-jsonrpc
           startupProbe:
             httpGet:
@@ -83,7 +83,7 @@ spec:
           image: "busybox:1.35.0-musl"
           command: [ "/bin/httpd", "-v", "-f", "-p", "5353", "-h", "/home/celestia/token-server/" ]
           ports:
-            - containerPort: 5353
+            - containerPort: {{ .Values.ports.celestiaTokenService }}
               name: token-svc
           volumeMounts:
             - mountPath: /home/celestia
@@ -98,11 +98,11 @@ spec:
       volumes:
         - name: bridge-scripts-volume
           configMap:
-            name: bridge-scripts
+            name: celestia-local-bridge-scripts
+            defaultMode: 0550
+        - name: celestia-appd-scripts-volume
+          configMap:
+            name: celestia-local-appd-scripts
             defaultMode: 0550
         - emptyDir: { }
           name: celestia-home-vol
-        - name: celestia-appd-scripts-volume
-          configMap:
-            name: celestia-appd-scripts
-            defaultMode: 0550
