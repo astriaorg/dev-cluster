@@ -109,9 +109,9 @@ Then you can run the load-image command with your image name for instance if we 
 just load-image astria-sequencer:local
 ```
 
-Now you can run the of the startup the full cluster.
+Now you can run the rest of the startup the full cluster.
 
-If you already had a running cluster, you only need to redeploy the component with the custom image (see below). If the image is a part of a delete it and redeploy:
+If you already had a running cluster, you only need to redeploy the component with the custom image (see below). If the image is a part of a rollup delete it and redeploy:
 
 ```
 just delete-rollup <ROLLUP_NAME>
