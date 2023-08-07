@@ -14,6 +14,9 @@ wait-for-ingress-controller:
     sleep 1; \
   done
 
+load-image image:
+  kind load docker-image {{image}} --name astria-dev-cluster
+
 deploy pod:
   kubectl apply -k kubernetes/{{pod}}
 
