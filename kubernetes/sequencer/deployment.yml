@@ -29,7 +29,7 @@ spec:
               name: cometbft-home-vol
       containers:
         - name: sequencer
-          image: "ghcr.io/astriaorg/sequencer:0.1.0--sequencer"
+          image: "ghcr.io/astriaorg/sequencer:0.2.0--sequencer"
           command: [ "/usr/local/bin/astria-sequencer" ]
           stdin: true
           tty: true

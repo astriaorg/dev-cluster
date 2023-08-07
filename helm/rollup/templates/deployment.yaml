@@ -19,7 +19,7 @@ spec:
       initContainers:
         - name: init-geth
           command: [ "/scripts/init-geth.sh" ]
-          image: "ghcr.io/astriaorg/go-ethereum:0.1.1"
+          image: "ghcr.io/astriaorg/go-ethereum:0.2.0"
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-executor-scripts-volume
@@ -31,7 +31,7 @@ spec:
       containers:
         - name: geth
           command: [ "/scripts/start-geth.sh" ]
-          image: "ghcr.io/astriaorg/go-ethereum:0.1.1"
+          image: "ghcr.io/astriaorg/go-ethereum:0.2.0"
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-executor-scripts-volume
@@ -48,6 +48,14 @@ spec:
               name: ws-rpc
             - containerPort: {{ .Values.ports.executionGRPC }}
               name: execution-grpc
+        - name: composer
+          image: "ghcr.io/astriaorg/composer:0.1.0--composer"
+          command: [ "/usr/local/bin/astria-composer" ]
+          stdin: true
+          tty: true
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.rollupName }}-composer-env
         - name: conductor
           image: "ghcr.io/astriaorg/conductor:0.4.0--conductor"
           command: [ "/scripts/start-conductor.sh" ]
