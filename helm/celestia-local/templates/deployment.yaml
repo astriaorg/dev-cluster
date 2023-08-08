@@ -15,6 +15,9 @@ spec:
       name: celestia-local
       labels:
         app: astria-dev-cluster
+        "app.kubernetes.io/name": "celestia-local"
+        "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
+        "helm.sh/chart": {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     spec:
       securityContext:
         runAsUser: 10001
@@ -104,5 +107,6 @@ spec:
           configMap:
             name: celestia-local-appd-scripts
             defaultMode: 0550
-        - emptyDir: { }
-          name: celestia-home-vol
+        - name: celestia-home-vol
+          persistentVolumeClaim:
+            claimName: celestia-shared-pv-claim

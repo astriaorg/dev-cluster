@@ -2,8 +2,10 @@
 
 set -o errexit -o nounset
 
-# start with clean config directory.
-rm -rf "$home_dir/config/*"
+# if app config already exists then we have already ran initialization.
+if [ -f "$home_dir/config/config.toml" ]; then
+  exit 0
+fi
 
 celestia-appd init "$chainid" \
   --chain-id "$chainid" \
