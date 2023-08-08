@@ -23,6 +23,18 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: {{ .Values.rollupName }}-composer-env
+  namespace: astria-dev-cluster
+data:
+  ASTRIA_COMPOSER_LOG: "astria_composer=debug"
+  ASTRIA_COMPOSER_API_LISTEN_ADDR: "0.0.0.0:0"
+  ASTRIA_COMPOSER_SEQUENCER_URL: "http://sequencer-service:26657"
+  ASTRIA_COMPOSER_CHAIN_ID: "{{ .Values.evmChainId }}"
+  ASTRIA_COMPOSER_EXECUTION_URL: "ws://127.0.0.1:{{ .Values.ports.wsRPC }}"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: {{ .Values.rollupName }}-geth-env
   namespace: astria-dev-cluster
 data:
