@@ -56,7 +56,7 @@ deploy-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAll
     {{ if networkId           != '' { replace('--set evmNetworkId=#', '#', networkId) } else { '' } }} \
     {{ if genesisAllocAddress != '' { replace('--set genesisAllocAddress=#', '#', genesisAllocAddress) } else { '' } }} \
     {{ if privateKey          != '' { replace('--set privateKey=#', '#', privateKey) } else { '' } }} \
-    {{rollupName}}chain-chart-deploy ./kubernetes/rollup
+    {{rollupName}}chain-chart-deploy ./helm/rollup
 
 wait-for-rollup rollupName=defaultRollupName:
   kubectl wait -n astria-dev-cluster deployment {{rollupName}}-geth --for=condition=Available=True --timeout=600s
