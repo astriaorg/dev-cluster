@@ -1,0 +1,45 @@
+{{/* We need to manually create a PersistentVolume when local. */}}
+{{/* In prod, a PV will be created by the StorageClass' provisioner using dynamic provisioning feature.  */}}
+{{- if eq .Values.storage.executor.type "local" }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.rollupName }}-executor-pv
+spec:
+  capacity:
+    storage: {{ .Values.storage.executor.size }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.storage.executor.storageClassName }}
+  local:
+    path: {{ .Values.storage.executor.path }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - astria-dev-cluster-control-plane
+---
+{{- end }}
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.rollupName }}-executor-pv-claim
+  namespace: astria-dev-cluster
+  labels:
+    "app.kubernetes.io/name": "{{ .Values.rollupName }}-{{ .Chart.Name }}"
+    "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
+    "helm.sh/chart": {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  storageClassName: "{{ .Values.storage.executor.storageClassName }}"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.storage.executor.size }}
+---

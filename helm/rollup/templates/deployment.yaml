@@ -65,8 +65,6 @@ spec:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-conductor-scripts-volume
               readOnly: true
-            - mountPath: /home/conductor
-              name: {{ .Values.rollupName }}-conductor-home-vol
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-conductor-env
@@ -82,10 +80,9 @@ spec:
           configMap:
             name: {{ .Values.rollupName }}-conductor-scripts
             defaultMode: 0500
-        - emptyDir: { }
-          name: {{ .Values.rollupName }}-executor-home-vol
-        - emptyDir: { }
-          name: {{ .Values.rollupName }}-conductor-home-vol
+        - name: {{ .Values.rollupName }}-executor-home-vol
+          persistentVolumeClaim:
+            claimName: {{ .Values.rollupName }}-executor-pv-claim
 ---
 apiVersion: apps/v1
 kind: Deployment

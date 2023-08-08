@@ -9,6 +9,14 @@ evmChainId: "astria"
 # Default network id
 evmNetworkId: 912559
 
+# Default persistent storage values
+storage:
+  executor:
+    type: "local"
+    size: "2Gi"
+    storageClassName: "rollup-executor-storage-local"
+    path: "/data/rollup-data/executor"
+
 # Default service ports
 ports:
   jsonRPC: 8545

@@ -10,6 +10,8 @@ nodes:
   extraMounts:
     - hostPath: /tmp/celestia-data
       containerPath: /data/celestia-data
+    - hostPath: /tmp/rollup-data/executor
+      containerPath: /data/rollup-data/executor
   kubeadmConfigPatches:
   - |
     kind: InitConfiguration
