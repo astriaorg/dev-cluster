@@ -24,7 +24,7 @@ spec:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-executor-scripts-volume
             - mountPath: /home/geth
-              name: {{ .Values.rollupName }}-executor-home-vol
+              name: {{ .Values.rollupName }}-executor-vol
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-geth-env
@@ -37,7 +37,7 @@ spec:
               name: {{ .Values.rollupName }}-executor-scripts-volume
               readOnly: true
             - mountPath: /home/geth
-              name: {{ .Values.rollupName }}-executor-home-vol
+              name: {{ .Values.rollupName }}-executor-vol
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-geth-env
@@ -80,9 +80,13 @@ spec:
           configMap:
             name: {{ .Values.rollupName }}-conductor-scripts
             defaultMode: 0500
-        - name: {{ .Values.rollupName }}-executor-home-vol
+        {{- range $key, $value := .Values.storage }}
+        {{- if hasPrefix "executor" $key }}
+        - name: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-vol
           persistentVolumeClaim:
-            claimName: {{ .Values.rollupName }}-executor-pv-claim
+            claimName: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-pvc
+        {{- end }}
+        {{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -170,7 +174,7 @@ spec:
             - containerPort: 5432
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: {{ .Values.rollupName }}-postgres-vol
+              name: {{ .Values.rollupName }}-blockscout-postgres-vol
         - name: redis
           command: ["redis-server"]
           image: docker.io/library/redis:alpine
@@ -178,7 +182,7 @@ spec:
             - containerPort: 6379
           volumeMounts:
             - mountPath: /data
-              name: {{ .Values.rollupName }}-redis-vol
+              name: {{ .Values.rollupName }}-blockscout-redis-vol
         - name: sig-provider
           image: ghcr.io/blockscout/sig-provider:latest@sha256:ae371ce8d0a20993bf61ca81b3394416f4778c9edd398250fd4d81a8d6820950
           ports:
@@ -200,7 +204,10 @@ spec:
       volumes:
         - emptyDir: {}
           name: {{ .Values.rollupName }}-blockscout-logs-vol
-        - emptyDir: {}
-          name: {{ .Values.rollupName }}-postgres-vol
-        - emptyDir: {}
-          name: {{ .Values.rollupName }}-redis-vol
+        {{- range $key, $value := .Values.storage }}
+        {{- if hasPrefix "blockscout" $key }}
+        - name: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-vol
+          persistentVolumeClaim:
+            claimName: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-pvc
+        {{- end }}
+        {{- end }}

@@ -11,10 +11,23 @@ evmNetworkId: 912559
 
 # Default persistent storage values
 storage:
+  blockscout-postgres:
+    type: "local"
+    size: "2Gi"
+    persistentVolumeName: "blockscout-postgres"
+    storageClassName: "blockscout-postgres-storage-local"
+    path: "/data/rollup-data/blockscout/postgres"
+  blockscout-redis:
+    type: "local"
+    size: "2Gi"
+    persistentVolumeName: "blockscout-redis"
+    storageClassName: "blockscout-redis-storage-local"
+    path: "/data/rollup-data/blockscout/redis"
   executor:
     type: "local"
     size: "2Gi"
-    storageClassName: "rollup-executor-storage-local"
+    persistentVolumeName: "executor"
+    storageClassName: "executor-storage-local"
     path: "/data/rollup-data/executor"
 
 # Default service ports

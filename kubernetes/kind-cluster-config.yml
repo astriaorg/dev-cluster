@@ -12,6 +12,10 @@ nodes:
       containerPath: /data/celestia-data
     - hostPath: /tmp/rollup-data/executor
       containerPath: /data/rollup-data/executor
+    - hostPath: /tmp/rollup-data/blockscout/postgres
+      containerPath: /data/rollup-data/blockscout/postgres
+    - hostPath: /tmp/rollup-data/blockscout/redis
+      containerPath: /data/rollup-data/blockscout/redis
   kubeadmConfigPatches:
   - |
     kind: InitConfiguration
