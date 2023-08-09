@@ -11,6 +11,12 @@ evmNetworkId: 912559
 
 # Default persistent storage values
 storage:
+  blockscout-logs:
+    type: "local"
+    size: "2Gi"
+    persistentVolumeName: "blockscout-logs"
+    storageClassName: "blockscout-logs-storage-local"
+    path: "/data/rollup-data/blockscout/logs"
   blockscout-postgres:
     type: "local"
     size: "2Gi"
