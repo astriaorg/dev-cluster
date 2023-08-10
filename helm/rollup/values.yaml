@@ -10,20 +10,22 @@ evmChainId: "astria"
 evmNetworkId: 912559
 
 # Default persistent storage values
+# NOTE - `rollupName` will be used with `persistentVolumeName` to generate names for kubernetes resources.
+#  e.g. astria-executor-pv, astria-executor-pvc
 storage:
-  blockscout-logs:
+  blockscoutLogs:
     type: "local"
     size: "2Gi"
     persistentVolumeName: "blockscout-logs"
     storageClassName: "blockscout-logs-storage-local"
     path: "/data/rollup-data/blockscout/logs"
-  blockscout-postgres:
+  blockscoutPostgres:
     type: "local"
     size: "2Gi"
     persistentVolumeName: "blockscout-postgres"
     storageClassName: "blockscout-postgres-storage-local"
     path: "/data/rollup-data/blockscout/postgres"
-  blockscout-redis:
+  blockscoutRedis:
     type: "local"
     size: "2Gi"
     persistentVolumeName: "blockscout-redis"
