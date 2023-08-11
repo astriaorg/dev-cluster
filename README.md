@@ -22,7 +22,7 @@ In order to startup you will need to have docker running on your machine
 
 ### Configuring Funding of Geth
 
-By default, running this local rollup will fund a wallet address `0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30`, which you can add to your preferred wallet using the private key in `kubernetes/rollup/files/keys/private_key.txt`. This account should never be used for anything but test transactions.
+By default, running this local rollup will fund a wallet address `0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30`, which you can add to your preferred wallet using the private key in `helm/rollup/files/keys/private_key.txt`. This account should never be used for anything but test transactions.
 
 To change the wallet account which receives funds, use the `deploy-rollup` command with the optional arguments `evm_funding_address` and `evm_funding_private_key`.
 
@@ -44,7 +44,7 @@ just deploy-all-local
 
 # Deploys a geth rollup chain + faucet + blockscout + ingress
 # w/ defaults
-# NOTE - default values can be found in `kubernetes/rollup/values.yaml`
+# NOTE - default values can be found in `helm/rollup/values.yaml`
 just deploy-rollup
 # w/ custom name and id
 just deploy-rollup <rollup_name> <network_id>
@@ -59,7 +59,7 @@ just delete-rollup <rollup_name>
 
 The faucet is reachable at http://faucet.<rollup_name>.localdev.me.
 
-By default, the faucet is funded by the account that is funded during geth genesis. This is configured by using the private key of the funded account in `start-faucet.sh`. This key is defined in `kubernetes/faucet/config-maps.yml` and is identical to the key in `kubernetes/geth/key/private_key.txt`.
+By default, the faucet is funded by the account that is funded during geth genesis. This is configured by using the private key of the funded account in `start-faucet.sh`. This key is defined in `helm/rollup/values.yaml` and is identical to the key in `helm/rollup/files/keys/private_key.txt`.
 
 ### Connecting Metamask
 
@@ -71,13 +71,13 @@ By default, the faucet is funded by the account that is funded during geth genes
 
 ## Deployments and Containers
 
-| Deployment       | Containers                    |
-|------------------|-------------------------------|
-| `celestia-local` | celestia-app, celestia-bridge |
-| `sequencer`      | metro, sequencer-relayer      |
-| `geth`           | geth, conductor               |
-| `faucet`         | faucet                        |
-| `blockscout`     | blockscout + more             |
+| Deployment       | Containers                             |
+|------------------|----------------------------------------|
+| `celestia-local` | celestia-app, celestia-bridge          |
+| `sequencer`      | cometbft, sequencer, sequencer-relayer |
+| `geth`           | geth, conductor                        |
+| `faucet`         | faucet                                 |
+| `blockscout`     | blockscout + more                      |
 
 ### Restarting Deployments
 

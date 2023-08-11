@@ -17,19 +17,6 @@ wait-for-ingress-controller:
 load-image image:
   kind load docker-image {{image}} --name astria-dev-cluster
 
-deploy pod:
-  kubectl apply -k kubernetes/{{pod}}
-
-delete pod:
-  kubectl delete -n astria-dev-cluster deployment {{pod}}
-
-restart pod:
-  kubectl rollout restart -n astria-dev-cluster deployment {{pod}}
-
-redeploy pod:
-  kubectl delete -n astria-dev-cluster deployment {{pod}}
-  kubectl apply -k kubernetes/{{pod}}
-
 deploy-chart chart:
   helm install --debug {{chart}}-chart ./helm/{{chart}}
 
@@ -40,7 +27,7 @@ redeploy-chart chart:
   helm uninstall {{chart}}-chart
   helm install --debug {{chart}}-chart ./helm/{{chart}}
 
-deploy-astria-local: (deploy-chart "celestia-local") (deploy "sequencer")
+deploy-astria-local: (deploy-chart "celestia-local") (deploy-chart "sequencer")
 
 wait-for-sequencer:
   kubectl wait -n astria-dev-cluster deployment celestia-local --for=condition=Available=True --timeout=600s
