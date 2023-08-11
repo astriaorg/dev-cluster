@@ -18,6 +18,10 @@ nodes:
       containerPath: /data/rollup-data/blockscout/postgres
     - hostPath: /tmp/rollup-data/blockscout/redis
       containerPath: /data/rollup-data/blockscout/redis
+    - hostPath: /tmp/sequencer-data/cometbft
+      containerPath: /data/sequencer-data/cometbft
+    - hostPath: /tmp/sequencer-data/relayer
+      containerPath: /data/sequencer-data/relayer
   kubeadmConfigPatches:
   - |
     kind: InitConfiguration

@@ -89,7 +89,9 @@ spec:
           configMap:
             name: relayer-keys
             defaultMode: 0500
-        - emptyDir: { }
-          name: cometbft-home-vol
-        - emptyDir: { }
-          name: relayer-home-vol
+        - name: cometbft-home-vol
+          persistentVolumeClaim:
+            claimName: sequencer-cometbft-pvc
+        - name: relayer-home-vol
+          persistentVolumeClaim:
+            claimName: sequencer-relayer-pvc
