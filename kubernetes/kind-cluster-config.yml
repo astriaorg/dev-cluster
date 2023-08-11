@@ -22,6 +22,8 @@ nodes:
       containerPath: /data/sequencer-data/cometbft
     - hostPath: /tmp/sequencer-data/relayer
       containerPath: /data/sequencer-data/relayer
+    - hostPath: /tmp/sequencer-data/sequencer
+      containerPath: /data/sequencer-data/sequencer
   kubeadmConfigPatches:
   - |
     kind: InitConfiguration

@@ -35,9 +35,12 @@ spec:
           tty: true
           args:
             - --genesis-file=/genesis/local.json
+            - --db-filepath=/sequencer/penumbra.db
           volumeMounts:
             - mountPath: /genesis/
               name: sequencer-genesis-volume
+            - mountPath: /sequencer
+              name: sequencer-home-vol
           ports:
             - containerPort: 26658
         - name: cometbft
@@ -95,3 +98,6 @@ spec:
         - name: relayer-home-vol
           persistentVolumeClaim:
             claimName: sequencer-relayer-pvc
+        - name: sequencer-home-vol
+          persistentVolumeClaim:
+            claimName: sequencer-pvc
