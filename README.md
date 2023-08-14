@@ -53,6 +53,9 @@ just deploy-rollup <rollup_name> <network_id> <evm_funding_address> <evm_funding
 
 # Delete rollup
 just delete-rollup <rollup_name>
+
+# Delete local persisted data
+just clean-persisted-data
 ```
 
 ### Faucet
