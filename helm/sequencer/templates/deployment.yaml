@@ -35,7 +35,7 @@ spec:
           tty: true
           args:
             - --genesis-file=/genesis/local.json
-            - --db-datadir=/sequencer/penumbra.db
+            - --db-filepath=/sequencer/penumbra.db
           volumeMounts:
             - mountPath: /genesis/
               name: sequencer-genesis-volume
