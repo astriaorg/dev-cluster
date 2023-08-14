@@ -8,16 +8,22 @@ nodes:
 - role: control-plane
   image: kindest/node:v1.26.3@sha256:61b92f38dff6ccc29969e7aa154d34e38b89443af1a2c14e6cfbd2df6419c66f
   extraMounts:
-    - hostPath: /tmp/celestia-data
+    - hostPath: /tmp/astria/celestia-data
       containerPath: /data/celestia-data
-    - hostPath: /tmp/rollup-data/executor
+    - hostPath: /tmp/astria/rollup-data/executor
       containerPath: /data/rollup-data/executor
-    - hostPath: /tmp/rollup-data/blockscout/logs
+    - hostPath: /tmp/astria/rollup-data/blockscout/logs
       containerPath: /data/rollup-data/blockscout/logs
-    - hostPath: /tmp/rollup-data/blockscout/postgres
+    - hostPath: /tmp/astria/rollup-data/blockscout/postgres
       containerPath: /data/rollup-data/blockscout/postgres
-    - hostPath: /tmp/rollup-data/blockscout/redis
+    - hostPath: /tmp/astria/rollup-data/blockscout/redis
       containerPath: /data/rollup-data/blockscout/redis
+    - hostPath: /tmp/astria/sequencer-data/cometbft
+      containerPath: /data/sequencer-data/cometbft
+    - hostPath: /tmp/astria/sequencer-data/relayer
+      containerPath: /data/sequencer-data/relayer
+    - hostPath: /tmp/astria/sequencer-data/sequencer
+      containerPath: /data/sequencer-data/sequencer
   kubeadmConfigPatches:
   - |
     kind: InitConfiguration

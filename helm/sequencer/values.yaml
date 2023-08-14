@@ -6,10 +6,30 @@ namespace: "astria-dev-cluster"
 replicaCount: 1
 
 cometBFTImage: "ghcr.io/astriaorg/cometbft:0.0.2"
-sequencerImage: "ghcr.io/astriaorg/sequencer:0.2.0--sequencer"
+sequencerImage: "ghcr.io/astriaorg/sequencer:0.3.0--sequencer"
 sequencerRelayerImage: "ghcr.io/astriaorg/sequencer-relayer:0.4.0--sequencer-relayer"
 
 ports:
   cometBFTP2P: 26656
   cometBFTRPC: 26657
   gossipnet: 33900
+
+storage:
+  cometBFT:
+    type: "local"
+    size: "2Gi"
+    persistentVolumeName: "sequencer-cometbft"
+    storageClassName: "sequencer-cometbft-storage-local"
+    path: "/data/sequencer-data/cometbft"
+  relayer:
+    type: "local"
+    size: "2Gi"
+    persistentVolumeName: "sequencer-relayer"
+    storageClassName: "sequencer-relayer-storage-local"
+    path: "/data/sequencer-data/relayer"
+  sequencer:
+    type: "local"
+    size: "2Gi"
+    persistentVolumeName: "sequencer"
+    storageClassName: "sequencer-storage-local"
+    path: "/data/sequencer-data/sequencer"

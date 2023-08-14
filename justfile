@@ -57,3 +57,6 @@ deploy-all-local: create-cluster deploy-ingress-controller wait-for-ingress-cont
 
 clean:
   kind delete cluster --name astria-dev-cluster
+
+clean-persisted-data:
+  rm -r /tmp/astria
