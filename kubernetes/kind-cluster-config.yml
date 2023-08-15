@@ -18,12 +18,8 @@ nodes:
       containerPath: /data/rollup-data/blockscout/postgres
     - hostPath: /tmp/astria/rollup-data/blockscout/redis
       containerPath: /data/rollup-data/blockscout/redis
-    - hostPath: /tmp/astria/sequencer-data/cometbft
-      containerPath: /data/sequencer-data/cometbft
-    - hostPath: /tmp/astria/sequencer-data/relayer
-      containerPath: /data/sequencer-data/relayer
-    - hostPath: /tmp/astria/sequencer-data/sequencer
-      containerPath: /data/sequencer-data/sequencer
+    - hostPath: /tmp/astria/sequencer-data
+      containerPath: /data/sequencer-data
   kubeadmConfigPatches:
   - |
     kind: InitConfiguration

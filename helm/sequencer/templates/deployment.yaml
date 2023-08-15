@@ -26,7 +26,8 @@ spec:
             - mountPath: /scripts/
               name: cometbft-scripts-volume
             - mountPath: /cometbft
-              name: cometbft-home-vol
+              name: sequencer-shared-storage-vol
+              subPath: cometbft
       containers:
         - name: sequencer
           image: "{{ .Values.sequencerImage }}"
@@ -40,7 +41,8 @@ spec:
             - mountPath: /genesis/
               name: sequencer-genesis-volume
             - mountPath: /sequencer
-              name: sequencer-home-vol
+              name: sequencer-shared-storage-vol
+              subPath: sequencer
           ports:
             - containerPort: 26658
         - name: cometbft
@@ -50,7 +52,8 @@ spec:
             - mountPath: /scripts/
               name: cometbft-scripts-volume
             - mountPath: /cometbft
-              name: cometbft-home-vol
+              name: sequencer-shared-storage-vol
+              subPath: cometbft
           ports:
             - containerPort: {{ .Values.ports.cometBFTP2P }}
               name: cometbft-p2p
@@ -63,9 +66,11 @@ spec:
           tty: true
           volumeMounts:
             - mountPath: /home/relayer
-              name: relayer-home-vol
+              name: sequencer-shared-storage-vol
+              subPath: relayer
             - mountPath: /cometbft
-              name: cometbft-home-vol
+              name: sequencer-shared-storage-vol
+              subPath: cometbft
               readOnly: true
             - mountPath: /scripts/
               name: relayer-scripts-volume
@@ -92,12 +97,7 @@ spec:
           configMap:
             name: relayer-keys
             defaultMode: 0500
-        - name: cometbft-home-vol
+        - name: sequencer-shared-storage-vol
           persistentVolumeClaim:
-            claimName: sequencer-cometbft-pvc
-        - name: relayer-home-vol
-          persistentVolumeClaim:
-            claimName: sequencer-relayer-pvc
-        - name: sequencer-home-vol
-          persistentVolumeClaim:
-            claimName: sequencer-pvc
+            claimName: sequencer-shared-storage-pvc
+

@@ -15,21 +15,9 @@ ports:
   gossipnet: 33900
 
 storage:
-  cometBFT:
+  sequencerSharedStorage:
     type: "local"
-    size: "2Gi"
-    persistentVolumeName: "sequencer-cometbft"
-    storageClassName: "sequencer-cometbft-storage-local"
-    path: "/data/sequencer-data/cometbft"
-  relayer:
-    type: "local"
-    size: "2Gi"
-    persistentVolumeName: "sequencer-relayer"
-    storageClassName: "sequencer-relayer-storage-local"
-    path: "/data/sequencer-data/relayer"
-  sequencer:
-    type: "local"
-    size: "2Gi"
-    persistentVolumeName: "sequencer"
-    storageClassName: "sequencer-storage-local"
-    path: "/data/sequencer-data/sequencer"
+    size: "5Gi"
+    persistentVolumeName: "sequencer-shared-storage"
+    storageClassName: "sequencer-shared-storage-local"
+    path: "/data/sequencer-data"
