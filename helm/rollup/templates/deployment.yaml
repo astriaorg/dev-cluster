@@ -24,7 +24,8 @@ spec:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-executor-scripts-volume
             - mountPath: /home/geth
-              name: {{ .Values.rollupName }}-executor-vol
+              name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
+              subPath: {{ .Values.rollupName }}/executor
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-geth-env
@@ -37,7 +38,8 @@ spec:
               name: {{ .Values.rollupName }}-executor-scripts-volume
               readOnly: true
             - mountPath: /home/geth
-              name: {{ .Values.rollupName }}-executor-vol
+              name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
+              subPath: {{ .Values.rollupName }}/executor
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-geth-env
@@ -80,13 +82,9 @@ spec:
           configMap:
             name: {{ .Values.rollupName }}-conductor-scripts
             defaultMode: 0500
-        {{- range $key, $value := .Values.storage }}
-        {{- if hasPrefix "executor" $key }}
-        - name: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-vol
+        - name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
           persistentVolumeClaim:
-            claimName: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-pvc
-        {{- end }}
-        {{- end }}
+            claimName: {{ $.Values.rollupName }}-rollup-shared-storage-pvc
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -117,6 +115,7 @@ spec:
           volumeMounts:
             - mountPath: /home/faucet
               name: {{ .Values.rollupName }}-faucet-home-vol
+              subPath: {{ .Values.rollupName }}/faucet
           ports:
             - containerPort: {{ .Values.ports.faucet }}
               name: faucet
@@ -151,7 +150,8 @@ spec:
           image: "docker.io/blockscout/blockscout:5.1.0"
           volumeMounts:
             - mountPath: /app/logs
-              name: {{ .Values.rollupName }}-blockscout-logs-vol
+              name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
+              subPath: {{ .Values.rollupName }}/blockscout/logs
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-blockscout-env
@@ -174,7 +174,8 @@ spec:
             - containerPort: 5432
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: {{ .Values.rollupName }}-blockscout-postgres-vol
+              name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
+              subPath: {{ .Values.rollupName }}/blockscout/postgres
         - name: redis
           command: ["redis-server"]
           image: docker.io/library/redis:alpine
@@ -182,7 +183,8 @@ spec:
             - containerPort: 6379
           volumeMounts:
             - mountPath: /data
-              name: {{ .Values.rollupName }}-blockscout-redis-vol
+              name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
+              subPath: {{ .Values.rollupName }}/blockscout/redis
         - name: sig-provider
           image: ghcr.io/blockscout/sig-provider:latest@sha256:ae371ce8d0a20993bf61ca81b3394416f4778c9edd398250fd4d81a8d6820950
           ports:
@@ -202,10 +204,6 @@ spec:
           ports:
             - containerPort: 8151
       volumes:
-        {{- range $key, $value := .Values.storage }}
-        {{- if hasPrefix "blockscout" $key }}
-        - name: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-vol
+        - name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
           persistentVolumeClaim:
-            claimName: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-pvc
-        {{- end }}
-        {{- end }}
+            claimName: {{ $.Values.rollupName }}-rollup-shared-storage-pvc

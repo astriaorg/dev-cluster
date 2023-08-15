@@ -13,30 +13,12 @@ evmNetworkId: 912559
 # NOTE - `rollupName` will be used with `persistentVolumeName` to generate names for kubernetes resources.
 #  e.g. astria-executor-pv, astria-executor-pvc
 storage:
-  blockscoutLogs:
+  rollupSharedStorage:
     type: "local"
-    size: "2Gi"
-    persistentVolumeName: "blockscout-logs"
-    storageClassName: "blockscout-logs-storage-local"
-    path: "/data/rollup-data/blockscout/logs"
-  blockscoutPostgres:
-    type: "local"
-    size: "2Gi"
-    persistentVolumeName: "blockscout-postgres"
-    storageClassName: "blockscout-postgres-storage-local"
-    path: "/data/rollup-data/blockscout/postgres"
-  blockscoutRedis:
-    type: "local"
-    size: "2Gi"
-    persistentVolumeName: "blockscout-redis"
-    storageClassName: "blockscout-redis-storage-local"
-    path: "/data/rollup-data/blockscout/redis"
-  executor:
-    type: "local"
-    size: "2Gi"
-    persistentVolumeName: "executor"
-    storageClassName: "executor-storage-local"
-    path: "/data/rollup-data/executor"
+    size: "5Gi"
+    persistentVolumeName: "rollup-shared-storage"
+    storageClassName: "rollup-shared-storage-local"
+    path: "/data/rollup-data"
 
 # Default service ports
 ports:
