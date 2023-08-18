@@ -14,10 +14,11 @@ evmNetworkId: 912559
 #  e.g. astria-executor-pv, astria-executor-pvc
 storage:
   rollupSharedStorage:
-    type: "local"
+    type: "cloud"
     size: "5Gi"
     persistentVolumeName: "rollup-shared-storage"
     storageClassName: "rollup-shared-storage-local"
+    sharedStorageClassOverride: "standard"
     path: "/data/rollup-data"
 
 # Default service ports

@@ -3,11 +3,11 @@
 # Declare variables to be passed into your templates.
 
 # Default storage type for local development workflow.
-storageType: "local"
+storageType: "cloud"
 localCelestiaSharedStorageSize: "2Gi"
 
 # Allows to override storage class for when the storage class already exists, like in GKE.
-sharedStorageClassOverride: ""
+sharedStorageClassOverride: "standard"
 
 
 podSecurityContext:
