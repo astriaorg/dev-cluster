@@ -5,40 +5,44 @@ metadata:
   namespace: astria-dev-cluster
 spec:
   rules:
-    - host: executor.{{ .Values.rollupName }}.localdev.me
+    - 
+      # host: executor.{{ .Values.rollupName }}.localdev.me
       http:
         paths:
-          - path: "/"
+          - path: /{{ .Values.rollupName }}-executor
             pathType: Prefix
             backend:
               service:
                 name: {{ .Values.rollupName }}-evm-service
                 port:
                   name: json-rpc-svc
-    - host: ws-executor.{{ .Values.rollupName }}.localdev.me
+    - 
+      # host: ws-executor.{{ .Values.rollupName }}.localdev.me
       http:
         paths:
-          - path: "/"
+          - path: /{{ .Values.rollupName }}-ws-executor
             pathType: Prefix
             backend:
               service:
                 name: {{ .Values.rollupName }}-evm-service
                 port:
                   name: ws-rpc-svc
-    - host: faucet.{{ .Values.rollupName }}.localdev.me
+    - 
+      # host: faucet.{{ .Values.rollupName }}.localdev.me
       http:
         paths:
-          - path: "/"
+          - path: /{{ .Values.rollupName }}-faucet
             pathType: Prefix
             backend:
               service:
                 name: {{ .Values.rollupName }}-faucet-service
                 port:
                   name: faucet-svc
-    - host: blockscout.{{ .Values.rollupName }}.localdev.me
+    - 
+      # host: blockscout.{{ .Values.rollupName }}.localdev.me
       http:
         paths:
-          - path: "/"
+          - path: /{{ .Values.rollupName }}-blockscout
             pathType: Prefix
             backend:
               service:
