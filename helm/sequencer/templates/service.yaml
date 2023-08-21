@@ -8,8 +8,8 @@ spec:
     app: astria-dev-cluster
   ports:
     - name: cometbft-rpc
-      port: 26657
+      port: {{ .Values.ports.cometBFTRPC }}
       targetPort: cometbft-rpc
     - name: gossipnet
-      port: 33900
+      port: {{ .Values.ports.gossipnet }}
       targetPort: gossipnet

@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cometbft-scripts
+  namespace: astria-dev-cluster
+data:
+  init-cometbft.sh: |
+    {{- .Files.Get "files/scripts/init-cometbft.sh" | nindent 4 }}
+  start-cometbft.sh: |
+    {{- .Files.Get "files/scripts/start-cometbft.sh" | nindent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: relayer-keys
+  namespace: astria-dev-cluster
+data:
+  libp2p.key: |
+    {{- .Files.Get "files/key/libp2p.key" | nindent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: relayer-scripts
+  namespace: astria-dev-cluster
+data:
+  start-relayer.sh: |
+    {{- .Files.Get "files/scripts/start-relayer.sh" | nindent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sequencer-genesis
+  namespace: astria-dev-cluster
+data:
+  local.json: |
+    {{- .Files.Get "files/genesis/local.json" | nindent 4 }}
+---
