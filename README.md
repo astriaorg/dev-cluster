@@ -119,16 +119,16 @@ Once you have a locally built image, update the image in the relevant deployment
 just create-cluster
 ```
 
-Then you can run the load-image command with your image name for instance if we have created a local image `astria-sequencer:local`
+Then you can run the load-image command with your image name. For instance, if we have created a local image `astria-sequencer:local`
 
 ```bash
 # load image into cluster
 just load-image astria-sequencer:local
 ```
 
-Now you can run the rest of the startup the full cluster.
+Now you can run the rest of the full cluster.
 
-If you already had a running cluster, you only need to redeploy the component with the custom image (see below). If the image is a part of a rollup delete it and redeploy:
+If you already had a running cluster, you only need to redeploy the component with the custom image [(see below)](#redeploying-deployments). If the image is a part of a rollup delete it and redeploy:
 
 ```
 just delete-rollup <ROLLUP_NAME>
@@ -137,7 +137,7 @@ just deploy-rollup <ROLLUP_NAME> <NETWORK_ID>
 
 ### Redeploying Deployments
 
-When deploying pods which participate in p2p (`sequencer`, `geth`) you must completely redeployd
+When deploying pods which participate in p2p (`sequencer`, `geth`) you must completely redeploy.
 
 ```bash
 just redeploy <DEPLOYMENT_NAME>
