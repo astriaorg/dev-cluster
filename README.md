@@ -100,11 +100,14 @@ If you deploy a custom Blockscout app, it will be available at http://blockscout
 
 ### Restarting Deployments
 
-It is possible to restart running pods without restarting the entire cluster. This is useful for debugging and development.
+It is possible to restart a deployment without restarting the entire cluster. This is useful for debugging and development.
 
 NOTE: when restarting `celestia-local`, you will also need to restart `sequencer` and `geth`.
 
 ```bash
+# get deployments
+kubectl get deployments --all-namespaces
+# restart deployment
 just restart <DEPLOYMENT_NAME>
 ```
 
@@ -137,7 +140,7 @@ just deploy-rollup <ROLLUP_NAME> <NETWORK_ID>
 
 ### Redeploying Deployments
 
-When deploying pods which participate in p2p (`sequencer`, `geth`) you must completely redeploy.
+If you want to restart deployments which participate in p2p (`sequencer`, `geth`) you must completely redeploy.
 
 ```bash
 just redeploy <DEPLOYMENT_NAME>
