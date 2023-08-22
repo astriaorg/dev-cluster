@@ -51,7 +51,9 @@ just deploy-rollup <rollup_name> <network_id>
 # w/ custom name, id, and funding address
 just deploy-rollup <rollup_name> <network_id> <evm_funding_address> <evm_funding_private_key>
 
-# Delete rollup
+# Delete default rollup
+just delete-rollup
+# Delete custom rollup
 just delete-rollup <rollup_name>
 
 # Delete local persisted data
@@ -60,13 +62,27 @@ just clean-persisted-data
 
 ### Faucet
 
-The faucet is reachable at http://faucet.<rollup_name>.localdev.me.
+The default faucet is available at http://faucet.astria.localdev.me. 
+
+If you deploy a custom faucet, it will be reachable at http://faucet.<rollup_name>.localdev.me.
 
 By default, the faucet is funded by the account that is funded during geth genesis. This is configured by using the private key of the funded account in `start-faucet.sh`. This key is defined in `helm/rollup/values.yaml` and is identical to the key in `helm/rollup/files/keys/private_key.txt`.
 
+### Blockscout
+
+The default Blockscout app is available at http://blockscout.astria.localdev.me.
+
+If you deploy a custom Blockscout app, it will be available at http://blockscout.<rollup_name>.localdev.me.
+
 ### Connecting Metamask
 
-* add custom network
+* adding the default network
+  * network name: `astria`
+  * rpc url: `http://executor.astria.localdev.me`
+  * chain id: `912559`
+  * currency symbol: `RIA`
+
+* adding a custom network
     * network name: `<rollup_name>`
     * rpc url: `http://executor.<rollup_name>.localdev.me`
     * chain id: `<network_id>`
