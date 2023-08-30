@@ -27,6 +27,9 @@ redeploy-chart chart:
   helm uninstall {{chart}}-chart
   helm install --debug {{chart}}-chart ./helm/{{chart}}
 
+restart deployment:
+  kubectl rollout restart -n astria-dev-cluster deployment {{deployment}}
+
 deploy-astria-local: (deploy-chart "celestia-local") (deploy-chart "sequencer")
 
 wait-for-sequencer:

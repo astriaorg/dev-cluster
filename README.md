@@ -51,7 +51,9 @@ just deploy-rollup <rollup_name> <network_id>
 # w/ custom name, id, and funding address
 just deploy-rollup <rollup_name> <network_id> <evm_funding_address> <evm_funding_private_key>
 
-# Delete rollup
+# Delete default rollup
+just delete-rollup
+# Delete custom rollup
 just delete-rollup <rollup_name>
 
 # Delete local persisted data
@@ -60,13 +62,27 @@ just clean-persisted-data
 
 ### Faucet
 
-The faucet is reachable at http://faucet.<rollup_name>.localdev.me.
+The default faucet is available at http://faucet.astria.localdev.me. 
+
+If you deploy a custom faucet, it will be reachable at http://faucet.<rollup_name>.localdev.me.
 
 By default, the faucet is funded by the account that is funded during geth genesis. This is configured by using the private key of the funded account in `start-faucet.sh`. This key is defined in `helm/rollup/values.yaml` and is identical to the key in `helm/rollup/files/keys/private_key.txt`.
 
+### Blockscout
+
+The default Blockscout app is available at http://blockscout.astria.localdev.me.
+
+If you deploy a custom Blockscout app, it will be available at http://blockscout.<rollup_name>.localdev.me.
+
 ### Connecting Metamask
 
-* add custom network
+* adding the default network
+  * network name: `astria`
+  * rpc url: `http://executor.astria.localdev.me`
+  * chain id: `912559`
+  * currency symbol: `RIA`
+
+* adding a custom network
     * network name: `<rollup_name>`
     * rpc url: `http://executor.<rollup_name>.localdev.me`
     * chain id: `<network_id>`
@@ -84,11 +100,14 @@ By default, the faucet is funded by the account that is funded during geth genes
 
 ### Restarting Deployments
 
-It is possible to restart running pods without restarting the entire cluster. This is useful for debugging and development.
+It is possible to restart a deployment without restarting the entire cluster. This is useful for debugging and development.
 
 NOTE: when restarting `celestia-local`, you will also need to restart `sequencer` and `geth`.
 
 ```bash
+# get deployments
+kubectl get deployments --all-namespaces
+# restart deployment
 just restart <DEPLOYMENT_NAME>
 ```
 
@@ -103,16 +122,16 @@ Once you have a locally built image, update the image in the relevant deployment
 just create-cluster
 ```
 
-Then you can run the load-image command with your image name for instance if we have created a local image `astria-sequencer:local`
+Then you can run the load-image command with your image name. For instance, if we have created a local image `astria-sequencer:local`
 
 ```bash
 # load image into cluster
 just load-image astria-sequencer:local
 ```
 
-Now you can run the rest of the startup the full cluster.
+Now you can run the rest of the full cluster.
 
-If you already had a running cluster, you only need to redeploy the component with the custom image (see below). If the image is a part of a rollup delete it and redeploy:
+If you already had a running cluster, you only need to redeploy the component with the custom image [(see below)](#redeploying-deployments). If the image is a part of a rollup delete it and redeploy:
 
 ```
 just delete-rollup <ROLLUP_NAME>
@@ -121,7 +140,7 @@ just deploy-rollup <ROLLUP_NAME> <NETWORK_ID>
 
 ### Redeploying Deployments
 
-When deploying pods which participate in p2p (`sequencer`, `geth`) you must completely redeployd
+If you want to restart deployments which participate in p2p (`sequencer`, `geth`) you must completely redeploy.
 
 ```bash
 just redeploy <DEPLOYMENT_NAME>
