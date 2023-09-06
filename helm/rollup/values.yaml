@@ -9,6 +9,20 @@ evmChainId: "astria"
 # Default network id
 evmNetworkId: 912559
 
+# rollup core images
+composerImage: "ghcr.io/astriaorg/composer:0.1.0--composer"
+conductorImage: "ghcr.io/astriaorg/conductor:0.4.0--conductor"
+gethImage: "ghcr.io/astriaorg/go-ethereum:0.2.0"
+
+# extra images that the rollup uses
+faucetImage: "ghcr.io/astriaorg/ria-faucet:0.0.1"
+blockscoutImage: "docker.io/blockscout/blockscout:5.1.0"
+blockscoutPostgresImage: "docker.io/library/postgres:14"
+blockscoutRedisImage: "docker.io/library/redis:alpine"
+blockscoutSigProviderImage: "ghcr.io/blockscout/sig-provider:latest@sha256:ae371ce8d0a20993bf61ca81b3394416f4778c9edd398250fd4d81a8d6820950"
+blockscoutSmartContractVerifierImage: "ghcr.io/blockscout/smart-contract-verifier:v1.3.0@sha256:f07b2d874c28d45f5ba81f297c868a746a03771e8b6d9b8e96f0eba0beeb1016"
+blockscoutVisualizerImage: "ghcr.io/blockscout/visualizer:v0.2.0@sha256:99479da126248e0aba5c32b1e32625f8c527b72924f55cb510b50e5f854b2d15"
+
 # Default persistent storage values
 # NOTE - `rollupName` will be used with `persistentVolumeName` to generate names for kubernetes resources.
 #  e.g. astria-executor-pv, astria-executor-pvc
