@@ -19,7 +19,7 @@ spec:
       initContainers:
         - name: init-geth
           command: [ "/scripts/init-geth.sh" ]
-          image: "ghcr.io/astriaorg/go-ethereum:0.2.0"
+          image: {{.Values.gethImage }}
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-executor-scripts-volume
@@ -32,7 +32,7 @@ spec:
       containers:
         - name: geth
           command: [ "/scripts/start-geth.sh" ]
-          image: "ghcr.io/astriaorg/go-ethereum:0.2.0"
+          image: {{.Values.gethImage }}
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-executor-scripts-volume
@@ -51,7 +51,7 @@ spec:
             - containerPort: {{ .Values.ports.executionGRPC }}
               name: execution-grpc
         - name: composer
-          image: "ghcr.io/astriaorg/composer:0.1.0--composer"
+          image: {{ .Values.composerImage }}
           command: [ "/usr/local/bin/astria-composer" ]
           stdin: true
           tty: true
@@ -59,7 +59,7 @@ spec:
             - configMapRef:
                 name: {{ .Values.rollupName }}-composer-env
         - name: conductor
-          image: "ghcr.io/astriaorg/conductor:0.4.0--conductor"
+          image: {{ .Values.conductorImage }}
           command: [ "/scripts/start-conductor.sh" ]
           stdin: true
           tty: true
@@ -111,7 +111,7 @@ spec:
             - -httpport={{ .Values.ports.faucet }}
             - -wallet.provider=http://{{ .Values.rollupName }}-evm-service:{{ .Values.ports.jsonRPC }}
             - -wallet.privkey={{ .Values.privateKey }}
-          image: "ghcr.io/astriaorg/ria-faucet:0.0.1"
+          image: {{ .Values.faucetImage }}
           volumeMounts:
             - mountPath: /home/faucet
               name: {{ .Values.rollupName }}-faucet-home-vol
@@ -147,7 +147,7 @@ spec:
           args:
             - -c
             - bin/blockscout eval "Elixir.Explorer.ReleaseTasks.create_and_migrate()" && bin/blockscout start
-          image: "docker.io/blockscout/blockscout:5.1.0"
+          image: {{ .Values.blockscoutImage }}
           volumeMounts:
             - mountPath: /app/logs
               name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
@@ -169,7 +169,7 @@ spec:
             - name: POSTGRES_PASSWORD
             - name: POSTGRES_USER
               value: postgres
-          image: docker.io/library/postgres:14
+          image: {{ .Values.blockscoutPostgresImage }}
           ports:
             - containerPort: 5432
           volumeMounts:
@@ -178,7 +178,7 @@ spec:
               subPath: {{ .Values.rollupName }}/blockscout/postgres
         - name: redis
           command: ["redis-server"]
-          image: docker.io/library/redis:alpine
+          image: {{ .Values.blockscoutRedisImage }}
           ports:
             - containerPort: 6379
           volumeMounts:
@@ -186,18 +186,18 @@ spec:
               name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
               subPath: {{ .Values.rollupName }}/blockscout/redis
         - name: sig-provider
-          image: ghcr.io/blockscout/sig-provider:latest@sha256:ae371ce8d0a20993bf61ca81b3394416f4778c9edd398250fd4d81a8d6820950
+          image: {{ .Values.blockscoutSigProviderImage }}
           ports:
             - containerPort: 8050
         - name: smart-contract-verifier
-          image: ghcr.io/blockscout/smart-contract-verifier:v1.3.0@sha256:f07b2d874c28d45f5ba81f297c868a746a03771e8b6d9b8e96f0eba0beeb1016
+          image: {{ .Values.blockscoutSmartContractVerifierImage }}
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-smart-contract-verifier-env
           ports:
             - containerPort: 8150
         - name: visualizer
-          image: ghcr.io/blockscout/visualizer:v0.2.0@sha256:99479da126248e0aba5c32b1e32625f8c527b72924f55cb510b50e5f854b2d15
+          image: {{ .Values.blockscoutVisualizerImage }}
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-visualizer-env

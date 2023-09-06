@@ -26,7 +26,7 @@ spec:
       initContainers:
         - name: init-celestia-app
           command: [ "/scripts/init-celestia-appd.sh" ]
-          image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc9"
+          image: {{ .Values.celestiaAppImage }}
           volumeMounts:
             - mountPath: /scripts/
               name: celestia-appd-scripts-volume
@@ -37,7 +37,7 @@ spec:
                 name: celestia-local-env
         - name: init-bridge
           command: [ "/scripts/init-bridge.sh" ]
-          image: "ghcr.io/astriaorg/test-images-celestia-node:v0.11.0-rc7"
+          image: {{ .Values.celestiaNodeImage }}
           volumeMounts:
             - mountPath: /scripts/
               name: bridge-scripts-volume
@@ -49,7 +49,7 @@ spec:
       containers:
         - name: celestia-app
           command: [ "/scripts/start-celestia-appd.sh" ]
-          image: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc9"
+          image: {{ .Values.celestiaAppImage }}
           volumeMounts:
             - mountPath: /scripts/
               name: celestia-appd-scripts-volume
@@ -62,7 +62,7 @@ spec:
             - containerPort: {{ .Values.ports.celestiaAppHostPort }}
         - name: celestia-bridge
           command: [ "/scripts/start-bridge.sh" ]
-          image: "ghcr.io/astriaorg/test-images-celestia-node:v0.11.0-rc7"
+          image: {{ .Values.celestiaNodeImage }}
           volumeMounts:
             - mountPath: /scripts/
               name: bridge-scripts-volume
@@ -83,7 +83,7 @@ spec:
             failureThreshold: 30
             periodSeconds: 10
         - name: token-server
-          image: "busybox:1.35.0-musl"
+          image: {{ .Values.tokenServerImage }}
           command: [ "/bin/httpd", "-v", "-f", "-p", "5353", "-h", "/home/celestia/token-server/" ]
           ports:
             - containerPort: {{ .Values.ports.celestiaTokenService }}
