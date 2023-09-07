@@ -21,7 +21,7 @@ spec:
       initContainers:
         - command: [ "/scripts/init-cometbft.sh" ]
           name: init-cometbft
-          image: "{{ .Values.cometBFTImage }}"
+          image: {{ .Values.cometBFTImage }}
           volumeMounts:
             - mountPath: /scripts/
               name: cometbft-scripts-volume
@@ -30,7 +30,7 @@ spec:
               subPath: cometbft
       containers:
         - name: sequencer
-          image: "{{ .Values.sequencerImage }}"
+          image: {{ .Values.sequencerImage }}
           command: [ "/usr/local/bin/astria-sequencer" ]
           stdin: true
           tty: true
@@ -47,7 +47,7 @@ spec:
             - containerPort: 26658
         - name: cometbft
           command: [ "/scripts/start-cometbft.sh" ]
-          image: "{{ .Values.cometBFTImage }}"
+          image: {{ .Values.cometBFTImage }}
           volumeMounts:
             - mountPath: /scripts/
               name: cometbft-scripts-volume
@@ -60,7 +60,7 @@ spec:
             - containerPort: {{ .Values.ports.cometBFTRPC }}
               name: cometbft-rpc
         - name: sequencer-relayer
-          image: "{{ .Values.sequencerRelayerImage }}"
+          image: {{ .Values.sequencerRelayerImage }}
           command: [ "/scripts/start-relayer.sh" ]
           stdin: true
           tty: true
