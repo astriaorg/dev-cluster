@@ -10,7 +10,7 @@ data:
   ASTRIA_CONDUCTOR_CHAIN_ID: "{{ .Values.evmChainId }}"
   ASTRIA_CONDUCTOR_EXECUTION_RPC_URL: "http://127.0.0.1:{{ .Values.ports.executionGRPC }}"
   ASTRIA_CONDUCTOR_DISABLE_FINALIZATION: "false"
-  ASTRIA_CONDUCTOR_SEQUENCER_URL: "ws://sequencer-service:26657"
+  ASTRIA_CONDUCTOR_SEQUENCER_URL: "ws://sequencer-service:26657/websocket"
   ASTRIA_CONDUCTOR_DISABLE_EMPTY_BLOCK_EXECUTION: "false"
 ---
 apiVersion: v1
