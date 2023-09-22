@@ -21,14 +21,14 @@ spec:
       initContainers:
         - command: [ "/bin/sh", "-c" ]
           args:
-            - cp -Lr /data /cometbft/data && cp -Lr /config /cometbft/config && chmod -R 0777 /cometbft
+            - cp -LR /data/ /cometbft/data && cp -LR /config /cometbft/config && chmod -R 0777 /cometbft
           name: config-cometbft
           image: "ghcr.io/tomwright/dasel:alpine"
           volumeMounts:
             - mountPath: /config/
-              name: cometbft-scripts-volume
+              name: cometbft-config-volume
             - mountPath: /data/
-              name: cometbft-scripts-volume
+              name: cometbft-data-volume
             - mountPath: /cometbft
               name: sequencer-shared-storage-vol
               subPath: cometbft
@@ -45,10 +45,17 @@ spec:
             - mountPath: /sequencer
               name: sequencer-shared-storage-vol
               subPath: sequencer
+            - mountPath: /cometbft
+              name: sequencer-shared-storage-vol
+              subPath: cometbft
           ports:
-            - containerPort: 26658
+            - containerPort: {{ .Values.ports.sequencerABCI }}
+              name: sequencer-abci
         - name: cometbft
           command: [ "cometbft", "start" ]
+          args:
+          - "--home"
+          - "/cometbft"
           image: "{{ .Values.cometBFTImage }}"
           envFrom:
             - configMapRef:
@@ -67,6 +74,9 @@ spec:
           command: [ "/scripts/start-relayer.sh" ]
           stdin: {{ .Values.useTTY }}
           tty: {{ .Values.useTTY }}
+          envFrom:
+            - configMapRef:
+                name: relayer-env
           volumeMounts:
             - mountPath: /home/relayer
               name: sequencer-shared-storage-vol

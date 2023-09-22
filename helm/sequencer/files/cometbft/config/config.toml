@@ -12,7 +12,7 @@
 
 # TCP or UNIX socket address of the ABCI application,
 # or the name of an ABCI application compiled in with the CometBFT binary
-proxy_app = "tcp://127.0.0.1:{{ .Values.ports.abci }}"
+proxy_app = "tcp://127.0.0.1:{{ .Values.ports.sequencerABCI }}"
 
 # A custom human readable name for this node
 moniker = "astria-sequencer-1"
@@ -91,7 +91,7 @@ filter_peers = false
 [rpc]
 
 # TCP or UNIX socket address for the RPC server to listen on
-laddr = "tcp://127.0.0.1:{{ .Values.port.cometBFTRPC}}"
+laddr = "tcp://0.0.0.0:{{ .Values.ports.cometBFTRPC }}"
 
 # A list of origins a cross-domain request can be executed from
 # Default value '[]' disables cors support

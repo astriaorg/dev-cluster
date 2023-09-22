@@ -36,7 +36,7 @@ metadata:
   name: sequencer-env
   namespace: astria-dev-cluster
 data:
-  ASTRIA_SEQUENCER_LOG: "astria_sequencer=info"
+  ASTRIA_SEQUENCER_LOG: "astria_sequencer=debug"
   ASTRIA_SEQUENCER_LISTEN_ADDR: "127.0.0.1:{{ .Values.ports.sequencerABCI }}"
   ASTRIA_SEQUENCER_DB_FILEPATH: "/sequencer/penumbra.db"
 ---
@@ -46,7 +46,7 @@ metadata:
   name: relayer-env
   namespace: astria-dev-cluster
 data:
-  ASTRIA_SEQUENCER_RELAYER_LOG: "astria_sequencer_relayer=info"
+  ASTRIA_SEQUENCER_RELAYER_LOG: "astria_sequencer_relayer=debug"
   ASTRIA_SEQUENCER_RELAYER_SEQUENCER_ENDPOINT: "http://127.0.0.1:{{ .Values.ports.cometBFTRPC }}"
   ASTRIA_SEQUENCER_RELAYER_CELESTIA_ENDPOINT: "http://celestia-service:26658"
   ASTRIA_SEQUENCER_RELAYER_GAS_LIMIT: "1000000"

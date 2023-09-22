@@ -70,9 +70,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-conductor-env
-          ports:
-            - containerPort: {{ .Values.ports.gossipnet }}
-              name: gossipnet
       volumes:
         - name: {{ .Values.rollupName }}-executor-scripts-volume
           configMap:
