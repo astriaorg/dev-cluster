@@ -13,7 +13,7 @@ sequencerPrivateKey: "2bd806c97f0e00af1a1fc3328fa763a9269723c8db8fac4f93af71db18
 
 # rollup core images
 composerImage: "ghcr.io/astriaorg/composer:0.2.0--composer"
-conductorImage: "ghcr.io/astriaorg/conductor:0.5.0--conductor"
+conductorImage: "ghcr.io/astriaorg/conductor:pr-427"
 gethImage: "ghcr.io/astriaorg/go-ethereum:sha-d2ce656"
 
 # extra images that the rollup uses
