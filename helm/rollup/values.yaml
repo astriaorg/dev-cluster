@@ -5,13 +5,15 @@ genesisAllocAddress: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
 # Default private key, must correspond with above address
 privateKey: "8b3a7999072c9c9314c084044fe705db11714c6c4ed7cddb64da18ea270dd203"
 # Default chain id
-evmChainId: "astria"
+evmChainId: "astriachain"
 # Default network id
 evmNetworkId: 912559
+# private key for submitting to sequencer
+sequencerPrivateKey: "2bd806c97f0e00af1a1fc3328fa763a9269723c8db8fac4f93af71db186d6e90"
 
 # rollup core images
-composerImage: "ghcr.io/astriaorg/composer:0.1.0--composer"
-conductorImage: "ghcr.io/astriaorg/conductor:0.4.0--conductor"
+composerImage: "ghcr.io/astriaorg/composer:0.2.0--composer"
+conductorImage: "ghcr.io/astriaorg/conductor:0.5.0--conductor"
 gethImage: "ghcr.io/astriaorg/go-ethereum:0.2.0"
 
 # extra images that the rollup uses
@@ -22,6 +24,8 @@ blockscoutRedisImage: "docker.io/library/redis:alpine"
 blockscoutSigProviderImage: "ghcr.io/blockscout/sig-provider:latest@sha256:ae371ce8d0a20993bf61ca81b3394416f4778c9edd398250fd4d81a8d6820950"
 blockscoutSmartContractVerifierImage: "ghcr.io/blockscout/smart-contract-verifier:v1.3.0@sha256:f07b2d874c28d45f5ba81f297c868a746a03771e8b6d9b8e96f0eba0beeb1016"
 blockscoutVisualizerImage: "ghcr.io/blockscout/visualizer:v0.2.0@sha256:99479da126248e0aba5c32b1e32625f8c527b72924f55cb510b50e5f854b2d15"
+
+useTTY: true
 
 # Default persistent storage values
 # NOTE - `rollupName` will be used with `persistentVolumeName` to generate names for kubernetes resources.

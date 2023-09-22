@@ -4,11 +4,14 @@ metadata:
   name: {{ .Values.rollupName }}-conductor-env
   namespace: astria-dev-cluster
 data:
-  executor_host_grpc_port: "{{ .Values.ports.executionGRPC }}"
-  gossipnet_port: "{{ .Values.ports.gossipnet }}"
-  cometbft_rpc_endpoint: "http://sequencer-service:26657"
-  celestia_node_url: "http://celestia-service:26658"
-  evm_chain_id: "{{ .Values.evmChainId }}"
+  ASTRIA_CONDUCTOR_LOG: "astria_conductor=info"
+  ASTRIA_CONDUCTOR_CELESTIA_NODE_URL: "http://celestia-service:26658"
+  ASTRIA_CONDUCTOR_TENDERMINT_URL: "http://sequencer-service:26657"
+  ASTRIA_CONDUCTOR_CHAIN_ID: "{{ .Values.evmChainId }}"
+  ASTRIA_CONDUCTOR_EXECUTION_RPC_URL: "http://127.0.0.1:{{ .Values.ports.executionGRPC }}"
+  ASTRIA_CONDUCTOR_DISABLE_FINALIZATION: false
+  ASTRIA_CONDUCTOR_SEQUENCER_URL: "ws://127.0.0.1:26657"
+  ASTRIA_CONDUCTOR_DISABLE_EMPTY_BLOCK_EXECUTION: false
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -28,8 +31,8 @@ data:
   ASTRIA_COMPOSER_LOG: "astria_composer=debug"
   ASTRIA_COMPOSER_API_LISTEN_ADDR: "0.0.0.0:0"
   ASTRIA_COMPOSER_SEQUENCER_URL: "http://sequencer-service:26657"
-  ASTRIA_COMPOSER_CHAIN_ID: "{{ .Values.evmChainId }}"
-  ASTRIA_COMPOSER_EXECUTION_URL: "ws://127.0.0.1:{{ .Values.ports.wsRPC }}"
+  ASTRIA_COMPOSER_ROLLUPS: "{{ .Values.evmChainId }}::ws://127.0.0.1:{{ .Values.ports.wsRPC }}"
+  ASTRIA_COMPOSER_PRIVATE_KEY: "{{ .Values.sequencerPrivateKey }}"
 ---
 apiVersion: v1
 kind: ConfigMap
