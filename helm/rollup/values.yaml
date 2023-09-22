@@ -5,7 +5,7 @@ genesisAllocAddress: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
 # Default private key, must correspond with above address
 privateKey: "8b3a7999072c9c9314c084044fe705db11714c6c4ed7cddb64da18ea270dd203"
 # Default chain id
-evmChainId: "astriachain"
+evmChainId: "astria"
 # Default network id
 evmNetworkId: 912559
 # private key for submitting to sequencer
