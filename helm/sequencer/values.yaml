@@ -13,6 +13,13 @@ celestiaEndpoint: http://celestia-service:26658"
 
 useTTY: true
 
+CometBft:
+  node_key: YWdl/6zNNNIhJX+ZCaw0dxWZ6xFunB9HEJ41bz22wvkrqDA8ls0DbwtCTBTEoM3H4ePdgq6Ha1hJonWWNpZekA==
+  priv_validator_key:
+    address: 091E47761C58C474534F4D414AF104A6CAF90C22
+    pub_key: lV57+rGs2vac7mvkGHP1oBFGHPJM3a+WoAzeFDCJDNU=
+    priv_key: dGOTAweQV8Do9P2n+A8m5EnboDrlxgD3dg4vrYpdIRqVXnv6saza9pzua+QYc/WgEUYc8kzdr5agDN4UMIkM1Q==
+
 ports:
   cometBFTP2P: 26656
   cometBFTRPC: 26657

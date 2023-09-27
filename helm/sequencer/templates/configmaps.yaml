@@ -7,9 +7,9 @@ data:
   genesis.json: |
     {{- .Files.Get "files/cometbft/config/genesis.json" | nindent 4 }}
   node_key.json: |
-    {{- .Files.Get "files/cometbft/config/node_key.json" | nindent 4 }}
+    {{- tpl (.Files.Get "files/cometbft/config/node_key.json") $ | nindent 4 }}
   priv_validator_key.json: |
-    {{- .Files.Get "files/cometbft/config/priv_validator_key.json" | nindent 4 }}
+    {{- tpl (.Files.Get "files/cometbft/config/priv_validator_key.json") $ | nindent 4 }}
   config.toml: |
     {{- tpl (.Files.Get "files/cometbft/config/config.toml") $ | nindent 4 }}
 ---
