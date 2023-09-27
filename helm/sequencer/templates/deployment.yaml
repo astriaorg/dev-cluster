@@ -45,9 +45,6 @@ spec:
             - mountPath: /sequencer
               name: sequencer-shared-storage-vol
               subPath: sequencer
-            - mountPath: /cometbft
-              name: sequencer-shared-storage-vol
-              subPath: cometbft
           ports:
             - containerPort: {{ .Values.ports.sequencerABCI }}
               name: sequencer-abci
