@@ -1,11 +1,11 @@
 {
-  "address": "{{ .Values.CometBft.priv_validator_key.address }}",
+  "address": "{{ .Values.CometBFT.privValidatorKey.address }}",
   "pub_key": {
     "type": "tendermint/PubKeyEd25519",
-    "value": "{{ .Values.CometBft.priv_validator_key.pub_key }}"
+    "value": "{{ .Values.CometBFT.privValidatorKey.pubKey }}"
   },
   "priv_key": {
     "type": "tendermint/PrivKeyEd25519",
-    "value": "{{ .Values.CometBft.priv_validator_key.priv_key }}"
+    "value": "{{ .Values.CometBFT.privValidatorKey.privKey }}"
   }
 }
