@@ -15,3 +15,13 @@ spec:
                 name: sequencer-service
                 port:
                   name: cometbft-rpc
+    - host: sequencer-faucet.localdev.me
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: sequencer-faucet-service
+                port:
+                  name: seq-faucet-svc

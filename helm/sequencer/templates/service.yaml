@@ -10,3 +10,16 @@ spec:
     - name: cometbft-rpc
       port: {{ .Values.ports.cometBFTRPC }}
       targetPort: cometbft-rpc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sequencer-faucet-service
+  namespace: astria-dev-cluster
+spec:
+  selector:
+    app: astria-dev-cluster
+  ports:
+    - name: seq-faucet-svc
+      port: {{ .Values.ports.faucet }}
+      targetPort: seq-faucet

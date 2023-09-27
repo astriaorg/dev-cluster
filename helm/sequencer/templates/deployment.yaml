@@ -100,4 +100,35 @@ spec:
         - name: sequencer-shared-storage-vol
           persistentVolumeClaim:
             claimName: sequencer-shared-storage-pvc
-
+{{ if not .Values.disableFaucet }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sequencer-faucet
+  labels:
+    app: astria-dev-cluster
+  namespace: "{{ .Values.namespace }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: astria-dev-cluster
+  template:
+    metadata:
+      name: sequencer-faucet
+      labels:
+        app: astria-dev-cluster
+    spec:
+      containers:
+        - name: sequencer-faucet
+          image: {{ .Values.sequencerFaucetImage }}
+          command: [ "/app/seq-faucet" ]
+          args:
+            - -httpport={{ .Values.ports.faucet }}
+            - -wallet.provider=http://sequencer-service:{{ .Values.ports.cometBFTRPC }}
+            - -wallet.privkey={{ .Values.faucetFundingAccount.privKey }}
+          ports:
+            - containerPort: {{ .Values.ports.faucet }}
+              name: seq-faucet
+{{ end }}
