@@ -19,12 +19,16 @@ spec:
         app: astria-dev-cluster
     spec:
       initContainers:
-        - command: [ "/scripts/init-cometbft.sh" ]
-          name: init-cometbft
-          image: "{{ .Values.cometBFTImage }}"
+        - command: [ "/bin/sh", "-c" ]
+          args:
+            - cp -LR /data/ /cometbft/data && cp -LR /config /cometbft/config && chmod -R 0777 /cometbft
+          name: config-cometbft
+          image: "ghcr.io/tomwright/dasel:alpine"
           volumeMounts:
-            - mountPath: /scripts/
-              name: cometbft-scripts-volume
+            - mountPath: /config/
+              name: cometbft-config-volume
+            - mountPath: /data/
+              name: cometbft-data-volume
             - mountPath: /cometbft
               name: sequencer-shared-storage-vol
               subPath: cometbft
@@ -32,25 +36,28 @@ spec:
         - name: sequencer
           image: "{{ .Values.sequencerImage }}"
           command: [ "/usr/local/bin/astria-sequencer" ]
-          stdin: true
-          tty: true
-          args:
-            - --genesis-file=/genesis/local.json
-            - --db-filepath=/sequencer/penumbra.db
+          stdin: {{ .Values.useTTY }}
+          tty: {{ .Values.useTTY }}
+          envFrom:
+            - configMapRef:
+                name: sequencer-env
           volumeMounts:
-            - mountPath: /genesis/
-              name: sequencer-genesis-volume
             - mountPath: /sequencer
               name: sequencer-shared-storage-vol
               subPath: sequencer
           ports:
-            - containerPort: 26658
+            - containerPort: {{ .Values.ports.sequencerABCI }}
+              name: sequencer-abci
         - name: cometbft
-          command: [ "/scripts/start-cometbft.sh" ]
+          command: [ "cometbft", "start" ]
+          args:
+          - "--home"
+          - "/cometbft"
           image: "{{ .Values.cometBFTImage }}"
+          envFrom:
+            - configMapRef:
+                name: cometbft-env
           volumeMounts:
-            - mountPath: /scripts/
-              name: cometbft-scripts-volume
             - mountPath: /cometbft
               name: sequencer-shared-storage-vol
               subPath: cometbft
@@ -62,8 +69,11 @@ spec:
         - name: sequencer-relayer
           image: "{{ .Values.sequencerRelayerImage }}"
           command: [ "/scripts/start-relayer.sh" ]
-          stdin: true
-          tty: true
+          stdin: {{ .Values.useTTY }}
+          tty: {{ .Values.useTTY }}
+          envFrom:
+            - configMapRef:
+                name: relayer-env
           volumeMounts:
             - mountPath: /home/relayer
               name: sequencer-shared-storage-vol
@@ -74,28 +84,18 @@ spec:
               readOnly: true
             - mountPath: /scripts/
               name: relayer-scripts-volume
-            - mountPath: /keys/
-              name: relayer-keys-volume
-              readOnly: true
-          ports:
-            - containerPort: {{ .Values.ports.gossipnet }}
-              name: gossipnet
       volumes:
-        - name: cometbft-scripts-volume
+        - name: cometbft-config-volume
           configMap:
-            name: cometbft-scripts
-            defaultMode: 0777
-        - name: sequencer-genesis-volume
+            name: cometbft-config
+            defaultMode: 0700
+        - name: cometbft-data-volume
           configMap:
-            name: sequencer-genesis
-            defaultMode: 0500
+            name: cometbft-data
+            defaultMode: 0700
         - name: relayer-scripts-volume
           configMap:
             name: relayer-scripts
-            defaultMode: 0500
-        - name: relayer-keys-volume
-          configMap:
-            name: relayer-keys
             defaultMode: 0500
         - name: sequencer-shared-storage-vol
           persistentVolumeClaim:

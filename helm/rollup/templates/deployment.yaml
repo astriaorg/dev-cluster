@@ -19,7 +19,7 @@ spec:
       initContainers:
         - name: init-geth
           command: [ "/scripts/init-geth.sh" ]
-          image: {{.Values.gethImage }}
+          image: {{ .Values.gethImage }}
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-executor-scripts-volume
@@ -32,7 +32,7 @@ spec:
       containers:
         - name: geth
           command: [ "/scripts/start-geth.sh" ]
-          image: {{.Values.gethImage }}
+          image: {{ .Values.gethImage }}
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-executor-scripts-volume
@@ -53,16 +53,16 @@ spec:
         - name: composer
           image: {{ .Values.composerImage }}
           command: [ "/usr/local/bin/astria-composer" ]
-          stdin: true
-          tty: true
+          stdin: {{ .Values.useTTY }}
+          tty: {{ .Values.useTTY }}
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-composer-env
         - name: conductor
           image: {{ .Values.conductorImage }}
           command: [ "/scripts/start-conductor.sh" ]
-          stdin: true
-          tty: true
+          stdin: {{ .Values.useTTY }}
+          tty: {{ .Values.useTTY }}
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-conductor-scripts-volume
@@ -70,9 +70,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-conductor-env
-          ports:
-            - containerPort: {{ .Values.ports.gossipnet }}
-              name: gossipnet
       volumes:
         - name: {{ .Values.rollupName }}-executor-scripts-volume
           configMap:

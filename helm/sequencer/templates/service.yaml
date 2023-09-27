@@ -10,6 +10,3 @@ spec:
     - name: cometbft-rpc
       port: {{ .Values.ports.cometBFTRPC }}
       targetPort: cometbft-rpc
-    - name: gossipnet
-      port: {{ .Values.ports.gossipnet }}
-      targetPort: gossipnet
