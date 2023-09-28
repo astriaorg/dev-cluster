@@ -15,7 +15,6 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: {{ $.Values.rollupName }}-{{ $value.storageClassName }}
   local:
     path: {{ $value.path }}
   nodeAffinity:
@@ -39,11 +38,6 @@ metadata:
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
     "helm.sh/chart": {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
 spec:
-  {{- if  $value.sharedStorageClassOverride }}
-  storageClassName: "{{  $value.sharedStorageClassOverride }}"
-  {{- else }}
-  storageClassName: "{{ $.Values.rollupName }}-{{ $value.storageClassName }}"
-  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:
@@ -60,11 +54,6 @@ metadata:
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
     "helm.sh/chart": {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
 spec:
-  {{- if  $value.sharedStorageClassOverride }}
-  storageClassName: "{{  $value.sharedStorageClassOverride }}"
-  {{- else }}
-  storageClassName: "{{ $.Values.rollupName }}-{{ $value.storageClassName }}"
-  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:

@@ -40,11 +40,7 @@ storage:
     type: "local"
     size: "5Gi"
     persistentVolumeName: "rollup-shared-storage"
-    storageClassName: "rollup-shared-storage-local"
     path: "/data/rollup-data"
-
-# Allows to override storage class for when the storage class already exists, like in GKE.
-sharedStorageClassOverride: ""
 
 # Default service ports
 ports:
