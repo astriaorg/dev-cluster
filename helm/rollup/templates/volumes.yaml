@@ -32,18 +32,44 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-pvc
+  name: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-pvc-geth
   namespace: astria-dev-cluster
   labels:
     "app.kubernetes.io/name": "{{ $.Values.rollupName }}-{{ $.Chart.Name }}"
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
     "helm.sh/chart": {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
 spec:
+  {{- if  $value.sharedStorageClassOverride }}
+  storageClassName: "{{  $value.sharedStorageClassOverride }}"
+  {{- else }}
   storageClassName: "{{ $.Values.rollupName }}-{{ $value.storageClassName }}"
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: {{ $value.size }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-pvc-blockscout
+  namespace: astria-dev-cluster
+  labels:
+    "app.kubernetes.io/name": "{{ $.Values.rollupName }}-{{ $.Chart.Name }}"
+    "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
+    "helm.sh/chart": {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
+spec:
+  {{- if  $value.sharedStorageClassOverride }}
+  storageClassName: "{{  $value.sharedStorageClassOverride }}"
+  {{- else }}
+  storageClassName: "{{ $.Values.rollupName }}-{{ $value.storageClassName }}"
+  {{- end }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ $value.size }}
+
 ---
 {{ end }}
