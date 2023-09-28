@@ -43,7 +43,6 @@ storage:
     type: "local"
     size: "5Gi"
     persistentVolumeName: "sequencer-shared-storage"
-    storageClassName: "sequencer-shared-storage-local"
     path: "/data/sequencer-data"
 
 # Allows to override storage class for when the storage class already exists, like in GKE.
