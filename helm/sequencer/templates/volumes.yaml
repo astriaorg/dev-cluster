@@ -39,7 +39,11 @@ metadata:
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
     "helm.sh/chart": {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
 spec:
+  {{- if .Values.sharedStorageClassOverride }}
+  storageClassName: "{{ .Values.sharedStorageClassOverride }}"
+  {{- else }}
   storageClassName: "{{ $value.storageClassName }}"
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:
