@@ -6,9 +6,6 @@
 storageType: "local"
 localCelestiaSharedStorageSize: "2Gi"
 
-# Allows to override storage class for when the storage class already exists, like in GKE.
-sharedStorageClassOverride: ""
-
 celestiaAppImage: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc9"
 celestiaNodeImage: "ghcr.io/astriaorg/test-images-celestia-node:v0.11.0-rc7"
 tokenServerImage: "busybox:1.35.0-musl"
