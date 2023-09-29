@@ -13,9 +13,17 @@ evmNetworkId: 912559
 # This is a secret key, should use a secret manager for production deployments
 sequencerPrivateKey: "2bd806c97f0e00af1a1fc3328fa763a9269723c8db8fac4f93af71db186d6e90"
 
+sequencerWs: "ws://sequencer-service:26657/websocket"
+sequencerRpc: "http://sequencer-service:26657"
+celestiaUrl: "http://celestia-service:26658"
+logLevel: "info"
+skipEmptyBlocks: "false"
+disableFinalization: "false"
+initialSequencerBlockHeight: 1
+
 # rollup core images
 composerImage: "ghcr.io/astriaorg/composer:0.2.0--composer"
-conductorImage: "ghcr.io/astriaorg/conductor:0.5.1--conductor"
+conductorImage: "astria-conductor:local"
 gethImage: "ghcr.io/astriaorg/go-ethereum:0.3.0"
 
 # extra images that the rollup uses

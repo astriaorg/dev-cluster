@@ -4,14 +4,15 @@ metadata:
   name: {{ .Values.rollupName }}-conductor-env
   namespace: astria-dev-cluster
 data:
-  ASTRIA_CONDUCTOR_LOG: "astria_conductor=info"
-  ASTRIA_CONDUCTOR_CELESTIA_NODE_URL: "http://celestia-service:26658"
-  ASTRIA_CONDUCTOR_TENDERMINT_URL: "http://sequencer-service:26657"
+  ASTRIA_CONDUCTOR_LOG: "astria_conductor={{ .Values.logLevel }}"
+  ASTRIA_CONDUCTOR_CELESTIA_NODE_URL: "{{ .Values.celestiaUrl }}"
+  ASTRIA_CONDUCTOR_TENDERMINT_URL: "{{ .Values.sequencerRpc }}"
   ASTRIA_CONDUCTOR_CHAIN_ID: "{{ .Values.evmChainId }}"
   ASTRIA_CONDUCTOR_EXECUTION_RPC_URL: "http://127.0.0.1:{{ .Values.ports.executionGRPC }}"
-  ASTRIA_CONDUCTOR_DISABLE_FINALIZATION: "false"
-  ASTRIA_CONDUCTOR_SEQUENCER_URL: "ws://sequencer-service:26657/websocket"
-  ASTRIA_CONDUCTOR_DISABLE_EMPTY_BLOCK_EXECUTION: "false"
+  ASTRIA_CONDUCTOR_DISABLE_FINALIZATION: "{{ .Values.disableFinalization }}"
+  ASTRIA_CONDUCTOR_SEQUENCER_URL: "{{ .Values.sequencerWs }}"
+  ASTRIA_CONDUCTOR_DISABLE_EMPTY_BLOCK_EXECUTION: "{{ .Values.skipEmptyBlocks }}"
+  ASTRIA_CONDUCTOR_INITIAL_SEQUENCER_BLOCK_HEIGHT: "{{ .Values.initialSequencerBlockHeight }}"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -28,9 +29,9 @@ metadata:
   name: {{ .Values.rollupName }}-composer-env
   namespace: astria-dev-cluster
 data:
-  ASTRIA_COMPOSER_LOG: "astria_composer=debug"
+  ASTRIA_COMPOSER_LOG: "astria_composer={{ .Values.logLevel }}"
   ASTRIA_COMPOSER_API_LISTEN_ADDR: "0.0.0.0:0"
-  ASTRIA_COMPOSER_SEQUENCER_URL: "http://sequencer-service:26657"
+  ASTRIA_COMPOSER_SEQUENCER_URL: "{{ .Values.sequencerRpc }}"
   ASTRIA_COMPOSER_ROLLUPS: "{{ .Values.evmChainId }}::ws://127.0.0.1:{{ .Values.ports.wsRPC }}"
   ASTRIA_COMPOSER_PRIVATE_KEY: "{{ .Values.sequencerPrivateKey }}"
 ---
@@ -48,7 +49,6 @@ data:
   genesis_alloc_address: "{{ .Values.genesisAllocAddress }}"
   evm_network_id: "{{ .Values.evmNetworkId }}"
   evm_chain_id: "{{ .Values.evmChainId }}"
-  cometbft_rpc_endpoint: "http://sequencer-service:26657"
 ---
 apiVersion: v1
 kind: ConfigMap
