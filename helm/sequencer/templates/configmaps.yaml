@@ -5,7 +5,7 @@ metadata:
   namespace: astria-dev-cluster
 data:
   genesis.json: |
-    {{- .Files.Get "files/cometbft/config/genesis.json" | nindent 4 }}
+    {{- tpl (.Files.Get "files/cometbft/config/genesis.json") $ | nindent 4 }}
   node_key.json: |
     {{- tpl (.Files.Get "files/cometbft/config/node_key.json") $ | nindent 4 }}
   priv_validator_key.json: |

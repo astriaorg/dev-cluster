@@ -10,6 +10,17 @@ cometBFTImage: docker.io/cometbft/cometbft:v0.37.x
 sequencerImage: ghcr.io/astriaorg/sequencer:0.4.1--sequencer
 sequencerRelayerImage: ghcr.io/astriaorg/sequencer-relayer:0.5.1--sequencer-relayer
 
+genesisAccounts:
+  - address: 1c0c490f1b5528d8173c5de46d131160e4b2c0c3
+    balance: 1000000000000000000
+  - address: 34fec43c7fcab9aef3b3cf8aba855e41ee69ca3a
+    balance: 1000000000000000000
+  - address: 60709e2d391864b732b4f0f51e387abb76743871
+    balance: 1000000000000000000
+    # NOTE - the following address matches the privKey that funds the sequencer-faucet
+  - address: a8c46f92e987492de9b10a619efd4096a0608b94
+    balance: 500000000000000000000
+
 # This account is funded on genesis and provides funds for the faucet.
 # NOTE - this needs to match the faucetFundingAccount in the sequencer-faucet/values.yaml
 faucetFundingAccount:
