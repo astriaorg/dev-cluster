@@ -44,6 +44,4 @@ storage:
     size: "5Gi"
     persistentVolumeName: "sequencer-shared-storage"
     path: "/data/sequencer-data"
-
-# Allows to override storage class for when the storage class already exists, like in GKE.
-sharedStorageClassOverride: ""
+    
