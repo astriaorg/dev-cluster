@@ -44,4 +44,3 @@ storage:
     size: "5Gi"
     persistentVolumeName: "sequencer-shared-storage"
     path: "/data/sequencer-data"
-    
