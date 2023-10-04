@@ -73,7 +73,7 @@ spec:
               readOnly: true
           {{- if .Values.sequencer.extraVolumeMounts }}
           {{- toYaml .Values.sequencer.extraVolumeMounts | nindent 12 }}
-          {{- end }}     
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-conductor-env
