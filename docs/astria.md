@@ -30,7 +30,7 @@ At a high level, Astria breaks out all of the components that are historically c
 The diagram above shows a Decentralized Rollup w/ Astria Architecture. Each component is explained in more detail below.
 
 ### Users
-One of Astria's goals is to provide rollups with fast finality, atomic cross-rollup inclusion, and decentralization out of the box, without requiring changes to their end user experience. Individual rollups should be able to provide a native experience to their users, Metamask should "just work" with an EVM rollup, and Kepler should "just work" with a cosmos-sdk rollup.
+One of Astria's goals is to provide rollups with fast finality, atomic cross-rollup inclusion, and decentralization out of the box, without requiring changes to their end user experience. Individual rollups should be able to provide a native experience to their users, Metamask should "just work" with an EVM rollup, and Keplr should "just work" with a cosmos-sdk rollup.
 
 ### Rollups
 Astria is designed for permissionless rollup integration and takes advantage of lazy shared sequencing. This means that rollup developers have total sovereignty over their own execution state and can swap out sequencing layers without fear of being locked in. You do not need to ask for permission or go through a governance process to gain access. A rollup simply needs to satisfy the following interfaces:
@@ -46,11 +46,22 @@ Both composer and conductor expose [gRPC](https://grpc.io/) interfaces. See the 
 
 The current dev-cluster deploys a fork of [Geth](https://github.com/astriaorg/go-ethereum) as an EVM rollup. 
 
-### Composer (under construction)
-In the current dev-cluster, the Composer is not yet implemented or included. As of this writing, the Geth rollup mentioned in the previous section simply sends transactions directly to the sequencer network. The Composer will ultimately act as an intermediate component between any given rollup and the sequencer.
+### Composer 
+The Composer is an in-house abstraction over the potential actors in Astria's
+MEV supply chain. It currently contains a naive implementations of the role a
+searcher will fulfill, with the intention of having working examples that
+economically incentivized third parties can use as a starting point for their
+own implementations. As we progress from design to implementation of Astria's
+proposer-builder separation it will also include an example implementation of a
+naive builder. The abstractions serves the goal of acting as a forcing function
+on our architecture design by stubbing out the roles and requiring other
+components to interact with them through an interface.
 
-The Composer is an in-house abstraction over the potential actors in an MEV market. It contains naive implementations of the roles that a searcher and a builder will fulfill, with the intention of having working examples that economically incentivized third parties can use as a starting point for their own implementations. The abstraction serves the goal of acting as a forcing function on our architecture design by stubbing out the roles and requiring other components to interact with them through an interface.
-While a real searcher implementation would create profit-generating bundles of rollup transactions and submit them to a builder, the Composer implementation simply bundles every rollup transaction it receives into a sequence transaction and forwards it to the composer's builder. Similarly, while a real builder implementation would run a profit-generating auction, the composer implementation will simply run a FIFO queue that will add all the sequence transactions it receives and submits a block to the sequencer's proposer.
+While a real searcher implementation would create profit-generating bundles of rollup transactions and submit them to a builder, the Composer implementation simply bundles every rollup transaction it receives into a sequencer transaction and submits it to the sequencer. As our approach to proposer-builder separation is still in its design phase, there is currently no explicit builder role in the MEV supply chain and transactions are submitted directly to validator nodes' CometBFT mempool.
+
+Once Astria's block builder design moves to its implementation phase, the Composer will include a reference builder implementation as well. Similarly to the searcher, while a real builder implementation would run a profit-generating auction, the composer implementation will simply run a FIFO queue that will add all the sequencer transactions it receives and submits a block to the sequencer's proposer.
+
+Once Astria's block builder design moves to its implementation phase, the Composer will include a reference builder implementation as well. Similarly to the searcher, while a real builder implementation would run a profit-generating auction, the composer implementation will simply run a FIFO queue that will add all the sequencer transactions it receives and submits a block to the sequencer's proposer.
 
 ### The Shared Sequencer
 The Astria Shared Sequencer is a decentralized network of nodes utilizing CometBFT that come to consensus on an ordered set of transactions (ie. it is a blockchain). The unique feature of the sequencer is that the transactions it includes are not executed (lazy sequencing), and are destined for another execution engine (ie. a rollup). This excludes “sequencer native” transactions, such as transfers of tokens within the sequencer chain. Transactions from any given rollup are only ordered on the sequencer, not executed.
@@ -58,15 +69,15 @@ The Astria Shared Sequencer is a decentralized network of nodes utilizing CometB
 The sequencer can optionally act as a “validator”, meaning it actively participates in the production and finalization of new blocks.
 
 ### Relayer
-The Relayer's responsibility is to take validated blocks from the sequencer and pass them along to both the Conductor and the DA layer. Because the sequencers block times are much faster than those of the DA, the relayer also collects a queue of sequencer blocks before wrapping them for submission to DA.
+The Relayer's responsibility is to take validated blocks from the sequencer and pass them along to both the Conductor and the DA layer. Because the sequencer's block times are much faster than those of the DA, the relayer also collects a queue of sequencer blocks before wrapping them for submission to DA.
 
-The individual sequencer blocks sent immediately to the Conductor to enable fast finality for an improved UX and also act as soft commits for the execution layer. The collections of blocks sent to the DA layer are used as a source of truth and are ultimately pulled from the DA to be used as firm commits for finality in the rolllups.
+The individual sequencer blocks are sent immediately to the Conductor to enable fast finality for an improved UX and also act as soft commits for the execution layer. The collections of blocks sent to the DA layer are used as a source of truth and are ultimately pulled from the DA to be used as firm commits for finality in the rolllups.
 
 ### Data Availability
 The dev-cluster uses [Celestia](https://github.com/celestiaorg) as the data availability layer and is the ultimate destination of all data that has been ordered by the sequencer network. Once written to Celestia, the transaction order is considered final and it is where all data will be pulled from if you need to spin up a new rollup node.
 
 ### Conductor
-Conductors role is to drive the deterministic execution of sequencer blocks to rollups. It abstracts away the logic required to read data from DA and Sequencer, tracking firm and soft commitments, block and header shapes, as well as verification of the data. The rollup implements the Execution API server, and runs conductor alongside to drive deterministic execution. The Conductor is effectively stateless but does ephemerally store some information about the blocks it has seen and passed on to be executed. It primarily filters the transactions that are relevant to a given rollup out of the sequencer blocks for execution. The data that it does store is for sending commitment updates to the rollup.
+Conductor's role is to drive the deterministic execution of sequencer blocks to rollups. It abstracts away the logic required to read data from DA and Sequencer, tracking firm and soft commitments, block and header shapes, as well as verification of the data. The rollup implements the Execution API server, and runs conductor alongside to drive deterministic execution. The Conductor is effectively stateless but does ephemerally store some information about the blocks it has seen and passed on to be executed. It primarily filters the transactions that are relevant to a given rollup out of the sequencer blocks for execution. The data that it does store is for sending commitment updates to the rollup.
 As mentioned in the Relayer section above, any data received by the Conductor directly from the Relayer is considered a soft commit. This data is filtered using the rollup's namespace and only transactions that are relevant to the rollup are passed on as blocks for execution. These blocks are also marked as "safe". The Conductor regularly polls Celestia for new data and when it sees the same blocks in Celestia that it has already seen from the Relayer, it sends a firm commit message to the rollup to update that block to "finalized."
 
 ## Running the Cluster
