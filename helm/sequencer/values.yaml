@@ -31,6 +31,57 @@ CometBFT:
     # private key for the validator address
     # This is a secret key, should use a secret manager for production deployments
     privKey: dGOTAweQV8Do9P2n+A8m5EnboDrlxgD3dg4vrYpdIRqVXnv6saza9pzua+QYc/WgEUYc8kzdr5agDN4UMIkM1Q==
+  # Secret Provider Config
+  # secretProviderClass:
+  #   provider: gcp
+  #   secretObjects:
+  #   - secretName: privNodeKey
+  #     type: Opaque
+  #     data:
+  #     - objectName: privNodeKey
+  #       key: privNodeKey.json
+  #     - objectName: privValidatorKey
+  #       key: privValidatorKey.json
+  #   parameters:
+  #     secrets: |
+  #       - resourceName: "projects/$PROJECT_ID/secrets/privNodeKey/versions/latest"
+  #         filename: "privNodeKey.json"
+  #       - resourceName: "projects/$PROJECT_ID/secrets/privValidatorKey/versions/latest"
+  #         filename: "privValidatorKey.json"
+
+  # # Extra env for secrets CSI driver
+  # extraEnv:
+  #   - name: privNodeKey
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: privNodeKey
+  #         key: privNodeKey.json
+  #   - name: privValidatorKey
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: privValidatorKey
+  #         key: privValidatorKey.json
+
+  # # Extra volumes and mounts for secrets CSI driver
+  # extraVolumes:
+  #   - name: privNodeKey
+  #     csi:
+  #       driver: secrets-store.csi.k8s.io
+  #       readOnly: true
+  #       volumeAttributes:
+  #         secretProviderClass: privNodeKey
+  #   - name: privValidatorKey
+  #     csi:
+  #       driver: secrets-store.csi.k8s.io
+  #       readOnly: true
+  #       volumeAttributes:
+  #         secretProviderClass: privValidatorKey
+
+  # extraVolumeMounts:
+  #   - mountPath: "/var/secrets"
+  #     name: privNodeKey
+  #   - mountPath: "/var/secrets"
+  #     name: privValidatorKey
 
 ports:
   cometBFTP2P: 26656
