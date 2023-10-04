@@ -58,19 +58,29 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-composer-env
+          {{- with .Values.sequencer.extraEnv }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         - name: conductor
           image: {{ .Values.conductorImage }}
           command: [ "/scripts/start-conductor.sh" ]
           stdin: {{ .Values.useTTY }}
           tty: {{ .Values.useTTY }}
+          {{- with .Values.sequencer.extraVolumeMounts }}
           volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}            
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-conductor-scripts-volume
               readOnly: true
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-conductor-env
+      {{- with .Values.sequencer.extraVolumes }}
       volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
         - name: {{ .Values.rollupName }}-executor-scripts-volume
           configMap:
             name: {{ .Values.rollupName }}-executor-scripts
