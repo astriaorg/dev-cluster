@@ -1,43 +1,67 @@
-# Default name for the rollup chain
-rollupName: astria
-# Default address where funds get allocated on genesis
-genesisAllocAddress: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
-# Default private key, must correspond with above address
-# This is a secret key, should use a secret manager for production deployments
-privateKey: "8b3a7999072c9c9314c084044fe705db11714c6c4ed7cddb64da18ea270dd203"
-# Default chain id
-evmChainId: "astria"
-# Default network id
-evmNetworkId: 912559
-# private key for submitting to sequencer
-# This is a secret key, should use a secret manager for production deployments
-sequencerPrivateKey: "2bd806c97f0e00af1a1fc3328fa763a9269723c8db8fac4f93af71db186d6e90"
+config:
+  # Whether to use tty readable logging for astria services, when false use json.
+  # Best to be false in production environments, true for clean logs on local dev.
+  useTTY: true
 
-sequencerWs: "ws://sequencer-service:26657/websocket"
-sequencerRpc: "http://sequencer-service:26657"
-celestiaUrl: "http://celestia-service:26658"
-logLevel: "info"
-skipEmptyBlocks: "false"
-disableFinalization: "false"
-initialSequencerBlockHeight: 1
+  # The level at which core astria components will log out
+  # Options are: error, warn, info, and debug
+  logLevel: "info"
 
-# rollup core images
-composerImage: "ghcr.io/astriaorg/composer:0.2.0--composer"
-conductorImage: "astria-conductor:local"
-gethImage: "ghcr.io/astriaorg/go-ethereum:0.3.0"
+  rollup:
+    # Default name for the rollup chain
+    name: astria
+    # Chain ID used for submission to shared sequencer, and generating DA namespace
+    chainId: astria
+    # EVM network ID used by the chain
+    networkId: 912559
+    # Set to true to have rollup blocks only be generated when there are transactions
+    skipEmptyBlocks: false
+    # Set to true to rely on sequencer fully without Celestia DA finalization
+    disableFinalization: false
+    # Definitions around who has funding on startup
+    genesisAccounts:
+      - address: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
+        balance: "1000000000000000000000"
 
-# extra images that the rollup uses
-faucetImage: "ghcr.io/astriaorg/ria-faucet:0.0.1"
-blockscoutImage: "docker.io/blockscout/blockscout:5.1.0"
-blockscoutPostgresImage: "docker.io/library/postgres:14"
-blockscoutRedisImage: "docker.io/library/redis:alpine"
-blockscoutSigProviderImage: "ghcr.io/blockscout/sig-provider:latest@sha256:ae371ce8d0a20993bf61ca81b3394416f4778c9edd398250fd4d81a8d6820950"
-blockscoutSmartContractVerifierImage: "ghcr.io/blockscout/smart-contract-verifier:v1.3.0@sha256:f07b2d874c28d45f5ba81f297c868a746a03771e8b6d9b8e96f0eba0beeb1016"
-blockscoutVisualizerImage: "ghcr.io/blockscout/visualizer:v0.2.0@sha256:99479da126248e0aba5c32b1e32625f8c527b72924f55cb510b50e5f854b2d15"
+  faucet:
+    # The account from which the faucet disburses funds
+    # Note: likely want the matching account be funded in config.rollup.genesisAccounts
+    privateKey: "8b3a7999072c9c9314c084044fe705db11714c6c4ed7cddb64da18ea270dd203"
 
-# Whether to use tty readable logging for astria services, when false use json.
-# Best to be false in production environments, true for clean logs on local dev.
-useTTY: true
+  # Configuration related to sequencer connection for rollup
+  sequencer:
+    # Block height to start syncing rollup from
+    initialBlockHeight: 1
+    # Websocket connection used for 
+    websocket: "ws://sequencer-service:26657/websocket"
+    # URL path for the sequencer
+    rpc: "http://sequencer-service:26657"
+    # Private key which is used for wrapping txs for sequencer submission
+    privateKey: "2bd806c97f0e00af1a1fc3328fa763a9269723c8db8fac4f93af71db186d6e90"
+    
+  # Configuration for Celestia DA
+  celestia:
+    # Full node which client will connect to
+    fullNodeUrl: "http://celestia-service:26658"
+
+images:
+  # Core images for the rollup, developed for Astria
+  geth: "ghcr.io/astriaorg/go-ethereum:0.3.0"
+  conductor: "ghcr.io/astriaorg/conductor:0.5.1--conductor"
+  composer: "ghcr.io/astriaorg/composer:0.2.0--composer"
+
+  # Rollup faucet
+  faucet: "ghcr.io/astriaorg/ria-faucet:0.0.1"
+
+  # Pertaining to deploying blockscout block explorer 
+  blockscout:
+    core: "docker.io/blockscout/blockscout:5.1.0"
+    postgres: "docker.io/library/postgres:14"
+    redis: "docker.io/library/redis:alpine"
+    sigProvider: "ghcr.io/blockscout/sig-provider:latest@sha256:ae371ce8d0a20993bf61ca81b3394416f4778c9edd398250fd4d81a8d6820950"
+    smartContractVerifier: "ghcr.io/blockscout/smart-contract-verifier:v1.3.0@sha256:f07b2d874c28d45f5ba81f297c868a746a03771e8b6d9b8e96f0eba0beeb1016"
+    visualizer: "ghcr.io/blockscout/visualizer:v0.2.0@sha256:99479da126248e0aba5c32b1e32625f8c527b72924f55cb510b50e5f854b2d15"
+
 
 # Default persistent storage values
 # NOTE - `rollupName` will be used with `persistentVolumeName` to generate names for kubernetes resources.

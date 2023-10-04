@@ -7,7 +7,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-pv
+  name: {{ $.Values.config.rollup.name }}-{{ $value.persistentVolumeName }}-pv
 spec:
   capacity:
     storage: {{ $value.size }}
@@ -15,7 +15,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: {{ $.Values.rollupName }}-{{ $value.storageClassName }}
+  storageClassName: {{ $.Values.config.rollup.name }}-{{ $value.storageClassName }}
   local:
     path: {{ $value.path }}
   nodeAffinity:
@@ -32,14 +32,14 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-pvc
+  name: {{ $.Values.config.rollup.name }}-{{ $value.persistentVolumeName }}-pvc
   namespace: astria-dev-cluster
   labels:
-    "app.kubernetes.io/name": "{{ $.Values.rollupName }}-{{ $.Chart.Name }}"
+    "app.kubernetes.io/name": "{{ $.Values.config.rollup.name }}-{{ $.Chart.Name }}"
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
     "helm.sh/chart": {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
 spec:
-  storageClassName: "{{ $.Values.rollupName }}-{{ $value.storageClassName }}"
+  storageClassName: "{{ $.Values.config.rollup.name }}-{{ $value.storageClassName }}"
   accessModes:
     - ReadWriteOnce
   resources:

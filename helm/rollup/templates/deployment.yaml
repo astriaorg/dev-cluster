@@ -1,48 +1,48 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.rollupName }}-geth
+  name: {{ .Values.config.rollup.name }}-geth
   labels:
-    app: {{ .Values.rollupName }}-astria-dev-cluster
+    app: {{ .Values.config.rollup.name }}-astria-dev-cluster
   namespace: astria-dev-cluster
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.rollupName }}-astria-dev-cluster
+      app: {{ .Values.config.rollup.name }}-astria-dev-cluster
   template:
     metadata:
-      name: {{ .Values.rollupName }}-execution-chain
+      name: {{ .Values.config.rollup.name }}-execution-chain
       labels:
-        app: {{ .Values.rollupName }}-astria-dev-cluster
+        app: {{ .Values.config.rollup.name }}-astria-dev-cluster
     spec:
       initContainers:
         - name: init-geth
           command: [ "/scripts/init-geth.sh" ]
-          image: {{ .Values.gethImage }}
+          image: {{ .Values.images.geth }}
           volumeMounts:
             - mountPath: /scripts/
-              name: {{ .Values.rollupName }}-executor-scripts-volume
+              name: {{ .Values.config.rollup.name }}-executor-scripts-volume
             - mountPath: /home/geth
-              name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
-              subPath: {{ .Values.rollupName }}/executor
+              name: {{ $.Values.config.rollup.name }}-rollup-shared-storage-vol
+              subPath: {{ .Values.config.rollup.name }}/executor
           envFrom:
             - configMapRef:
-                name: {{ .Values.rollupName }}-geth-env
+                name: {{ .Values.config.rollup.name }}-geth-env
       containers:
         - name: geth
           command: [ "/scripts/start-geth.sh" ]
-          image: {{ .Values.gethImage }}
+          image: {{ .Values.images.geth }}
           volumeMounts:
             - mountPath: /scripts/
-              name: {{ .Values.rollupName }}-executor-scripts-volume
+              name: {{ .Values.config.rollup.name }}-executor-scripts-volume
               readOnly: true
             - mountPath: /home/geth
-              name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
-              subPath: {{ .Values.rollupName }}/executor
+              name: {{ $.Values.config.rollup.name }}-rollup-shared-storage-vol
+              subPath: {{ .Values.config.rollup.name }}/executor
           envFrom:
             - configMapRef:
-                name: {{ .Values.rollupName }}-geth-env
+                name: {{ .Values.config.rollup.name }}-geth-env
           ports:
             - containerPort: {{ .Values.ports.jsonRPC }}
               name: json-rpc
@@ -51,92 +51,92 @@ spec:
             - containerPort: {{ .Values.ports.executionGRPC }}
               name: execution-grpc
         - name: composer
-          image: {{ .Values.composerImage }}
+          image: {{ .Values.images.composer }}
           command: [ "/usr/local/bin/astria-composer" ]
-          stdin: {{ .Values.useTTY }}
-          tty: {{ .Values.useTTY }}
+          stdin: {{ .Values.config.useTTY }}
+          tty: {{ .Values.config.useTTY }}
           envFrom:
             - configMapRef:
-                name: {{ .Values.rollupName }}-composer-env
+                name: {{ .Values.config.rollup.name }}-composer-env
         - name: conductor
-          image: {{ .Values.conductorImage }}
+          image: {{ .Values.images.conductor }}
           command: [ "/scripts/start-conductor.sh" ]
-          stdin: {{ .Values.useTTY }}
-          tty: {{ .Values.useTTY }}
+          stdin: {{ .Values.config.useTTY }}
+          tty: {{ .Values.config.useTTY }}
           volumeMounts:
             - mountPath: /scripts/
-              name: {{ .Values.rollupName }}-conductor-scripts-volume
+              name: {{ .Values.config.rollup.name }}-conductor-scripts-volume
               readOnly: true
           envFrom:
             - configMapRef:
-                name: {{ .Values.rollupName }}-conductor-env
+                name: {{ .Values.config.rollup.name }}-conductor-env
       volumes:
-        - name: {{ .Values.rollupName }}-executor-scripts-volume
+        - name: {{ .Values.config.rollup.name }}-executor-scripts-volume
           configMap:
-            name: {{ .Values.rollupName }}-executor-scripts
+            name: {{ .Values.config.rollup.name }}-executor-scripts
             defaultMode: 0500
-        - name: {{ .Values.rollupName }}-conductor-scripts-volume
+        - name: {{ .Values.config.rollup.name }}-conductor-scripts-volume
           configMap:
-            name: {{ .Values.rollupName }}-conductor-scripts
+            name: {{ .Values.config.rollup.name }}-conductor-scripts
             defaultMode: 0500
-        - name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
+        - name: {{ $.Values.config.rollup.name }}-rollup-shared-storage-vol
           persistentVolumeClaim:
-            claimName: {{ $.Values.rollupName }}-rollup-shared-storage-pvc
+            claimName: {{ $.Values.config.rollup.name }}-rollup-shared-storage-pvc
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.rollupName }}-faucet
+  name: {{ .Values.config.rollup.name }}-faucet
   labels:
-    app: {{ .Values.rollupName }}-astria-dev-cluster
+    app: {{ .Values.config.rollup.name }}-astria-dev-cluster
   namespace: astria-dev-cluster
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.rollupName }}-astria-dev-cluster
+      app: {{ .Values.config.rollup.name }}-astria-dev-cluster
   template:
     metadata:
-      name: {{ .Values.rollupName }}-faucet
+      name: {{ .Values.config.rollup.name }}-faucet
       labels:
-        app: {{ .Values.rollupName }}-astria-dev-cluster
+        app: {{ .Values.config.rollup.name }}-astria-dev-cluster
     spec:
       containers:
         - name: faucet
           command: [ "/app/eth-faucet" ]
           args:
             - -httpport={{ .Values.ports.faucet }}
-            - -wallet.provider=http://{{ .Values.rollupName }}-evm-service:{{ .Values.ports.jsonRPC }}
-            - -wallet.privkey={{ .Values.privateKey }}
-          image: {{ .Values.faucetImage }}
+            - -wallet.provider=http://{{ .Values.config.rollup.name }}-evm-service:{{ .Values.ports.jsonRPC }}
+            - -wallet.privkey={{ .Values.config.faucet.privateKey }}
+          image: {{ .Values.images.faucet }}
           volumeMounts:
             - mountPath: /home/faucet
-              name: {{ .Values.rollupName }}-faucet-home-vol
-              subPath: {{ .Values.rollupName }}/faucet
+              name: {{ .Values.config.rollup.name }}-faucet-home-vol
+              subPath: {{ .Values.config.rollup.name }}/faucet
           ports:
             - containerPort: {{ .Values.ports.faucet }}
               name: faucet
       volumes:
         - emptyDir: { }
-          name: {{ .Values.rollupName }}-faucet-home-vol
+          name: {{ .Values.config.rollup.name }}-faucet-home-vol
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.rollupName }}-blockscout
+  name: {{ .Values.config.rollup.name }}-blockscout
   labels:
-    app: {{ .Values.rollupName }}-astria-dev-cluster
+    app: {{ .Values.config.rollup.name }}-astria-dev-cluster
   namespace: astria-dev-cluster
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.rollupName }}-astria-dev-cluster
+      app: {{ .Values.config.rollup.name }}-astria-dev-cluster
   template:
     metadata:
-      name: {{ .Values.rollupName }}-blockscout-local
+      name: {{ .Values.config.rollup.name }}-blockscout-local
       labels:
-        app: {{ .Values.rollupName }}-astria-dev-cluster
+        app: {{ .Values.config.rollup.name }}-astria-dev-cluster
     spec:
       containers:
         - name: blockscout
@@ -144,14 +144,14 @@ spec:
           args:
             - -c
             - bin/blockscout eval "Elixir.Explorer.ReleaseTasks.create_and_migrate()" && bin/blockscout start
-          image: {{ .Values.blockscoutImage }}
+          image: {{ .Values.images.blockscout.core }}
           volumeMounts:
             - mountPath: /app/logs
-              name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
-              subPath: {{ .Values.rollupName }}/blockscout/logs
+              name: {{ $.Values.config.rollup.name }}-rollup-shared-storage-vol
+              subPath: {{ .Values.config.rollup.name }}/blockscout/logs
           envFrom:
             - configMapRef:
-                name: {{ .Values.rollupName }}-blockscout-env
+                name: {{ .Values.config.rollup.name }}-blockscout-env
           ports:
             - containerPort: {{ .Values.ports.blockscout }}
               name: blockscout
@@ -166,41 +166,41 @@ spec:
             - name: POSTGRES_PASSWORD
             - name: POSTGRES_USER
               value: postgres
-          image: {{ .Values.blockscoutPostgresImage }}
+          image: {{ .Values.images.blockscout.postgres }}
           ports:
             - containerPort: 5432
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
-              subPath: {{ .Values.rollupName }}/blockscout/postgres
+              name: {{ $.Values.config.rollup.name }}-rollup-shared-storage-vol
+              subPath: {{ .Values.config.rollup.name }}/blockscout/postgres
         - name: redis
           command: ["redis-server"]
-          image: {{ .Values.blockscoutRedisImage }}
+          image: {{ .Values.images.blockscout.redis }}
           ports:
             - containerPort: 6379
           volumeMounts:
             - mountPath: /data
-              name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
-              subPath: {{ .Values.rollupName }}/blockscout/redis
+              name: {{ $.Values.config.rollup.name }}-rollup-shared-storage-vol
+              subPath: {{ .Values.config.rollup.name }}/blockscout/redis
         - name: sig-provider
-          image: {{ .Values.blockscoutSigProviderImage }}
+          image: {{ .Values.images.blockscout.sigProvider }}
           ports:
             - containerPort: 8050
         - name: smart-contract-verifier
-          image: {{ .Values.blockscoutSmartContractVerifierImage }}
+          image: {{ .Values.images.blockscout.smartContractVerifier }}
           envFrom:
             - configMapRef:
-                name: {{ .Values.rollupName }}-smart-contract-verifier-env
+                name: {{ .Values.config.rollup.name }}-smart-contract-verifier-env
           ports:
             - containerPort: 8150
         - name: visualizer
-          image: {{ .Values.blockscoutVisualizerImage }}
+          image: {{ .Values.images.blockscout.visualizer }}
           envFrom:
             - configMapRef:
-                name: {{ .Values.rollupName }}-visualizer-env
+                name: {{ .Values.config.rollup.name }}-visualizer-env
           ports:
             - containerPort: 8151
       volumes:
-        - name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
+        - name: {{ $.Values.config.rollup.name }}-rollup-shared-storage-vol
           persistentVolumeClaim:
-            claimName: {{ $.Values.rollupName }}-rollup-shared-storage-pvc
+            claimName: {{ $.Values.config.rollup.name }}-rollup-shared-storage-pvc

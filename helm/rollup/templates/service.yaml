@@ -1,11 +1,11 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ .Values.rollupName }}-evm-service
+  name: {{ .Values.config.rollup.name }}-evm-service
   namespace: astria-dev-cluster
 spec:
   selector:
-    app: {{ .Values.rollupName }}-astria-dev-cluster
+    app: {{ .Values.config.rollup.name }}-astria-dev-cluster
   ports:
     - name: json-rpc-svc
       port: {{ .Values.ports.jsonRPC }}
@@ -20,11 +20,11 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ .Values.rollupName }}-faucet-service
+  name: {{ .Values.config.rollup.name }}-faucet-service
   namespace: astria-dev-cluster
 spec:
   selector:
-    app: {{ .Values.rollupName }}-astria-dev-cluster
+    app: {{ .Values.config.rollup.name }}-astria-dev-cluster
   ports:
     - name: faucet-svc
       port: {{ .Values.ports.faucet }}
@@ -33,11 +33,11 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ .Values.rollupName }}-blockscout-svc
+  name: {{ .Values.config.rollup.name }}-blockscout-svc
   namespace: astria-dev-cluster
 spec:
   selector:
-    app: {{ .Values.rollupName }}-astria-dev-cluster
+    app: {{ .Values.config.rollup.name }}-astria-dev-cluster
   ports:
     - name: blockscout-svc
       port: {{ .Values.ports.blockscout }}

@@ -6,7 +6,7 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{ $.Values.rollupName }}-{{ $value.storageClassName }}
+  name: {{ $.Values.config.rollup.name }}-{{ $value.storageClassName }}
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Retain
