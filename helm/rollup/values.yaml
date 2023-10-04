@@ -47,7 +47,7 @@ config:
 images:
   # Core images for the rollup, developed for Astria
   geth: "ghcr.io/astriaorg/go-ethereum:0.3.0"
-  conductor: "ghcr.io/astriaorg/conductor:0.5.1--conductor"
+  conductor: "astria-conductor:local"
   composer: "ghcr.io/astriaorg/composer:0.2.0--composer"
 
   # Rollup faucet
@@ -67,6 +67,7 @@ images:
 # NOTE - `rollupName` will be used with `persistentVolumeName` to generate names for kubernetes resources.
 #  e.g. astria-executor-pv, astria-executor-pvc
 storage:
+  enabled: false
   rollupSharedStorage:
     type: "local"
     size: "5Gi"

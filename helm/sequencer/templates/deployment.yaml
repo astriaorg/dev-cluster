@@ -98,6 +98,9 @@ spec:
             name: relayer-scripts
             defaultMode: 0500
         - name: sequencer-shared-storage-vol
+          {{- if .Values.storage.enabled }}
           persistentVolumeClaim:
             claimName: sequencer-shared-storage-pvc
-
+          {{- else }}
+          emptyDir: {}
+          {{- end }}

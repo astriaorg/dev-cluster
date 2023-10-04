@@ -39,6 +39,7 @@ ports:
   relayerRPC: 2450
 
 storage:
+  enabled: false
   sequencerSharedStorage:
     type: "local"
     size: "5Gi"
