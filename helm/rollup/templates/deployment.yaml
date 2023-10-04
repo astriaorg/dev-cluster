@@ -58,29 +58,26 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-composer-env
-          {{- with .Values.sequencer.extraEnv }}
           env:
-            {{- toYaml . | nindent 12 }}
+          {{- if .Values.sequencer.extraEnv }}
+          {{- toYaml .Values.sequencer.extraEnv | nindent 12 }}
           {{- end }}
         - name: conductor
           image: {{ .Values.conductorImage }}
           command: [ "/scripts/start-conductor.sh" ]
           stdin: {{ .Values.useTTY }}
           tty: {{ .Values.useTTY }}
-          {{- with .Values.sequencer.extraVolumeMounts }}
-          volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}            
+          volumeMounts:       
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-conductor-scripts-volume
               readOnly: true
+          {{- if .Values.sequencer.extraVolumeMounts }}
+          {{- toYaml .Values.sequencer.extraVolumeMounts | nindent 12 }}
+          {{- end }}     
           envFrom:
             - configMapRef:
                 name: {{ .Values.rollupName }}-conductor-env
-      {{- with .Values.sequencer.extraVolumes }}
       volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
         - name: {{ .Values.rollupName }}-executor-scripts-volume
           configMap:
             name: {{ .Values.rollupName }}-executor-scripts
@@ -92,6 +89,9 @@ spec:
         - name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
           persistentVolumeClaim:
             claimName: {{ $.Values.rollupName }}-rollup-shared-storage-pvc
+        {{- if .Values.sequencer.extraVolumes }}
+        {{- toYaml .Values.sequencer.extraVolumes | nindent 8 }}
+        {{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment

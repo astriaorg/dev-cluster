@@ -13,40 +13,39 @@ evmNetworkId: 912559
 # This is a secret key, should use a secret manager for production deployments
 sequencerPrivateKey: "2bd806c97f0e00af1a1fc3328fa763a9269723c8db8fac4f93af71db186d6e90"
 # Uncomment this block to use secret providers (gcp given as example)
-sequencer:  
-  secretProviderClass:
-    provider: gcp
-    secretObjects:
-    - secretName: sequencerPrivateKey
-      type: Opaque
-      data:
-      - objectName: sequencerPrivateKey.txt
-        key: token
-    parameters:
-      secrets: |
-        - resourceName: "projects/$PROJECT_ID/secrets/testsecret/versions/latest"
-          filename: "sequencerPrivateKey.txt"
-  # objectStorageConfigFile: /var/secrets/sequencerPrivateKey.yaml
+sequencer: {}
+  # secretProviderClass:
+  #   provider: gcp
+  #   secretObjects:
+  #   - secretName: sequencerPrivateKey
+  #     type: Opaque
+  #     data:
+  #     - objectName: sequencerPrivateKey.txt
+  #       key: token
+  #   parameters:
+  #     secrets: |
+  #       - resourceName: "projects/$PROJECT_ID/secrets/testsecret/versions/latest"
+  #         filename: "sequencerPrivateKey.txt"
 
-  extraEnv:
-    - name: sequencerPrivateKey
-      valueFrom:
-        secretKeyRef:
-          name: sequencerPrivateKey
-          key: token
+  # extraEnv:
+  #   - name: sequencerPrivateKey
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: sequencerPrivateKey
+  #         key: token
 
-  # Extra volumes and mounts for secrets CSI driver
-  extraVolumes:
-    - name: sequencerPrivateKey
-      csi:
-        driver: secrets-store.csi.k8s.io
-        readOnly: true
-        volumeAttributes:
-          secretProviderClass: sequencerPrivateKey
+  # # Extra volumes and mounts for secrets CSI driver
+  # extraVolumes:
+  #   - name: sequencerPrivateKey
+  #     csi:
+  #       driver: secrets-store.csi.k8s.io
+  #       readOnly: true
+  #       volumeAttributes:
+  #         secretProviderClass: sequencerPrivateKey
 
-  extraVolumeMounts:
-    - mountPath: "/var/secrets"
-      name: sequencerPrivateKey
+  # extraVolumeMounts:
+  #   - mountPath: "/var/secrets"
+  #     name: sequencerPrivateKey
 
 
 # rollup core images
