@@ -78,9 +78,9 @@ CometBFT:
   #         secretProviderClass: privValidatorKey
 
   # extraVolumeMounts:
-  #   - mountPath: "/var/secrets"
+  #   - mountPath: "/cometbft/config"
   #     name: privNodeKey
-  #   - mountPath: "/var/secrets"
+  #   - mountPath: "/cometbft/config"
   #     name: privValidatorKey
 
 ports:

@@ -57,10 +57,17 @@ spec:
           envFrom:
             - configMapRef:
                 name: cometbft-env
+          env:
+          {{- if .Values.cometBFT.extraEnv }}
+          {{- toYaml .Values.cometBFT.extraEnv | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - mountPath: /cometbft
               name: sequencer-shared-storage-vol
               subPath: cometbft
+          {{- if .Values.cometBFT.extraVolumeMounts }}
+          {{- toYaml .Values.cometBFT.extraVolumeMounts | nindent 12 }}
+          {{- end }}
           ports:
             - containerPort: {{ .Values.ports.cometBFTP2P }}
               name: cometbft-p2p
@@ -100,4 +107,7 @@ spec:
         - name: sequencer-shared-storage-vol
           persistentVolumeClaim:
             claimName: sequencer-shared-storage-pvc
+        {{- if .Values.cometBFT.extraVolumes }}
+        {{- toYaml .Values.cometBFT.extraVolumes | nindent 8 }}
+        {{- end }}
 
