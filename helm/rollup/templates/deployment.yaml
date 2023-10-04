@@ -67,7 +67,7 @@ spec:
           command: [ "/scripts/start-conductor.sh" ]
           stdin: {{ .Values.useTTY }}
           tty: {{ .Values.useTTY }}
-          volumeMounts:       
+          volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.rollupName }}-conductor-scripts-volume
               readOnly: true
