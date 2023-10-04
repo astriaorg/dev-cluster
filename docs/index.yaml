@@ -3,36 +3,36 @@ entries:
   astria-evm-rollup:
   - apiVersion: v2
     appVersion: 0.3.0
-    created: "2023-10-04T15:08:15.170633-06:00"
+    created: "2023-10-04T15:35:27.584134-06:00"
     description: A Helm chart for EVM rollup in k8s deployed on top of Astria Sequencer
       Network + Celestia.
-    digest: 1d8ac1185931c8ca84268321219d0a893ad676169a60d5730979ff0b7dde7002
+    digest: a1f97be75ffc0e7ede05dfdf315502acb138750bd516de61a897ca5780040127
     name: astria-evm-rollup
     type: application
     urls:
-    - https://astria-dev.github.io/dev-cluster/astria-evm-rollup-0.2.0.tgz
+    - https://astriaorg.github.io/dev-cluster/astria-evm-rollup-0.2.0.tgz
     version: 0.2.0
   astria-sequencer-validator:
   - apiVersion: v2
     appVersion: 0.5.1
-    created: "2023-10-04T15:08:15.170972-06:00"
+    created: "2023-10-04T15:35:27.585358-06:00"
     description: A Helm chart for deploying a k8s validating node on the Astria Sequencer
       Network, which writes data to Celestia.
-    digest: 52dc6098863b05c482331bdc4c9c6ecde4af21ef81f62f0dc81c012600225724
+    digest: 8cd3a446f4bc4d0b55642d68e0003464047124713dbab8f06269e0ecb009cacc
     name: astria-sequencer-validator
     type: application
     urls:
-    - https://astria-dev.github.io/dev-cluster/astria-sequencer-validator-0.2.0.tgz
+    - https://astriaorg.github.io/dev-cluster/astria-sequencer-validator-0.2.0.tgz
     version: 0.2.0
   celestia-local:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-10-04T15:08:15.17119-06:00"
+    created: "2023-10-04T15:35:27.585616-06:00"
     description: A Helm chart for Kubernetes
-    digest: 8bd62104dd0e5a010a689fc1bb8e046f42ddb2ced5c2fbe565aa8fdb3831fe04
+    digest: f124ed3fc3b6978b7452bedf15e861781b8c6f117dc1320d8e07ef7702dbbe0d
     name: celestia-local
     type: application
     urls:
-    - https://astria-dev.github.io/dev-cluster/celestia-local-0.1.0.tgz
+    - https://astriaorg.github.io/dev-cluster/celestia-local-0.1.0.tgz
     version: 0.1.0
-generated: "2023-10-04T15:08:15.170243-06:00"
+generated: "2023-10-04T15:35:27.583605-06:00"
