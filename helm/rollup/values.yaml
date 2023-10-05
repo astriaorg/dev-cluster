@@ -24,8 +24,10 @@ config:
         balance: "1000000000000000000000"
 
   faucet:
-    # The account from which the faucet disburses funds
-    # Note: likely want the matching account be funded in config.rollup.genesisAccounts
+    # The account from which the faucet disburses funds, likely want to have
+    # the corresponding account given a balance in genesis accounts.
+    # Note: When secretProvider.enabled is true the secret provided by 
+    #       `evmPrivateKey` is used instead of this value.
     privateKey: "8b3a7999072c9c9314c084044fe705db11714c6c4ed7cddb64da18ea270dd203"
 
   # Configuration related to sequencer connection for rollup
@@ -37,6 +39,8 @@ config:
     # URL path for the sequencer
     rpc: "http://sequencer-service:26657"
     # Private key which is used for wrapping txs for sequencer submission
+    # Note: When secretProvider.enabled is true the secret provided by 
+    #       `sequencerPrivateKey` is used instead of this value.
     privateKey: "2bd806c97f0e00af1a1fc3328fa763a9269723c8db8fac4f93af71db186d6e90"
     
   # Configuration for Celestia DA
@@ -62,7 +66,24 @@ images:
     smartContractVerifier: "ghcr.io/blockscout/smart-contract-verifier:v1.3.0@sha256:f07b2d874c28d45f5ba81f297c868a746a03771e8b6d9b8e96f0eba0beeb1016"
     visualizer: "ghcr.io/blockscout/visualizer:v0.2.0@sha256:99479da126248e0aba5c32b1e32625f8c527b72924f55cb510b50e5f854b2d15"
 
-
+# When deploying in a production environment should use a secret provider
+# This is configured for use with GCP, need to set own resource names
+# and keys
+secretProvider:
+  enabled: true
+  provider: gcp
+  secrets:
+    # Used in place of sequencer.privateKey value when provider enabled
+    sequencerPrivateKey:
+      filename: sequencerPrivateKey.txt
+      resourceName: "projects/$PROJECT_ID/secrets/sequencerPrivateKey/versions/latest"
+      key: token
+    # Used in place of faucet.privateKey value when provider enabled
+    evmPrivateKey:
+      filename: evmPrivateKey.txt
+      resourceName: "projects/$PROJECT_ID/secrets/evmPrivateKey/versions/latest"
+      key: token
+  
 # Default persistent storage values
 # NOTE - `rollupName` will be used with `persistentVolumeName` to generate names for kubernetes resources.
 #  e.g. astria-executor-pv, astria-executor-pvc

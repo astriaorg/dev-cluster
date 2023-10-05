@@ -58,6 +58,19 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Values.config.rollup.name }}-composer-env
+          {{- if .Values.secretProvider.enabled }}
+          env:
+            - name: ASTRIA_COMPOSER_SEQUENCER_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sequencer-private-key
+                  key: {{ .Values.secretProvider.secrets.sequencerPrivateKey.key }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.secretProvider.enabled }}
+          - mountPath: "/var/secrets"
+            name: sequencer-private-key
+          {{- end }}
         - name: conductor
           image: {{ .Values.images.conductor }}
           command: [ "/scripts/start-conductor.sh" ]
@@ -86,6 +99,14 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- if .Values.secretProvider.enabled }}
+        - name: sequencer-private-key
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: sequencerPrivateKey
+        {{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -109,20 +130,43 @@ spec:
         - name: faucet
           command: [ "/app/eth-faucet" ]
           args:
-            - -httpport={{ .Values.ports.faucet }}
-            - -wallet.provider=http://{{ .Values.config.rollup.name }}-evm-service:{{ .Values.ports.jsonRPC }}
-            - -wallet.privkey={{ .Values.config.faucet.privateKey }}
+            - -httpport="$ETH_FAUCET_PORT"
+            - -wallet.provider="$ETH_FAUCET_EVM_PROVIDER_URL"
+            - -wallet.privkey="$ETH_FAUCET_EVM_PRIVATE_KEY"
           image: {{ .Values.images.faucet }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.config.rollup.name }}-faucet-env
+          {{- if .Values.secretProvider.enabled }}
+          env:
+            - name: ETH_FAUCET_EVM_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: evm-private-key
+                  key: {{ .Values.secretProvider.secrets.evmPrivateKey.key }}
+          {{- end }}
           volumeMounts:
             - mountPath: /home/faucet
               name: {{ .Values.config.rollup.name }}-faucet-home-vol
               subPath: {{ .Values.config.rollup.name }}/faucet
+            {{- if .Values.secretProvider.enabled }}
+            - mountPath: "/var/secrets"
+              name: evm-private-key
+            {{- end }}
           ports:
             - containerPort: {{ .Values.ports.faucet }}
               name: faucet
       volumes:
         - emptyDir: {}
           name: {{ .Values.config.rollup.name }}-faucet-home-vol
+        {{- if .Values.secretProvider.enabled }}
+        - name: evm-private-key
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: evmPrivateKey
+        {{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment

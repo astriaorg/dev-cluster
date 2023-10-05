@@ -16,9 +16,11 @@
     },
     "difficulty": "10000000",
     "gasLimit": "8000000",
-    "alloc": { {{ $accounts_length := len .Values.config.rollup.genesisAccounts  }}
+    "alloc": {
+    {{- $accounts_length := len .Values.config.rollup.genesisAccounts  }}
     {{- range $index, $value := .Values.config.rollup.genesisAccounts }}
-        "{{ $value.address }}": { "balance": "{{ $value.balance }}" }{{ if ne $index (sub $accounts_length 1) }},{{ end }}
+        "{{ $value.address }}": { "balance": "{{ $value.balance }}" }
+        {{- if ne $index (sub $accounts_length 1) }},{{- end }}
     {{- end }}
     }
 }
