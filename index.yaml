@@ -3,10 +3,10 @@ entries:
   astria-evm-rollup:
   - apiVersion: v2
     appVersion: 0.3.0
-    created: "2023-10-04T15:35:27.584134-06:00"
+    created: "2023-10-05T09:18:28.281202-06:00"
     description: A Helm chart for EVM rollup in k8s deployed on top of Astria Sequencer
       Network + Celestia.
-    digest: a1f97be75ffc0e7ede05dfdf315502acb138750bd516de61a897ca5780040127
+    digest: a98cf1dc54dbb3477326672903f1a7a038be3bc3e7218fac9019050f4b3475f5
     name: astria-evm-rollup
     type: application
     urls:
@@ -15,10 +15,10 @@ entries:
   astria-sequencer-validator:
   - apiVersion: v2
     appVersion: 0.5.1
-    created: "2023-10-04T15:35:27.585358-06:00"
+    created: "2023-10-05T09:18:28.281579-06:00"
     description: A Helm chart for deploying a k8s validating node on the Astria Sequencer
       Network, which writes data to Celestia.
-    digest: 8cd3a446f4bc4d0b55642d68e0003464047124713dbab8f06269e0ecb009cacc
+    digest: 2197e0eb107a319f4a79e8f7c05f6cc9041a5ee54f11862c263cc9ca16dc5cfd
     name: astria-sequencer-validator
     type: application
     urls:
@@ -27,12 +27,24 @@ entries:
   celestia-local:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-10-04T15:35:27.585616-06:00"
+    created: "2023-10-05T09:18:28.281794-06:00"
     description: A Helm chart for Kubernetes
-    digest: f124ed3fc3b6978b7452bedf15e861781b8c6f117dc1320d8e07ef7702dbbe0d
+    digest: 99bf4fc7c06a33301f6a06aefd97b46a1ba6e52edcf13985572dc330fff13ce8
     name: celestia-local
     type: application
     urls:
     - https://astriaorg.github.io/dev-cluster/celestia-local-0.1.0.tgz
     version: 0.1.0
-generated: "2023-10-04T15:35:27.583605-06:00"
+  sequencer-faucet:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2023-10-05T09:18:28.28191-06:00"
+    description: A Helm chart for deploying a k8s faucet node for the Astria Sequencer
+      Network.
+    digest: abd75d7a290f7b06cfb76d3e7017a3c3476ca905c950314781bc78237ffcbb28
+    name: sequencer-faucet
+    type: application
+    urls:
+    - https://astriaorg.github.io/dev-cluster/sequencer-faucet-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-10-05T09:18:28.280781-06:00"
