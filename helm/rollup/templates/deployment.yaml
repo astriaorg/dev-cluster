@@ -1,0 +1,206 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.rollupName }}-geth
+  labels:
+    app: {{ .Values.rollupName }}-astria-dev-cluster
+  namespace: astria-dev-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.rollupName }}-astria-dev-cluster
+  template:
+    metadata:
+      name: {{ .Values.rollupName }}-execution-chain
+      labels:
+        app: {{ .Values.rollupName }}-astria-dev-cluster
+    spec:
+      initContainers:
+        - name: init-geth
+          command: [ "/scripts/init-geth.sh" ]
+          image: {{ .Values.gethImage }}
+          volumeMounts:
+            - mountPath: /scripts/
+              name: {{ .Values.rollupName }}-executor-scripts-volume
+            - mountPath: /home/geth
+              name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
+              subPath: {{ .Values.rollupName }}/executor
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.rollupName }}-geth-env
+      containers:
+        - name: geth
+          command: [ "/scripts/start-geth.sh" ]
+          image: {{ .Values.gethImage }}
+          volumeMounts:
+            - mountPath: /scripts/
+              name: {{ .Values.rollupName }}-executor-scripts-volume
+              readOnly: true
+            - mountPath: /home/geth
+              name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
+              subPath: {{ .Values.rollupName }}/executor
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.rollupName }}-geth-env
+          ports:
+            - containerPort: {{ .Values.ports.jsonRPC }}
+              name: json-rpc
+            - containerPort: {{ .Values.ports.wsRPC }}
+              name: ws-rpc
+            - containerPort: {{ .Values.ports.executionGRPC }}
+              name: execution-grpc
+        - name: composer
+          image: {{ .Values.composerImage }}
+          command: [ "/usr/local/bin/astria-composer" ]
+          stdin: {{ .Values.useTTY }}
+          tty: {{ .Values.useTTY }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.rollupName }}-composer-env
+        - name: conductor
+          image: {{ .Values.conductorImage }}
+          command: [ "/scripts/start-conductor.sh" ]
+          stdin: {{ .Values.useTTY }}
+          tty: {{ .Values.useTTY }}
+          volumeMounts:
+            - mountPath: /scripts/
+              name: {{ .Values.rollupName }}-conductor-scripts-volume
+              readOnly: true
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.rollupName }}-conductor-env
+      volumes:
+        - name: {{ .Values.rollupName }}-executor-scripts-volume
+          configMap:
+            name: {{ .Values.rollupName }}-executor-scripts
+            defaultMode: 0500
+        - name: {{ .Values.rollupName }}-conductor-scripts-volume
+          configMap:
+            name: {{ .Values.rollupName }}-conductor-scripts
+            defaultMode: 0500
+        - name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
+          persistentVolumeClaim:
+            claimName: {{ $.Values.rollupName }}-rollup-shared-storage-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.rollupName }}-faucet
+  labels:
+    app: {{ .Values.rollupName }}-astria-dev-cluster
+  namespace: astria-dev-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.rollupName }}-astria-dev-cluster
+  template:
+    metadata:
+      name: {{ .Values.rollupName }}-faucet
+      labels:
+        app: {{ .Values.rollupName }}-astria-dev-cluster
+    spec:
+      containers:
+        - name: faucet
+          command: [ "/app/eth-faucet" ]
+          args:
+            - -httpport={{ .Values.ports.faucet }}
+            - -wallet.provider=http://{{ .Values.rollupName }}-evm-service:{{ .Values.ports.jsonRPC }}
+            - -wallet.privkey={{ .Values.privateKey }}
+          image: {{ .Values.faucetImage }}
+          volumeMounts:
+            - mountPath: /home/faucet
+              name: {{ .Values.rollupName }}-faucet-home-vol
+              subPath: {{ .Values.rollupName }}/faucet
+          ports:
+            - containerPort: {{ .Values.ports.faucet }}
+              name: faucet
+      volumes:
+        - emptyDir: { }
+          name: {{ .Values.rollupName }}-faucet-home-vol
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.rollupName }}-blockscout
+  labels:
+    app: {{ .Values.rollupName }}-astria-dev-cluster
+  namespace: astria-dev-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.rollupName }}-astria-dev-cluster
+  template:
+    metadata:
+      name: {{ .Values.rollupName }}-blockscout-local
+      labels:
+        app: {{ .Values.rollupName }}-astria-dev-cluster
+    spec:
+      containers:
+        - name: blockscout
+          command: ["bash"]
+          args:
+            - -c
+            - bin/blockscout eval "Elixir.Explorer.ReleaseTasks.create_and_migrate()" && bin/blockscout start
+          image: {{ .Values.blockscoutImage }}
+          volumeMounts:
+            - mountPath: /app/logs
+              name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
+              subPath: {{ .Values.rollupName }}/blockscout/logs
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.rollupName }}-blockscout-env
+          ports:
+            - containerPort: {{ .Values.ports.blockscout }}
+              name: blockscout
+        - name: postgres
+          command: ["docker-entrypoint.sh"]
+          args:
+            - -c
+            - max_connections=200
+          env:
+            - name: POSTGRES_HOST_AUTH_METHOD
+              value: trust
+            - name: POSTGRES_PASSWORD
+            - name: POSTGRES_USER
+              value: postgres
+          image: {{ .Values.blockscoutPostgresImage }}
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
+              subPath: {{ .Values.rollupName }}/blockscout/postgres
+        - name: redis
+          command: ["redis-server"]
+          image: {{ .Values.blockscoutRedisImage }}
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - mountPath: /data
+              name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
+              subPath: {{ .Values.rollupName }}/blockscout/redis
+        - name: sig-provider
+          image: {{ .Values.blockscoutSigProviderImage }}
+          ports:
+            - containerPort: 8050
+        - name: smart-contract-verifier
+          image: {{ .Values.blockscoutSmartContractVerifierImage }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.rollupName }}-smart-contract-verifier-env
+          ports:
+            - containerPort: 8150
+        - name: visualizer
+          image: {{ .Values.blockscoutVisualizerImage }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.rollupName }}-visualizer-env
+          ports:
+            - containerPort: 8151
+      volumes:
+        - name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
+          persistentVolumeClaim:
+            claimName: {{ $.Values.rollupName }}-rollup-shared-storage-pvc
