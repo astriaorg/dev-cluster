@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sequencer-faucet
+  labels:
+    app: astria-dev-cluster
+  namespace: "{{ .Values.namespace }}"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: astria-dev-cluster
+  template:
+    metadata:
+      name: sequencer-faucet
+      labels:
+        app: astria-dev-cluster
+    spec:
+      containers:
+        - name: sequencer-faucet
+          image: "{{ .Values.sequencerFaucetImage }}"
+          command: [ "/app/seq-faucet" ]
+          args:
+            - -httpport={{ .Values.ports.faucet }}
+            - -wallet.provider={{ .Values.faucetWalletProvider }}
+            - -wallet.privkey={{ .Values.faucetFundingAccount.privKey }}
+          ports:
+            - containerPort: {{ .Values.ports.faucet }}
+              name: seq-faucet

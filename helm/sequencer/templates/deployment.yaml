@@ -100,4 +100,3 @@ spec:
         - name: sequencer-shared-storage-vol
           persistentVolumeClaim:
             claimName: sequencer-shared-storage-pvc
-
