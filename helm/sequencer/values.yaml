@@ -59,7 +59,8 @@ ports:
 storage:
   enabled: false
   local: true
-  sequencerSharedStorage:
-    size: "5Gi"
-    persistentVolumeName: "sequencer-shared-storage"
-    path: "/data/sequencer-data"
+  entities:
+    sequencerSharedStorage:
+      size: "5Gi"
+      persistentVolumeName: "sequencer-shared-storage"
+      path: "/data/sequencer-data"

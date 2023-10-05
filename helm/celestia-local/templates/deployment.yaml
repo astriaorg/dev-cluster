@@ -108,5 +108,9 @@ spec:
             name: celestia-local-appd-scripts
             defaultMode: 0550
         - name: celestia-home-vol
+          {{- if .Values.storage.enabled }}
           persistentVolumeClaim:
-            claimName: celestia-shared-pv-claim
+            claimName: {{ .Values.storage.entities.celestiaSharedStorage.persistentVolumeName }}-pvc
+          {{- else }}
+          emptyDir: {}
+          {{- end }}

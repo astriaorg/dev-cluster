@@ -1,8 +1,8 @@
 {{/* We need to manually create a PersistentVolume when local. */}}
 {{/* In prod, a PV will be created by the StorageClass' provisioner using dynamic provisioning feature.  */}}
 {{- if .Values.storage.enabled }}
-  {{- range $key, $value := .Values.storage }}
-    {{- if .Values.storage.local }}
+  {{- range $key, $value := .Values.storage.entities }}
+    {{- if $.Values.storage.local }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -37,7 +37,7 @@ metadata:
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
     "helm.sh/chart": {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
 spec:
-  {{- if .Values.storage.local }}
+  {{- if $.Values.storage.local }}
   storageClassName: {{ $value.persistentVolumeName }}-local
   {{- end }}
   accessModes:
