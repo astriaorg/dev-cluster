@@ -58,7 +58,7 @@ defaultRollupNameForDelete := "astria"
 delete-rollup rollupName=defaultRollupNameForDelete:
   helm uninstall {{rollupName}}chain-chart-deploy
 
-deploy-all-local: create-cluster deploy-ingress-controller wait-for-ingress-controller deploy-astria-local wait-for-sequencer deploy-rollup wait-for-rollup
+deploy-all-local: create-cluster deploy-ingress-controller wait-for-ingress-controller deploy-astria-local wait-for-sequencer (deploy-chart "sequencer-faucet") deploy-rollup wait-for-rollup
 
 clean:
   kind delete cluster --name astria-dev-cluster

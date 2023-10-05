@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sequencer-faucet-ingress
+  namespace: astria-dev-cluster
+spec:
+  rules:
+    - host: sequencer-faucet.localdev.me
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: sequencer-faucet-service
+                port:
+                  name: seq-faucet-svc

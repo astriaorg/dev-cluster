@@ -1,0 +1,17 @@
+namespace: "astria-dev-cluster"
+replicaCount: 1
+
+sequencerFaucetImage: "ghcr.io/astriaorg/seq-faucet:0.1.0"
+disableFaucet: false
+
+faucetWalletProvider: http://sequencer-service:26657
+
+
+# This account is funded on genesis and provides funds for the faucet
+faucetFundingAccount:
+  address: a8c46f92e987492de9b10a619efd4096a0608b94
+  pubKey: 3aff30d91b8853688ca2edc966ae3cfd67e3571b07e6b5f24fc18ea99d2d7122
+  privKey: 96f26eb410039d6559908fd64a2d1fbf21690ec18085283754811c7fb1b5f68d3aff30d91b8853688ca2edc966ae3cfd67e3571b07e6b5f24fc18ea99d2d7122
+
+ports:
+  faucet: 8080

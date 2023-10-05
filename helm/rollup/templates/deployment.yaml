@@ -95,7 +95,7 @@ spec:
         - name: {{ $.Values.config.rollup.name }}-rollup-shared-storage-vol
           {{- if .Values.storage.enabled }}
           persistentVolumeClaim:
-            claimName: {{ $.Values.config.rollup.name }}-rollup-shared-storage-pvc
+            claimName: {{ $.Values.config.rollup.name }}-rollup-shared-storage-pvc-geth
           {{- else }}
           emptyDir: {}
           {{- end }}
@@ -252,7 +252,7 @@ spec:
         - name: {{ $.Values.config.rollup.name }}-rollup-shared-storage-vol
           {{- if .Values.storage.enabled }}
           persistentVolumeClaim:
-            claimName: {{ $.Values.config.rollup.name }}-rollup-shared-storage-pvc
+            claimName: {{ $.Values.config.rollup.name }}-rollup-shared-storage-pvc-blockscout
           {{- else }}
           emptyDir: {}
           {{- end }}
