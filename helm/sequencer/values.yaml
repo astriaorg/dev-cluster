@@ -50,8 +50,10 @@ ports:
   relayerRPC: 2450
 
 storage:
-  sequencerSharedStorage:
-    type: "local"
-    size: "5Gi"
-    persistentVolumeName: "sequencer-shared-storage"
-    path: "/data/sequencer-data"
+  enabled: false
+  local: true
+  entities:
+    sequencerSharedStorage:
+      size: "5Gi"
+      persistentVolumeName: "sequencer-shared-storage"
+      path: "/data/sequencer-data"

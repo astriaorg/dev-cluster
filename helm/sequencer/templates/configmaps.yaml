@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cometbft-config
-  namespace: astria-dev-cluster
+  namespace: {{ .Values.namespace }}
 data:
   genesis.json: |
     {{- tpl (.Files.Get "files/cometbft/config/genesis.json") $ | nindent 4 }}
@@ -17,7 +17,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cometbft-data
-  namespace: astria-dev-cluster
+  namespace: {{ .Values.namespace }}
 data:
   priv_validator_state.json: |
     {{- .Files.Get "files/cometbft/data/priv_validator_state.json" | nindent 4 }}
@@ -26,7 +26,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cometbft-env
-  namespace: astria-dev-cluster
+  namespace: {{ .Values.namespace }}
 data:
   COMET_BFT_RPC_PORT: "{{ .Values.ports.cometBFTRPC }}"
 ---
@@ -34,7 +34,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: sequencer-env
-  namespace: astria-dev-cluster
+  namespace: {{ .Values.namespace }}
 data:
   ASTRIA_SEQUENCER_LOG: "astria_sequencer=debug"
   ASTRIA_SEQUENCER_LISTEN_ADDR: "127.0.0.1:{{ .Values.ports.sequencerABCI }}"
@@ -44,7 +44,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: relayer-env
-  namespace: astria-dev-cluster
+  namespace: {{ .Values.namespace }}
 data:
   ASTRIA_SEQUENCER_RELAYER_LOG: "astria_sequencer_relayer=debug"
   ASTRIA_SEQUENCER_RELAYER_SEQUENCER_ENDPOINT: "http://127.0.0.1:{{ .Values.ports.cometBFTRPC }}"
@@ -58,7 +58,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: relayer-scripts
-  namespace: astria-dev-cluster
+  namespace: {{ .Values.namespace }}
 data:
   start-relayer.sh: |
     {{- .Files.Get "files/scripts/start-relayer.sh" | nindent 4 }}

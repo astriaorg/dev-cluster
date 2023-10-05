@@ -1,13 +1,12 @@
 {{/* We need to manually create a PersistentVolume when local. */}}
 {{/* In prod, a PV will be created by the StorageClass' provisioner using dynamic provisioning feature.  */}}
-
-{{ range $key, $value := .Values.storage }}
-
-{{- if eq $value.type "local" }}
+{{- if and .Values.storage.enabled }}
+  {{- range $key, $value := .Values.storage.entities }}
+    {{- if $.Values.storage.local }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-pv
+  name: {{ $.Values.config.rollup.name }}-{{ $value.persistentVolumeName }}-pv
 spec:
   capacity:
     storage: {{ $value.size }}
@@ -15,6 +14,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ $.Values.config.rollup.name }}-{{ $value.persistentVolumeName }}-local
   local:
     path: {{ $value.path }}
   nodeAffinity:
@@ -26,39 +26,44 @@ spec:
               values:
                 - astria-dev-cluster-control-plane
 ---
+    {{- end }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $.Values.config.rollup.name }}-{{ $value.persistentVolumeName }}-pvc-geth
+  namespace: astria-dev-cluster
+  labels:
+    "app.kubernetes.io/name": "{{ $.Values.config.rollup.name }}-{{ $.Chart.Name }}"
+    "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
+    "helm.sh/chart": {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
+spec:
+  {{- if $.Values.storage.local }}
+  storageClassName: {{ $.Values.config.rollup.name }}-{{ $value.persistentVolumeName }}-local
+  {{- end }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ $value.size }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $.Values.config.rollup.name }}-{{ $value.persistentVolumeName }}-pvc-blockscout
+  namespace: astria-dev-cluster
+  labels:
+    "app.kubernetes.io/name": {{ $.Values.config.rollup.name }}-{{ $.Chart.Name }}
+    "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
+    "helm.sh/chart": {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
+spec:
+  {{- if $.Values.storage.local }}
+  storageClassName: {{ $.Values.config.rollup.name }}-{{ $value.persistentVolumeName }}-local
+  {{- end }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ $value.size }}
+---
+  {{- end }}
 {{- end }}
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-pvc-geth
-  namespace: astria-dev-cluster
-  labels:
-    "app.kubernetes.io/name": "{{ $.Values.rollupName }}-{{ $.Chart.Name }}"
-    "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
-    "helm.sh/chart": {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: {{ $value.size }}
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: {{ $.Values.rollupName }}-{{ $value.persistentVolumeName }}-pvc-blockscout
-  namespace: astria-dev-cluster
-  labels:
-    "app.kubernetes.io/name": "{{ $.Values.rollupName }}-{{ $.Chart.Name }}"
-    "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
-    "helm.sh/chart": {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: {{ $value.size }}
-
----
-{{ end }}

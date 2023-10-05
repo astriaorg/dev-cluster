@@ -4,7 +4,7 @@ metadata:
   name: sequencer-faucet
   labels:
     app: astria-dev-cluster
-  namespace: "{{ .Values.namespace }}"
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -18,12 +18,24 @@ spec:
     spec:
       containers:
         - name: sequencer-faucet
-          image: "{{ .Values.sequencerFaucetImage }}"
+          image: {{ .Values.images.sequencerFaucet }}
           command: [ "/app/seq-faucet" ]
           args:
-            - -httpport={{ .Values.ports.faucet }}
-            - -wallet.provider={{ .Values.faucetWalletProvider }}
-            - -wallet.privkey={{ .Values.faucetFundingAccount.privKey }}
+            - -httpport=$(SEQUENCER_FAUCET_PORT)
+            - -wallet.provider=$(SEQUENCER_FAUCET_SEQUENCER_RPC_URL)
+            - -wallet.privkey=$(SEQUENCER_FAUCET_PRIVATE_KEY)
+            - -faucet.amount=$(SEQUENCER_FAUCET_AMOUNT)
+          envFrom:
+            - configMapRef:
+                name: sequencer-faucet-env
+          {{- if .Values.secretProvider.enabled }}
+          env:
+            - name: SEQUENCER_FAUCET_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sequencer-private-key
+                  key: {{ .Values.secretProvider.secrets.sequencerPrivateKey.key }}
+          {{- end }}
           ports:
             - containerPort: {{ .Values.ports.faucet }}
               name: seq-faucet

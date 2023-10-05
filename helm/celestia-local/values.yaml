@@ -1,10 +1,18 @@
 # Default values for celestia-local.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+namespace: "astria-dev-cluster"
+replicaCount: 1
 
 # Default storage type for local development workflow.
-storageType: "local"
-localCelestiaSharedStorageSize: "2Gi"
+storage:
+  enabled: false
+  local: true
+  entities:
+    celestiaSharedStorage:
+      size: "5Gi"
+      persistentVolumeName: "celestia-shared-storage"
+      path: "/data/celestia-data"
 
 celestiaAppImage: "ghcr.io/celestiaorg/celestia-app:v1.0.0-rc9"
 celestiaNodeImage: "ghcr.io/astriaorg/test-images-celestia-node:v0.11.0-rc7"
