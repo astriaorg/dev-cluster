@@ -29,6 +29,8 @@ config:
     # Note: When secretProvider.enabled is true the secret provided by 
     #       `evmPrivateKey` is used instead of this value.
     privateKey: "8b3a7999072c9c9314c084044fe705db11714c6c4ed7cddb64da18ea270dd203"
+    # The amount of token to give per request
+    amount: 1
 
   # Configuration related to sequencer connection for rollup
   sequencer:
@@ -51,7 +53,7 @@ config:
 images:
   # Core images for the rollup, developed for Astria
   geth: "ghcr.io/astriaorg/go-ethereum:0.3.0"
-  conductor: "ghcr.io/astriaorg/conductor:0.6.0--conductor"
+  conductor: "astria-conductor:local"
   composer: "ghcr.io/astriaorg/composer:0.2.0--composer"
 
   # Rollup faucet

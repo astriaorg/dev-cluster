@@ -9,6 +9,8 @@ config:
   #     address: 00d75b270542084a54fcf0d0f6eab0402982d156
   #     pubKey: db617d4ec61726efc4d993488931b37f7774bf04ad916b8f974d33c9241ee762
   fundingPrivateKey: 934ab488f9e1900f6a08f50605ce1409ca9d95ebdc400dafc2e8a4306419fd52
+  # The amount of token to give per request
+  amount: 1800
 
 images:
   sequencerFaucet: "ghcr.io/astriaorg/seq-faucet:0.1.0"
