@@ -1,7 +1,7 @@
 namespace: "astria-dev-cluster"
 replicaCount: 1
 
-sequencerFaucetImage: "ghcr.io/astriaorg/seq-faucet:0.1.0"
+sequencerFaucetImage: "ghcr.io/astriaorg/seq-faucet:0.2.0"
 disableFaucet: false
 
 faucetWalletProvider: http://sequencer-service:26657
