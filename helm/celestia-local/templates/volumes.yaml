@@ -12,7 +12,6 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: {{ .Release.Name }}-shared-storage
   local:
     # NOTE - this is the path to the directory in the kind node, not your host machine!
     # This requires you to have an `extraMounts` section in your kind cluster config.
@@ -37,11 +36,6 @@ metadata:
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
     "helm.sh/chart": {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 spec:
-  {{- if .Values.sharedStorageClassOverride }}
-  storageClassName: "{{ .Values.sharedStorageClassOverride }}"
-  {{- else }}
-  storageClassName: "{{ .Release.Name }}-shared-storage"
-  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:

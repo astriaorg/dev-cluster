@@ -39,7 +39,6 @@ metadata:
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
     "helm.sh/chart": {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
 spec:
-  storageClassName: "{{ $value.storageClassName }}"
   accessModes:
     - ReadWriteOnce
   resources:

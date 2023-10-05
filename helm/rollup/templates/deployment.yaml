@@ -81,7 +81,7 @@ spec:
             defaultMode: 0500
         - name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
           persistentVolumeClaim:
-            claimName: {{ $.Values.rollupName }}-rollup-shared-storage-pvc
+            claimName: {{ $.Values.rollupName }}-rollup-shared-storage-pvc-geth
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -203,4 +203,4 @@ spec:
       volumes:
         - name: {{ $.Values.rollupName }}-rollup-shared-storage-vol
           persistentVolumeClaim:
-            claimName: {{ $.Values.rollupName }}-rollup-shared-storage-pvc
+            claimName: {{ $.Values.rollupName }}-rollup-shared-storage-pvc-blockscout

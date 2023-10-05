@@ -34,12 +34,12 @@ useTTY: true
 # Default persistent storage values
 # NOTE - `rollupName` will be used with `persistentVolumeName` to generate names for kubernetes resources.
 #  e.g. astria-executor-pv, astria-executor-pvc
+
 storage:
   rollupSharedStorage:
     type: "local"
     size: "5Gi"
     persistentVolumeName: "rollup-shared-storage"
-    storageClassName: "rollup-shared-storage-local"
     path: "/data/rollup-data"
 
 # Default service ports
