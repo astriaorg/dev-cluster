@@ -1,19 +1,30 @@
 namespace: "astria-dev-cluster"
 replicaCount: 1
 
-sequencerFaucetImage: "ghcr.io/astriaorg/seq-faucet:0.3.0"
-disableFaucet: false
+config:
+  sequencerRpcUrl: http://sequencer-service:26657
+  # This private key will be replaced with `sequencerPrivateKey` when enabled
+  # For testing purposes only, do not use except with local development cluster,
+  # it corresponds with the following account:
+  #     address: 00d75b270542084a54fcf0d0f6eab0402982d156
+  #     pubKey: db617d4ec61726efc4d993488931b37f7774bf04ad916b8f974d33c9241ee762
+  fundingPrivateKey: 934ab488f9e1900f6a08f50605ce1409ca9d95ebdc400dafc2e8a4306419fd52
 
-faucetWalletProvider: http://sequencer-service:26657
+images:
+  sequencerFaucet: "ghcr.io/astriaorg/seq-faucet:0.1.0"
 
-
-# This account is funded on genesis and provides funds for the faucet
-faucetFundingAccount:
-  # NOTE - this address matches an address that is funded during sequencer genesis.
-  #  if you change this address, you must ensure the account is funded somehow.
-  address: 00d75b270542084a54fcf0d0f6eab0402982d156
-  pubKey: db617d4ec61726efc4d993488931b37f7774bf04ad916b8f974d33c9241ee762
-  privKey: 934ab488f9e1900f6a08f50605ce1409ca9d95ebdc400dafc2e8a4306419fd52
+# When deploying in a production environment should use a secret provider
+# This is configured for use with GCP, need to set own resource names
+# and keys
+secretProvider:
+  enabled: false
+  provider: gcp
+  secrets:
+    # Used in place of config.fundingPrivateKey value when provider enabled
+    sequencerPrivateKey:
+      filename: sequencerPrivateKey.txt
+      resourceName: "projects/$PROJECT_ID/secrets/sequencerPrivateKey/versions/latest"
+      key: token
 
 ports:
   faucet: 8080
