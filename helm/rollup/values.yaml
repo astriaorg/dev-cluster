@@ -17,7 +17,7 @@ config:
     # Set to true to have rollup blocks only be generated when there are transactions
     skipEmptyBlocks: false
     # Set to true to rely on sequencer fully without Celestia DA finalization
-    disableFinalization: false
+    disableFinalization: true
     # Definitions around who has funding on startup
     genesisAccounts:
       - address: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
@@ -53,7 +53,7 @@ config:
 images:
   # Core images for the rollup, developed for Astria
   geth: "ghcr.io/astriaorg/go-ethereum:0.3.0"
-  conductor: "astria-conductor:local"
+  conductor: "ghcr.io/astriaorg/conductor:0.6.0--conductor"
   composer: "ghcr.io/astriaorg/composer:0.2.0--composer"
 
   # Rollup faucet
