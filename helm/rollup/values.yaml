@@ -70,7 +70,7 @@ images:
 # This is configured for use with GCP, need to set own resource names
 # and keys
 secretProvider:
-  enabled: true
+  enabled: false
   provider: gcp
   secrets:
     # Used in place of sequencer.privateKey value when provider enabled
