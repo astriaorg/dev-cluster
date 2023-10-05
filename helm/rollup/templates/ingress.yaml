@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Values.config.rollup.name }}-ingress
-  namespace: astria-dev-cluster
+  namespace: {{ .Values.namespace }}
 spec:
   rules:
     - host: executor.{{ .Values.config.rollup.name }}.localdev.me

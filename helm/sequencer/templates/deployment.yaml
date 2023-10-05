@@ -4,7 +4,7 @@ metadata:
   name: sequencer
   labels:
     app: astria-dev-cluster
-  namespace: "{{ .Values.namespace }}"
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:

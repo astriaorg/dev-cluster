@@ -1,3 +1,6 @@
+namespace: "astria-dev-cluster"
+replicaCount: 1
+
 config:
   # Whether to use tty readable logging for astria services, when false use json.
   # Best to be false in production environments, true for clean logs on local dev.
@@ -17,7 +20,7 @@ config:
     # Set to true to have rollup blocks only be generated when there are transactions
     skipEmptyBlocks: false
     # Set to true to rely on sequencer fully without Celestia DA finalization
-    disableFinalization: true
+    disableFinalization: false
     # Definitions around who has funding on startup
     genesisAccounts:
       - address: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"

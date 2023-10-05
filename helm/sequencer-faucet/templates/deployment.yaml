@@ -4,7 +4,7 @@ metadata:
   name: sequencer-faucet
   labels:
     app: astria-dev-cluster
-  namespace: "{{ .Values.namespace }}"
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -18,7 +18,8 @@ spec:
     spec:
       containers:
         - name: sequencer-faucet
-          command: [ "/app/eth-faucet" ]
+          image: {{ .Values.images.sequencerFaucet }}
+          command: [ "/app/seq-faucet" ]
           args:
             - -httpport=$(SEQUENCER_FAUCET_PORT)
             - -wallet.provider=$(SEQUENCER_FAUCET_SEQUENCER_RPC_URL)

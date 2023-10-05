@@ -4,9 +4,9 @@ metadata:
   name: {{ .Values.config.rollup.name }}-geth
   labels:
     app: {{ .Values.config.rollup.name }}-astria-dev-cluster
-  namespace: astria-dev-cluster
+  namespace: {{ .Values.namespace }}
 spec:
-  replicas: 1
+  replicas : {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Values.config.rollup.name }}-astria-dev-cluster
@@ -114,9 +114,9 @@ metadata:
   name: {{ .Values.config.rollup.name }}-faucet
   labels:
     app: {{ .Values.config.rollup.name }}-astria-dev-cluster
-  namespace: astria-dev-cluster
+  namespace: {{ .Values.namespace }}
 spec:
-  replicas: 1
+  replicas : {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Values.config.rollup.name }}-astria-dev-cluster
@@ -175,9 +175,9 @@ metadata:
   name: {{ .Values.config.rollup.name }}-blockscout
   labels:
     app: {{ .Values.config.rollup.name }}-astria-dev-cluster
-  namespace: astria-dev-cluster
+  namespace: {{ .Values.namespace }}
 spec:
-  replicas: 1
+  replicas : {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Values.config.rollup.name }}-astria-dev-cluster

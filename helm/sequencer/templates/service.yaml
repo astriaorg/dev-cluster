@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: sequencer-service
-  namespace: astria-dev-cluster
+  namespace: {{ .Values.namespace }}
 spec:
   selector:
     app: astria-dev-cluster
