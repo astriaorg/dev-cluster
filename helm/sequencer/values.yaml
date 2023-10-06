@@ -18,15 +18,8 @@ genesisAccounts:
   - address: 60709e2d391864b732b4f0f51e387abb76743871
     balance: 1000000000000000000
     # NOTE - the following address matches the privKey that funds the sequencer-faucet
-  - address: a8c46f92e987492de9b10a619efd4096a0608b94
+  - address: 00d75b270542084a54fcf0d0f6eab0402982d156
     balance: 500000000000000000000
-
-# This account is funded on genesis and provides funds for the faucet.
-# NOTE - this needs to match the faucetFundingAccount in the sequencer-faucet/values.yaml
-faucetFundingAccount:
-  address: a8c46f92e987492de9b10a619efd4096a0608b94
-  pubKey: 3aff30d91b8853688ca2edc966ae3cfd67e3571b07e6b5f24fc18ea99d2d7122
-  privKey: 96f26eb410039d6559908fd64a2d1fbf21690ec18085283754811c7fb1b5f68d3aff30d91b8853688ca2edc966ae3cfd67e3571b07e6b5f24fc18ea99d2d7122
 
 # endpoint with which to access celestia network bridge node
 celestiaEndpoint: http://celestia-service:26658"
@@ -57,9 +50,10 @@ ports:
   relayerRPC: 2450
 
 storage:
-  sequencerSharedStorage:
-    type: "local"
-    size: "5Gi"
-    persistentVolumeName: "sequencer-shared-storage"
-    storageClassName: "sequencer-shared-storage-local"
-    path: "/data/sequencer-data"
+  enabled: false
+  local: true
+  entities:
+    sequencerSharedStorage:
+      size: "5Gi"
+      persistentVolumeName: "sequencer-shared-storage"
+      path: "/data/sequencer-data"

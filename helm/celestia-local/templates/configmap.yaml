@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: celestia-local-env
-  namespace: astria-dev-cluster
+  namespace: {{ .Values.namespace }}
 data:
   home_dir: "/home/celestia"
   coins: "{{ .Values.coins }}"
@@ -19,7 +19,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: celestia-local-bridge-scripts
-  namespace: astria-dev-cluster
+  namespace: {{ .Values.namespace }}
 data:
   init-bridge.sh: |
     {{- .Files.Get "files/scripts/init-bridge.sh" | nindent 4 }}
@@ -30,7 +30,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: celestia-local-appd-scripts
-  namespace: astria-dev-cluster
+  namespace: {{ .Values.namespace }}
 data:
   init-celestia-appd.sh: |
     {{- .Files.Get "files/scripts/init-celestia-appd.sh" | nindent 4 }}

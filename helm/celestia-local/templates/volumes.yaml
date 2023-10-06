@@ -1,50 +1,50 @@
 {{/* We need to manually create a PersistentVolume when local. */}}
 {{/* In prod, a PV will be created by the StorageClass' provisioner using dynamic provisioning feature.  */}}
-{{- if eq .Values.storageType "local" }}
+{{- if .Values.storage.enabled }}
+  {{- range $key, $value := .Values.storage.entities }}
+    {{- if $.Values.storage.local }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: celestia-shared-pv
+  name: {{ $value.persistentVolumeName }}-pv
 spec:
   capacity:
-    storage: {{ .Values.localCelestiaSharedStorageSize }}
+    storage: {{ $value.size }}
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: {{ .Release.Name }}-shared-storage
+  storageClassName: {{ $value.persistentVolumeName }}-local
   local:
-    # NOTE - this is the path to the directory in the kind node, not your host machine!
-    # This requires you to have an `extraMounts` section in your kind cluster config.
-    path: /data/celestia-data
+    path: {{ $value.path }}
   nodeAffinity:
     required:
       nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - astria-dev-cluster-control-plane
-{{- end }}
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - astria-dev-cluster-control-plane
 ---
+    {{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: celestia-shared-pv-claim
+  name: {{ $value.persistentVolumeName }}-pvc
   namespace: astria-dev-cluster
   labels:
-    "app.kubernetes.io/name": "celestia-local"
+    "app.kubernetes.io/name": "{{ $.Chart.Name }}"
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
-    "helm.sh/chart": {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    "helm.sh/chart": {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
 spec:
-  {{- if .Values.sharedStorageClassOverride }}
-  storageClassName: "{{ .Values.sharedStorageClassOverride }}"
-  {{- else }}
-  storageClassName: "{{ .Release.Name }}-shared-storage"
+  {{- if $.Values.storage.local }}
+  storageClassName: {{ $value.persistentVolumeName }}-local
   {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.localCelestiaSharedStorageSize }}
+      storage: {{ $value.size }}
 ---
+  {{- end }}
+{{- end }}

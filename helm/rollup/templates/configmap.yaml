@@ -1,23 +1,23 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.rollupName }}-conductor-env
-  namespace: astria-dev-cluster
+  name: {{ .Values.config.rollup.name }}-conductor-env
+  namespace: {{ .Values.namespace }}
 data:
-  ASTRIA_CONDUCTOR_LOG: "astria_conductor=info"
-  ASTRIA_CONDUCTOR_CELESTIA_NODE_URL: "http://celestia-service:26658"
-  ASTRIA_CONDUCTOR_TENDERMINT_URL: "http://sequencer-service:26657"
-  ASTRIA_CONDUCTOR_CHAIN_ID: "{{ .Values.evmChainId }}"
+  ASTRIA_CONDUCTOR_LOG: "astria_conductor={{ .Values.config.logLevel }}"
+  ASTRIA_CONDUCTOR_CELESTIA_NODE_URL: "{{ .Values.config.celestia.fullNodeUrl }}"
+  ASTRIA_CONDUCTOR_CHAIN_ID: "{{ .Values.config.rollup.chainId }}"
   ASTRIA_CONDUCTOR_EXECUTION_RPC_URL: "http://127.0.0.1:{{ .Values.ports.executionGRPC }}"
-  ASTRIA_CONDUCTOR_DISABLE_FINALIZATION: "false"
-  ASTRIA_CONDUCTOR_SEQUENCER_URL: "ws://sequencer-service:26657/websocket"
-  ASTRIA_CONDUCTOR_DISABLE_EMPTY_BLOCK_EXECUTION: "false"
+  ASTRIA_CONDUCTOR_DISABLE_FINALIZATION: "{{ .Values.config.rollup.disableFinalization }}"
+  ASTRIA_CONDUCTOR_SEQUENCER_URL: "{{ .Values.config.sequencer.websocket }}"
+  ASTRIA_CONDUCTOR_DISABLE_EMPTY_BLOCK_EXECUTION: "{{ .Values.config.rollup.skipEmptyBlocks }}"
+  ASTRIA_CONDUCTOR_INITIAL_SEQUENCER_BLOCK_HEIGHT: "{{ .Values.config.sequencer.initialBlockHeight }}"
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.rollupName }}-conductor-scripts
-  namespace: astria-dev-cluster
+  name: {{ .Values.config.rollup.name }}-conductor-scripts
+  namespace: {{ .Values.namespace }}
 data:
   start-conductor.sh: |
     {{- .Files.Get "files/scripts/start-conductor.sh" | nindent 4 }}
@@ -25,36 +25,49 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.rollupName }}-composer-env
-  namespace: astria-dev-cluster
+  name: {{ .Values.config.rollup.name }}-composer-env
+  namespace: {{ .Values.namespace }}
 data:
-  ASTRIA_COMPOSER_LOG: "astria_composer=debug"
+  ASTRIA_COMPOSER_LOG: "astria_composer={{ .Values.config.logLevel }}"
   ASTRIA_COMPOSER_API_LISTEN_ADDR: "0.0.0.0:0"
-  ASTRIA_COMPOSER_SEQUENCER_URL: "http://sequencer-service:26657"
-  ASTRIA_COMPOSER_ROLLUPS: "{{ .Values.evmChainId }}::ws://127.0.0.1:{{ .Values.ports.wsRPC }}"
-  ASTRIA_COMPOSER_PRIVATE_KEY: "{{ .Values.sequencerPrivateKey }}"
+  ASTRIA_COMPOSER_SEQUENCER_URL: "{{ .Values.config.sequencer.rpc }}"
+  ASTRIA_COMPOSER_ROLLUPS: "{{ .Values.config.rollup.chainId }}::ws://127.0.0.1:{{ .Values.ports.wsRPC }}"
+  {{- if not .Values.secretProvider.enabled }}
+  ASTRIA_COMPOSER_PRIVATE_KEY: "{{ .Values.config.sequencer.privateKey }}"
+  {{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.rollupName }}-geth-env
-  namespace: astria-dev-cluster
+  name: {{ .Values.config.rollup.name }}-faucet-env
+  namespace: {{ .Values.namespace }}
+data:
+  ETH_FAUCET_PORT: "{{ .Values.ports.faucet }}"
+  ETH_FAUCET_EVM_PROVIDER_URL: "http://{{ .Values.config.rollup.name }}-evm-service:{{ .Values.ports.jsonRPC }}"
+  ETH_FAUCET_AMOUNT: "{{ .Values.config.faucet.amount }}"
+  {{- if not .Values.secretProvider.enabled }}
+  ETH_FAUCET_EVM_PRIVATE_KEY: "{{ .Values.config.faucet.privateKey }}"
+  {{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.config.rollup.name }}-geth-env
+  namespace: {{ .Values.namespace }}
 data:
   home_dir: "/home/geth"
-  data_dir: "/home/geth/{{ .Values.rollupName }}geth"
+  data_dir: "/home/geth/{{ .Values.config.rollup.name }}geth"
   executor_host_http_port: "{{ .Values.ports.jsonRPC }}"
   executor_host_grpc_port: "{{ .Values.ports.executionGRPC }}"
   executor_host_ws_port: "{{ .Values.ports.wsRPC }}"
-  genesis_alloc_address: "{{ .Values.genesisAllocAddress }}"
-  evm_network_id: "{{ .Values.evmNetworkId }}"
-  evm_chain_id: "{{ .Values.evmChainId }}"
-  cometbft_rpc_endpoint: "http://sequencer-service:26657"
+  evm_network_id: "{{ .Values.config.rollup.networkId }}"
+  evm_chain_id: "{{ .Values.config.rollup.chainId }}"
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.rollupName }}-executor-scripts
-  namespace: astria-dev-cluster
+  name: {{ .Values.config.rollup.name }}-executor-scripts
+  namespace: {{ .Values.namespace }}
 data:
   geth-genesis.json: |
     {{- tpl (.Files.Get "files/genesis/geth-genesis.json") $ | nindent 4 }}
@@ -66,8 +79,8 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.rollupName }}-blockscout-env
-  namespace: astria-dev-cluster
+  name: {{ .Values.config.rollup.name }}-blockscout-env
+  namespace: {{ .Values.namespace }}
 data:
   ACCOUNT_CLOAK_KEY: ""
   ACCOUNT_ENABLED: "false"
@@ -121,9 +134,9 @@ data:
   EIP_1559_ELASTICITY_MULTIPLIER: "2"
   EMISSION_FORMAT: "DEFAULT"
   ETHEREUM_JSONRPC_DISABLE_ARCHIVE_BALANCES: "false"
-  ETHEREUM_JSONRPC_HTTP_URL: "http://{{ .Values.rollupName }}-evm-service:{{ .Values.ports.jsonRPC }}/"
-  ETHEREUM_JSONRPC_TRACE_URL: "http://{{ .Values.rollupName }}-evm-service:{{ .Values.ports.jsonRPC }}/"
-  ETHEREUM_JSONRPC_WS_URL: "ws://{{ .Values.rollupName }}-evm-service:{{ .Values.ports.wsRPC }}/"
+  ETHEREUM_JSONRPC_HTTP_URL: "http://{{ .Values.config.rollup.name }}-evm-service:{{ .Values.ports.jsonRPC }}/"
+  ETHEREUM_JSONRPC_TRACE_URL: "http://{{ .Values.config.rollup.name }}-evm-service:{{ .Values.ports.jsonRPC }}/"
+  ETHEREUM_JSONRPC_WS_URL: "ws://{{ .Values.config.rollup.name }}-evm-service:{{ .Values.ports.wsRPC }}/"
   ETHEREUM_JSONRPC_TRANSPORT: "http"
   ETHEREUM_JSONRPC_VARIANT: "geth"
   EXCHANGE_RATES_COIN: ""
@@ -152,7 +165,7 @@ data:
   MICROSERVICE_SIG_PROVIDER_URL: "http://localhost:8050/"
   MICROSERVICE_VISUALIZE_SOL2UML_ENABLED: "true"
   MICROSERVICE_VISUALIZE_SOL2UML_URL: "http://localhost:8151/"
-  NETWORK: "{{ .Values.evmChainId }}"
+  NETWORK: "{{ .Values.config.rollup.chainId }}"
   NETWORK_PATH: "/"
   POOL_SIZE: "90"
   POOL_SIZE_API: "10"
@@ -172,7 +185,7 @@ data:
   SOURCIFY_INTEGRATION_ENABLED: "false"
   SOURCIFY_REPO_URL: ""
   SOURCIFY_SERVER_URL: ""
-  SUBNETWORK: {{ .Values.rollupName | title }}
+  SUBNETWORK: {{ .Values.config.rollup.name | title }}
   SUPPORTED_CHAINS: '{}'
   TENDERLY_CHAIN_PATH: ""
   TOKEN_METADATA_UPDATE_INTERVAL: "172800"
@@ -184,8 +197,8 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.rollupName }}-smart-contract-verifier-env
-  namespace: astria-dev-cluster
+  name: {{ .Values.config.rollup.name }}-smart-contract-verifier-env
+  namespace: {{ .Values.namespace }}
 data:
   SMART_CONTRACT_VERIFIER__JAEGER__AGENT_ENDPOINT: "localhost:6831"
   SMART_CONTRACT_VERIFIER__JAEGER__ENABLED: "false"
@@ -213,8 +226,8 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: astria-dev-cluster
-  name: {{ .Values.rollupName }}-visualizer-env
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.config.rollup.name }}-visualizer-env
 data:
   VISUALIZER__SERVER__GRPC__ENABLED: "false"
   VISUALIZER__SERVER__HTTP__ADDR: "0.0.0.0:8151"
