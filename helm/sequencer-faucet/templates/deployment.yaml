@@ -36,6 +36,20 @@ spec:
                   name: sequencer-private-key-faucet
                   key: {{ .Values.secretProvider.secrets.sequencerPrivateKey.key }}
           {{- end }}
+          volumeMounts:
+          {{- if .Values.secretProvider.enabled }}
+          - mountPath: "/var/secrets"
+            name: sequencer-private-key-faucet
+          {{- end }}
           ports:
             - containerPort: {{ .Values.ports.faucet }}
               name: seq-faucet
+      volumes:
+        {{- if .Values.secretProvider.enabled }}
+        - name: sequencer-private-key-faucet
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: sequencer-private-key-faucet
+        {{- end }}
