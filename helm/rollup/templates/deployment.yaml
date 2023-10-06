@@ -60,7 +60,7 @@ spec:
                 name: {{ .Values.config.rollup.name }}-composer-env
           {{- if .Values.secretProvider.enabled }}
           env:
-            - name: ASTRIA_COMPOSER_SEQUENCER_PRIVATE_KEY
+            - name: ASTRIA_COMPOSER_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
                   name: sequencer-private-key
