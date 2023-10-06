@@ -151,7 +151,7 @@ spec:
               name: {{ .Values.config.rollup.name }}-faucet-home-vol
               subPath: {{ .Values.config.rollup.name }}/faucet
             {{- if .Values.secretProvider.enabled }}
-            - mountPath: "/var/secrets"
+            - mountPath: /var/secrets
               name: evm-private-key
             {{- end }}
           ports:
