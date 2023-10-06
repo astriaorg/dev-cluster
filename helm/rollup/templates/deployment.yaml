@@ -166,7 +166,7 @@ spec:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: evmPrivateKey
+              secretProviderClass: evm-private-key
         {{- end }}
 ---
 apiVersion: apps/v1
