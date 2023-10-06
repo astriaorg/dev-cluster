@@ -105,7 +105,7 @@ spec:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: sequencerPrivateKey
+              secretProviderClass: sequencer-private-key
         {{- end }}
 ---
 apiVersion: apps/v1
