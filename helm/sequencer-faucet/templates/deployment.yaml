@@ -33,7 +33,7 @@ spec:
             - name: SEQUENCER_FAUCET_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: sequencer-private-key
+                  name: sequencer-private-key-faucet
                   key: {{ .Values.secretProvider.secrets.sequencerPrivateKey.key }}
           {{- end }}
           ports:
