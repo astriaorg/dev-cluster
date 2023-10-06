@@ -3,7 +3,18 @@ entries:
   astria-evm-rollup:
   - apiVersion: v2
     appVersion: 0.3.0
-    created: "2023-10-05T09:18:28.281202-06:00"
+    created: "2023-10-06T14:21:07.215152-06:00"
+    description: A Helm chart for EVM rollup in k8s deployed on top of Astria Sequencer
+      Network + Celestia.
+    digest: c0e50269e1748eb635d20c141a375aeac49fc6f9947815c4f7388eee56864a24
+    name: astria-evm-rollup
+    type: application
+    urls:
+    - https://astriaorg.github.io/dev-cluster/astria-evm-rollup-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
+    appVersion: 0.3.0
+    created: "2023-10-06T14:21:07.214782-06:00"
     description: A Helm chart for EVM rollup in k8s deployed on top of Astria Sequencer
       Network + Celestia.
     digest: a98cf1dc54dbb3477326672903f1a7a038be3bc3e7218fac9019050f4b3475f5
@@ -15,7 +26,18 @@ entries:
   astria-sequencer-validator:
   - apiVersion: v2
     appVersion: 0.5.1
-    created: "2023-10-05T09:18:28.281579-06:00"
+    created: "2023-10-06T14:21:07.215867-06:00"
+    description: A Helm chart for deploying a k8s validating node on the Astria Sequencer
+      Network, which writes data to Celestia.
+    digest: 5269240872956b86e5853b243e97c66aae8966efcaca1f05ab8a130144d753a7
+    name: astria-sequencer-validator
+    type: application
+    urls:
+    - https://astriaorg.github.io/dev-cluster/astria-sequencer-validator-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
+    appVersion: 0.5.1
+    created: "2023-10-06T14:21:07.215529-06:00"
     description: A Helm chart for deploying a k8s validating node on the Astria Sequencer
       Network, which writes data to Celestia.
     digest: 2197e0eb107a319f4a79e8f7c05f6cc9041a5ee54f11862c263cc9ca16dc5cfd
@@ -27,7 +49,17 @@ entries:
   celestia-local:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-10-05T09:18:28.281794-06:00"
+    created: "2023-10-06T14:21:07.216256-06:00"
+    description: A Helm chart for Kubernetes
+    digest: 5ea3622d23803f5421bdcac4c63c607fc4fce4dfc860e53469eda8c66f9ef8b7
+    name: celestia-local
+    type: application
+    urls:
+    - https://astriaorg.github.io/dev-cluster/celestia-local-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2023-10-06T14:21:07.216056-06:00"
     description: A Helm chart for Kubernetes
     digest: 99bf4fc7c06a33301f6a06aefd97b46a1ba6e52edcf13985572dc330fff13ce8
     name: celestia-local
@@ -38,7 +70,18 @@ entries:
   sequencer-faucet:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2023-10-05T09:18:28.28191-06:00"
+    created: "2023-10-06T14:21:07.216503-06:00"
+    description: A Helm chart for deploying a k8s faucet node for the Astria Sequencer
+      Network.
+    digest: d63d386d3df850fbc60a98381d19c4ad947c499857016e7df9105b018331235a
+    name: sequencer-faucet
+    type: application
+    urls:
+    - https://astriaorg.github.io/dev-cluster/sequencer-faucet-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2023-10-06T14:21:07.216367-06:00"
     description: A Helm chart for deploying a k8s faucet node for the Astria Sequencer
       Network.
     digest: abd75d7a290f7b06cfb76d3e7017a3c3476ca905c950314781bc78237ffcbb28
@@ -47,4 +90,4 @@ entries:
     urls:
     - https://astriaorg.github.io/dev-cluster/sequencer-faucet-0.1.0.tgz
     version: 0.1.0
-generated: "2023-10-05T09:18:28.280781-06:00"
+generated: "2023-10-06T14:21:07.214334-06:00"
