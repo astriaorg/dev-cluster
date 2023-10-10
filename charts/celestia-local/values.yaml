@@ -43,5 +43,3 @@ ports:
   celestiaTokenService: 5353
   bridgeRPC: 26658
   bridgeHTTP: 26659
-
-

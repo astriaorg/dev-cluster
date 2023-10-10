@@ -29,7 +29,7 @@ config:
   faucet:
     # The account from which the faucet disburses funds, likely want to have
     # the corresponding account given a balance in genesis accounts.
-    # Note: When secretProvider.enabled is true the secret provided by 
+    # Note: When secretProvider.enabled is true the secret provided by
     #       `evmPrivateKey` is used instead of this value.
     privateKey: "8b3a7999072c9c9314c084044fe705db11714c6c4ed7cddb64da18ea270dd203"
     # The amount of token to give per request
@@ -39,15 +39,15 @@ config:
   sequencer:
     # Block height to start syncing rollup from
     initialBlockHeight: 1
-    # Websocket connection used for 
+    # Websocket connection used for
     websocket: "ws://sequencer-service:26657/websocket"
     # URL path for the sequencer
     rpc: "http://sequencer-service:26657"
     # Private key which is used for wrapping txs for sequencer submission
-    # Note: When secretProvider.enabled is true the secret provided by 
+    # Note: When secretProvider.enabled is true the secret provided by
     #       `sequencerPrivateKey` is used instead of this value.
     privateKey: "2bd806c97f0e00af1a1fc3328fa763a9269723c8db8fac4f93af71db186d6e90"
-    
+
   # Configuration for Celestia DA
   celestia:
     # Full node which client will connect to
@@ -62,7 +62,7 @@ images:
   # Rollup faucet
   faucet: "ghcr.io/astriaorg/ria-faucet:0.0.1"
 
-  # Pertaining to deploying blockscout block explorer 
+  # Pertaining to deploying blockscout block explorer
   blockscout:
     core: "docker.io/blockscout/blockscout:5.1.0"
     postgres: "docker.io/library/postgres:14"
@@ -88,7 +88,7 @@ secretProvider:
       filename: evmPrivateKey.txt
       resourceName: "projects/$PROJECT_ID/secrets/evmPrivateKey/versions/latest"
       key: token
-  
+
 # Default persistent storage values
 # NOTE - `rollupName` will be used with `persistentVolumeName` to generate names for kubernetes resources.
 #  e.g. astria-executor-pv, astria-executor-pvc
