@@ -25,6 +25,9 @@ config:
     genesisAccounts:
       - address: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
         balance: "1000000000000000000000"
+    # Ingress domain name override
+    ingressHostOverride: ""
+    wsIngressHostOverride: ""
 
   faucet:
     # The account from which the faucet disburses funds, likely want to have
@@ -34,6 +37,8 @@ config:
     privateKey: "8b3a7999072c9c9314c084044fe705db11714c6c4ed7cddb64da18ea270dd203"
     # The amount of token to give per request
     amount: 1
+    # Ingress domain name override
+    ingressHostOverride: ""
 
   # Configuration related to sequencer connection for rollup
   sequencer:
@@ -47,11 +52,15 @@ config:
     # Note: When secretProvider.enabled is true the secret provided by 
     #       `sequencerPrivateKey` is used instead of this value.
     privateKey: "2bd806c97f0e00af1a1fc3328fa763a9269723c8db8fac4f93af71db186d6e90"
-    
+
   # Configuration for Celestia DA
   celestia:
     # Full node which client will connect to
     fullNodeUrl: "http://celestia-service:26658"
+
+  blockscout:
+    # Ingress domain name override
+    ingressHostOverride: ""
 
 images:
   # Core images for the rollup, developed for Astria

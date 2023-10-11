@@ -5,7 +5,11 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   rules:
+    {{- if .Values.config.rollup.ingressHostOverride }}
+    - host: {{ .Values.config.rollup.ingressHostOverride }}
+    {{- else }}
     - host: executor.{{ .Values.config.rollup.name }}.localdev.me
+    {{- end }}
       http:
         paths:
           - path: "/"
@@ -15,7 +19,11 @@ spec:
                 name: {{ .Values.config.rollup.name }}-evm-service
                 port:
                   name: json-rpc-svc
+    {{- if .Values.config.rollup.wsIngressHostOverride }}
+    - host: {{ .Values.config.rollup.wsIngressHostOverride }}
+    {{- else }}
     - host: ws-executor.{{ .Values.config.rollup.name }}.localdev.me
+    {{- end }}
       http:
         paths:
           - path: "/"
@@ -25,7 +33,11 @@ spec:
                 name: {{ .Values.config.rollup.name }}-evm-service
                 port:
                   name: ws-rpc-svc
+    {{- if .Values.config.faucet.ingressHostOverride }}
+    - host: {{ .Values.config.faucet.ingressHostOverride }}
+    {{- else }}
     - host: faucet.{{ .Values.config.rollup.name }}.localdev.me
+    {{- end }}
       http:
         paths:
           - path: "/"
@@ -35,7 +47,11 @@ spec:
                 name: {{ .Values.config.rollup.name }}-faucet-service
                 port:
                   name: faucet-svc
+    {{- if .Values.config.blockscout.ingressHostOverride }}
+    - host: {{ .Values.config.blockscout.ingressHostOverride }}
+    {{- else }}
     - host: blockscout.{{ .Values.config.rollup.name }}.localdev.me
+    {{- end }}
       http:
         paths:
           - path: "/"
