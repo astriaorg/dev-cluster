@@ -60,7 +60,7 @@ spec:
                 name: {{ .Values.config.rollup.name }}-composer-env
           {{- if .Values.secretProvider.enabled }}
           env:
-            - name: ASTRIA_COMPOSER_SEQUENCER_PRIVATE_KEY
+            - name: ASTRIA_COMPOSER_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
                   name: sequencer-private-key
@@ -105,7 +105,7 @@ spec:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: sequencerPrivateKey
+              secretProviderClass: sequencer-private-key
         {{- end }}
 ---
 apiVersion: apps/v1
@@ -151,7 +151,7 @@ spec:
               name: {{ .Values.config.rollup.name }}-faucet-home-vol
               subPath: {{ .Values.config.rollup.name }}/faucet
             {{- if .Values.secretProvider.enabled }}
-            - mountPath: "/var/secrets"
+            - mountPath: /var/secrets
               name: evm-private-key
             {{- end }}
           ports:
@@ -166,7 +166,7 @@ spec:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: evmPrivateKey
+              secretProviderClass: evm-private-key
         {{- end }}
 ---
 apiVersion: apps/v1
