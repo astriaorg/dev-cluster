@@ -99,34 +99,37 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   labels: {}
-  path: {}
-  # pathType is only for k8s >= 1.1=
-  pathType: Prefix
   hosts: {}
-  # - chart-example.local
-  service: {}
-    # name: astria-evm-service
-    # port:
-    #   name: json-rpc-svc
-  defaultBackend: {}
-    # service:
-    #   name: astria-evm-service
-    #   port:
-    #     name: json-rpc-svc
-  ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
-  extraPaths: {}
-  # - path: /*
-  #   backend:
-  #     serviceName: ssl-redirect
-  #     servicePort: use-annotation
-  ## Or for k8s > 1.19
-  # - path: /*
-  #   pathType: Prefix
-  #   backend:
-  #     service:
-  #       name: ssl-redirect
-  #       port:
-  #         name: use-annotation
+    # - host: executor.example.com
+    #   http:
+    #     paths:
+    #       - path: "/"
+    #         pathType: Prefix
+    #         backend:
+    #           service:
+    #             name: astria-evm-service
+    #             port:
+    #               name: json-rpc-svc
+    # - host: faucet.example.com
+    #   http:
+    #     paths:
+    #       - path: "/"
+    #         pathType: Prefix
+    #         backend:
+    #           service:
+    #             name: astria-faucet-service
+    #             port:
+    #               name: faucet-svc
+    # - host: blockscout.example.com
+    #   http:
+    #     paths:
+    #       - path: "/"
+    #         pathType: Prefix
+    #         backend:
+    #           service:
+    #             name: astria-blockscout-svc
+    #             port:
+    #               name: blockscout-svc
   tls: {}
   #  - secretName: chart-example-tls
   #    hosts:
