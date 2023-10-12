@@ -100,12 +100,16 @@ ingress:
     # kubernetes.io/tls-acme: "true"
   labels: {}
   path: {}
-  service: {}
-    # port:
-    # portName:
+  service: 
+    port: {}
+    name: {}
   # pathType is only for k8s >= 1.1=
   pathType: Prefix
-
+  defaultBackend: {}
+    # service:
+    #   name: astria-evm-service
+    #   port:
+    #     name: json-rpc-svc
   hosts: {}
     # - chart-example.local
   ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.

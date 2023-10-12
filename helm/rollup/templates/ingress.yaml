@@ -2,8 +2,8 @@
 {{- $ingressApiIsStable := eq (include "rollup.ingress.isStable" .) "true" -}}
 {{- $ingressSupportsIngressClassName := eq (include "rollup.ingress.supportsIngressClassName" .) "true" -}}
 {{- $ingressSupportsPathType := eq (include "rollup.ingress.supportsPathType" .) "true" -}}
-{{- $servicePort := .Values.ingress.service.port -}}
-{{- $serviceName := .Values.ingress.service.portName -}}
+{{- $servicePort := .Values.ingress.service.port.name -}}
+{{- $serviceName := .Values.ingress.service.name -}}
 {{- $ingressPath := .Values.ingress.path -}}
 {{- $ingressPathType := .Values.ingress.pathType -}}
 {{- $extraPaths := .Values.ingress.extraPaths -}}
@@ -26,6 +26,10 @@ spec:
   {{- if and $ingressSupportsIngressClassName .Values.ingress.ingressClassName }}
   ingressClassName: {{ .Values.ingress.ingressClassName }}
   {{- end -}}
+  {{- with .Values.ingress.defaultBackend }}
+  defaultBackend:
+    {{- tpl (toYaml .) $ | nindent 4 }}
+  {{- end }}
   {{- with .Values.ingress.tls }}
   tls:
     {{- tpl (toYaml .) $ | nindent 4 }}
