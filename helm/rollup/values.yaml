@@ -99,21 +99,22 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   labels: {}
-  path: {}
-  service: 
-    port: {}
-    name: {}
+  path: {}  
   # pathType is only for k8s >= 1.1=
-  pathType: Prefix
+  pathType: Prefix  
+  hosts: {}
+  # - chart-example.local
+  service: {}
+    # name: astria-evm-service
+    # port:
+    #   name: json-rpc-svc
   defaultBackend: {}
     # service:
     #   name: astria-evm-service
     #   port:
     #     name: json-rpc-svc
-  hosts: {}
-    # - chart-example.local
   ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
-  extraPaths: []
+  extraPaths: {}
   # - path: /*
   #   backend:
   #     serviceName: ssl-redirect
@@ -126,9 +127,7 @@ ingress:
   #       name: ssl-redirect
   #       port:
   #         name: use-annotation
-
-
-  tls: []
+  tls: {}
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local

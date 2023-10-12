@@ -2,7 +2,7 @@
 {{- $ingressApiIsStable := eq (include "rollup.ingress.isStable" .) "true" -}}
 {{- $ingressSupportsIngressClassName := eq (include "rollup.ingress.supportsIngressClassName" .) "true" -}}
 {{- $ingressSupportsPathType := eq (include "rollup.ingress.supportsPathType" .) "true" -}}
-{{- $servicePort := .Values.ingress.service.port.name -}}
+{{- $servicePort := .Values.ingress.service.port -}}
 {{- $serviceName := .Values.ingress.service.name -}}
 {{- $ingressPath := .Values.ingress.path -}}
 {{- $ingressPathType := .Values.ingress.pathType -}}
@@ -30,10 +30,6 @@ spec:
   defaultBackend:
     {{- tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
-  {{- with .Values.ingress.tls }}
-  tls:
-    {{- tpl (toYaml .) $ | nindent 4 }}
-  {{- end }}
   rules:
     {{- if .Values.ingress.hosts  }}
   {{- range .Values.ingress.hosts }}
@@ -57,6 +53,10 @@ spec:
               serviceName: {{ $serviceName }}
               servicePort: {{ $servicePort }}
               {{- end }}
+  {{- end }}
+  {{- with .Values.ingress.tls }}
+  tls:
+    {{- tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
   {{- else }}
     - host: executor.{{ .Values.config.rollup.name }}.localdev.me
