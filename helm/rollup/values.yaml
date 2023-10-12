@@ -100,11 +100,36 @@ ingress:
     # kubernetes.io/tls-acme: "true"
   labels: {}
   hosts: {}
-  # - chart-example.local
-  service: {}
-    # name: astria-evm-service
-    # port:
-    #   name: json-rpc-svc
+    # - host: executor.example.com
+    #   http:
+    #     paths:
+    #       - path: "/"
+    #         pathType: Prefix
+    #         backend:
+    #           service:
+    #             name: astria-evm-service
+    #             port:
+    #               name: json-rpc-svc
+    # - host: faucet.example.com
+    #   http:
+    #     paths:
+    #       - path: "/"
+    #         pathType: Prefix
+    #         backend:
+    #           service:
+    #             name: astria-faucet-service
+    #             port:
+    #               name: faucet-svc
+    # - host: blockscout.example.com
+    #   http:
+    #     paths:
+    #       - path: "/"
+    #         pathType: Prefix
+    #         backend:
+    #           service:
+    #             name: astria-blockscout-svc
+    #             port:
+    #               name: blockscout-svc
   tls: {}
   #  - secretName: chart-example-tls
   #    hosts:
