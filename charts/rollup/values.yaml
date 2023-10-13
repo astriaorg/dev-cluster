@@ -59,7 +59,7 @@ config:
 images:
   # Core images for the rollup, developed for Astria
   geth: "ghcr.io/astriaorg/go-ethereum:0.3.0"
-  conductor: "astria-conductor:local"
+  conductor: "ghcr.io/astriaorg/conductor:0.7.0--conductor"
   composer: "ghcr.io/astriaorg/composer:0.2.2--composer"
 
   # Rollup faucet
