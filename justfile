@@ -20,14 +20,14 @@ load-image image:
   kind load docker-image {{image}} --name astria-dev-cluster
 
 deploy-chart chart:
-  helm install --debug {{chart}}-chart ./helm/{{chart}}
+  helm install --debug {{chart}}-chart ./charts/{{chart}}
 
 delete-chart chart:
   helm uninstall {{chart}}-chart
 
 redeploy-chart chart:
   helm uninstall {{chart}}-chart
-  helm install --debug {{chart}}-chart ./helm/{{chart}}
+  helm install --debug {{chart}}-chart ./charts/{{chart}}
 
 restart deployment:
   kubectl rollout restart -n astria-dev-cluster deployment {{deployment}}
@@ -48,7 +48,7 @@ deploy-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAll
     {{ if networkId           != '' { replace('--set evmNetworkId=#', '#', networkId) } else { '' } }} \
     {{ if genesisAllocAddress != '' { replace('--set genesisAllocAddress=#', '#', genesisAllocAddress) } else { '' } }} \
     {{ if privateKey          != '' { replace('--set privateKey=#', '#', privateKey) } else { '' } }} \
-    {{rollupName}}chain-chart-deploy ./helm/rollup
+    {{rollupName}}chain-chart-deploy ./charts/rollup
 
 wait-for-rollup rollupName=defaultRollupName:
   kubectl wait -n astria-dev-cluster deployment {{rollupName}}-geth --for=condition=Available=True --timeout=600s
