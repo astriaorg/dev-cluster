@@ -4,7 +4,7 @@ set -o errexit -o nounset -o pipefail
 
 # Request Celestia token if connecting to celestia
 BEARER_TOKEN=""
-if [ "$ASTRIA_CONDUCTOR_DISABLE_FINALIZATION" = "false" ]; then
+if [ "$ASTRIA_CONDUCTOR_EXECUTION_COMMIT_LEVEL" -ne "SoftOnly" ]; then
     BEARER_TOKEN=$(wget -qO- http://celestia-service:5353)
 
     if [ -z "$BEARER_TOKEN" ]; then

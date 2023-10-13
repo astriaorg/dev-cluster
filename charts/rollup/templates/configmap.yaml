@@ -4,11 +4,11 @@ metadata:
   name: {{ .Values.config.rollup.name }}-conductor-env
   namespace: {{ .Values.namespace }}
 data:
-  ASTRIA_CONDUCTOR_LOG: "astria_conductor={{ .Values.config.logLevel }}"
+  ASTRIA_CONDUCTOR_LOG: "{{ .Values.config.logLevel }}"
   ASTRIA_CONDUCTOR_CELESTIA_NODE_URL: "{{ .Values.config.celestia.fullNodeUrl }}"
   ASTRIA_CONDUCTOR_CHAIN_ID: "{{ .Values.config.rollup.chainId }}"
   ASTRIA_CONDUCTOR_EXECUTION_RPC_URL: "http://127.0.0.1:{{ .Values.ports.executionGRPC }}"
-  ASTRIA_CONDUCTOR_DISABLE_FINALIZATION: "{{ .Values.config.rollup.disableFinalization }}"
+  ASTRIA_CONDUCTOR_EXECUTION_COMMIT_LEVEL: "{{ .Values.config.rollup.executionCommitLevel }}"
   ASTRIA_CONDUCTOR_SEQUENCER_URL: "{{ .Values.config.sequencer.websocket }}"
   ASTRIA_CONDUCTOR_DISABLE_EMPTY_BLOCK_EXECUTION: "{{ .Values.config.rollup.skipEmptyBlocks }}"
   ASTRIA_CONDUCTOR_INITIAL_SEQUENCER_BLOCK_HEIGHT: "{{ .Values.config.sequencer.initialBlockHeight }}"
