@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.config.rollup.name }}-conductor-env
   namespace: {{ .Values.namespace }}
 data:
-  ASTRIA_CONDUCTOR_LOG: "astria-conductor={{ .Values.config.logLevel }}"
+  ASTRIA_CONDUCTOR_LOG: "astria_conductor={{ .Values.config.logLevel }}"
   ASTRIA_CONDUCTOR_CELESTIA_NODE_URL: "{{ .Values.config.celestia.fullNodeUrl }}"
   ASTRIA_CONDUCTOR_CHAIN_ID: "{{ .Values.config.rollup.chainId }}"
   ASTRIA_CONDUCTOR_EXECUTION_RPC_URL: "http://127.0.0.1:{{ .Values.ports.executionGRPC }}"
