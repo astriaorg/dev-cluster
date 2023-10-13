@@ -8,7 +8,7 @@ config:
 
   # The level at which core astria components will log out
   # Options are: error, warn, info, and debug
-  logLevel: "debug"
+  logLevel: "info"
 
   rollup:
     # Default name for the rollup chain
