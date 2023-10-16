@@ -5,6 +5,8 @@ create-cluster:
   kind create cluster --config ./kubernetes/kind-cluster-config.yml
   kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml
   kubectl apply -f kubernetes/namespace.yml
+
+deploy-secrets-store:
   helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
   helm install csi-secrets-store secrets-store-csi-driver/secrets-store-csi-driver --namespace kube-system
 
@@ -42,12 +44,14 @@ defaultRollupName          := "astria"
 defaultNetworkId           := ""
 defaultGenesisAllocAddress := ""
 defaultPrivateKey          := ""
-deploy-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey:
+defaultSequencerStartBlock := ""
+deploy-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey sequencerStartBlock=defaultSequencerStartBlock:
   helm install --debug \
-    {{ if rollupName          != '' { replace('--set rollupName=# --set evmChainId=#chain', '#', rollupName) } else { '' } }} \
-    {{ if networkId           != '' { replace('--set evmNetworkId=#', '#', networkId) } else { '' } }} \
-    {{ if genesisAllocAddress != '' { replace('--set genesisAllocAddress=#', '#', genesisAllocAddress) } else { '' } }} \
-    {{ if privateKey          != '' { replace('--set privateKey=#', '#', privateKey) } else { '' } }} \
+    {{ if rollupName          != '' { replace('--set config.rollup.name=# --set config.rollup.chainId=#chain', '#', rollupName) } else { '' } }} \
+    {{ if networkId           != '' { replace('--set config.rollup.networkId=#', '#', networkId) } else { '' } }} \
+    {{ if genesisAllocAddress != '' { replace('--set config.rollup.genesisAccounts[0].address=#', '#', genesisAllocAddress) } else { '' } }} \
+    {{ if privateKey          != '' { replace('--set config.faucet.privateKey=#', '#', privateKey) } else { '' } }} \
+    {{ if sequencerStartBlock != '' { replace('--set config.sequencer.initialBlockHeight=#', '#', sequencerStartBlock) } else { '' } }} \
     {{rollupName}}chain-chart-deploy ./charts/rollup
 
 wait-for-rollup rollupName=defaultRollupName:

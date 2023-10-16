@@ -4,7 +4,7 @@
     "accounts": {{ toPrettyJson .Values.genesisAccounts | indent 4 | trim }},
     "authority_sudo_key": "1c0c490f1b5528d8173c5de46d131160e4b2c0c3"
   },
-  "chain_id": "test-chain-QPfw9b",
+  "chain_id": "{{ .Values.CometBFT.chainId }}",
   "consensus_params": {
     "block": {
       "max_bytes": "22020096",

@@ -16,7 +16,7 @@ config:
     # Chain ID used for submission to shared sequencer, and generating DA namespace
     chainId: astria
     # EVM network ID used by the chain
-    networkId: 912559
+    networkId: 1337
     # Set to true to have rollup blocks only be generated when there are transactions
     skipEmptyBlocks: false
     # Determines what will drive block execution, options are:
@@ -27,6 +27,7 @@ config:
     # Definitions around who has funding on startup
     genesisAccounts:
       - address: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
+        # The balance must be a string due to size
         balance: "1000000000000000000000"
 
   faucet:
