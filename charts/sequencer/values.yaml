@@ -30,6 +30,7 @@ useTTY: true
 
 # Values for CometBFT node configuration
 CometBFT:
+  chainId: 'sequencer-test-chain'
   # CometBFT P2P Private key.
   # This is a secret key, should use a secret manager for production deployments
   privNodeKey: YWdl/6zNNNIhJX+ZCaw0dxWZ6xFunB9HEJ41bz22wvkrqDA8ls0DbwtCTBTEoM3H4ePdgq6Ha1hJonWWNpZekA==
