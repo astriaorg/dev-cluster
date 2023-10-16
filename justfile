@@ -69,5 +69,5 @@ clean-persisted-data:
 # simple command to package charts and put them in the docs/ folder,
 # then creates index.yaml for the helm chart repository
 package-and-publish-charts:
-  helm package ./helm/*
+  helm package ./charts/*
   helm repo index --url https://astriaorg.github.io/dev-cluster/ .
