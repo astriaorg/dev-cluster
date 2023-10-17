@@ -36,10 +36,13 @@ just deploy-ingress-controller
 # wait for ingress.
 just wait-for-ingress-controller
 
-# Deploys Sequencer + local DA
+# Deploy ingress
+just deploy-astria-ingress
+
+# Deploys ingress + Sequencer + local DA
 just deploy-astria-local
 
-# To deploy the whole stack locally with one command
+# To deploy the whole stack (rollup included) locally with one command
 just deploy-all-local
 
 # Deploys a geth rollup chain + faucet + blockscout + ingress

@@ -32,7 +32,9 @@ redeploy-chart chart:
 restart deployment:
   kubectl rollout restart -n astria-dev-cluster deployment {{deployment}}
 
-deploy-astria-local: (deploy-chart "celestia-local") (deploy-chart "sequencer")
+deploy-astria-ingress: create-cluster deploy-ingress-controller wait-for-ingress-controller
+
+deploy-astria-local: deploy-astria-ingress (deploy-chart "celestia-local") (deploy-chart "sequencer")
 
 wait-for-sequencer:
   kubectl wait -n astria-dev-cluster deployment celestia-local --for=condition=Available=True --timeout=600s
@@ -58,7 +60,7 @@ defaultRollupNameForDelete := "astria"
 delete-rollup rollupName=defaultRollupNameForDelete:
   helm uninstall {{rollupName}}chain-chart-deploy
 
-deploy-all-local: create-cluster deploy-ingress-controller wait-for-ingress-controller deploy-astria-local wait-for-sequencer (deploy-chart "sequencer-faucet") deploy-rollup wait-for-rollup
+deploy-all-local: deploy-astria-local wait-for-sequencer (deploy-chart "sequencer-faucet") deploy-rollup wait-for-rollup
 
 clean:
   kind delete cluster --name astria-dev-cluster
