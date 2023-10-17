@@ -10,6 +10,8 @@ cometBFTImage: docker.io/cometbft/cometbft:v0.37.x
 sequencerImage: ghcr.io/astriaorg/sequencer:0.4.1--sequencer
 sequencerRelayerImage: ghcr.io/astriaorg/sequencer-relayer:0.5.1--sequencer-relayer
 
+sudoAuthorityKey: 1c0c490f1b5528d8173c5de46d131160e4b2c0c3
+
 genesisAccounts:
   - address: 1c0c490f1b5528d8173c5de46d131160e4b2c0c3
     balance: 1000000000000000000
@@ -30,6 +32,7 @@ useTTY: true
 
 # Values for CometBFT node configuration
 CometBFT:
+  chainId: 'sequencer-test-chain'
   # CometBFT P2P Private key.
   # This is a secret key, should use a secret manager for production deployments
   privNodeKey: YWdl/6zNNNIhJX+ZCaw0dxWZ6xFunB9HEJ41bz22wvkrqDA8ls0DbwtCTBTEoM3H4ePdgq6Ha1hJonWWNpZekA==
