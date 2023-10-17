@@ -2,7 +2,7 @@
   "app_hash": "",
   "app_state": {
     "accounts": {{ toPrettyJson .Values.genesisAccounts | indent 4 | trim }},
-    "authority_sudo_key": {{ .Values.sudoAuthorityKey }}
+    "authority_sudo_key": "{{ .Values.sudoAuthorityKey }}"
   },
   "chain_id": "{{ .Values.CometBFT.chainId }}",
   "consensus_params": {
@@ -33,7 +33,7 @@
       "power": "10",
       "pub_key": {
         "type": "tendermint/PubKeyEd25519",
-        "value": "{{ .Values.CometBFT.privValidatorKey.privKey }}"
+        "value": "{{ .Values.CometBFT.privValidatorKey.pubKey }}"
       }
     }
   ]
