@@ -13,11 +13,15 @@ metadata:
     {{- with .Values.ingress.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-  {{- with .Values.ingress.annotations }}
   annotations:
+  {{- if .Values.ingress.annotations  }}
+  {{- with .Values.ingress.annotations }}
     {{- range $key, $value := . }}
     {{ $key }}: {{ tpl $value $ | quote }}
     {{- end }}
+  {{- end }}
+  {{- else }}
+    kubernetes.io/ingress.class: nginx
   {{- end }}
 spec:
   {{- if and $ingressSupportsIngressClassName .Values.ingress.ingressClassName }}
@@ -37,7 +41,7 @@ spec:
     {{- tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
   {{- else }}
-    - host: executor.{{ .Values.config.rollup.name }}.localdev.me
+    - host: executor.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
       http:
         paths:
           - path: "/"
@@ -47,7 +51,7 @@ spec:
                 name: {{ .Values.config.rollup.name }}-evm-service
                 port:
                   name: json-rpc-svc
-    - host: ws-executor.{{ .Values.config.rollup.name }}.localdev.me
+    - host: ws-executor.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
       http:
         paths:
           - path: "/"
@@ -57,7 +61,7 @@ spec:
                 name: {{ .Values.config.rollup.name }}-evm-service
                 port:
                   name: ws-rpc-svc
-    - host: faucet.{{ .Values.config.rollup.name }}.localdev.me
+    - host: faucet.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
       http:
         paths:
           - path: "/"
@@ -67,7 +71,7 @@ spec:
                 name: {{ .Values.config.rollup.name }}-faucet-service
                 port:
                   name: faucet-svc
-    - host: blockscout.{{ .Values.config.rollup.name }}.localdev.me
+    - host: blockscout.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
       http:
         paths:
           - path: "/"
