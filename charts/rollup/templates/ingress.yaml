@@ -14,7 +14,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
   annotations:
-  {{- if .Values.ingress.hosts  }}
+  {{- if .Values.ingress.annotations  }}
   {{- with .Values.ingress.annotations }}
     {{- range $key, $value := . }}
     {{ $key }}: {{ tpl $value $ | quote }}
