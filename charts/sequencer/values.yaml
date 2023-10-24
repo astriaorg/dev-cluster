@@ -5,46 +5,80 @@
 namespace: "astria-dev-cluster"
 replicaCount: 1
 
-# sequencer core images
-cometBFTImage: docker.io/cometbft/cometbft:v0.37.x
-sequencerImage: ghcr.io/astriaorg/sequencer:0.4.1--sequencer
-sequencerRelayerImage: ghcr.io/astriaorg/sequencer-relayer:0.5.1--sequencer-relayer
+config:
+  calicoIP: "192.168.65.120"
+  # Whether to use tty readable logging for astria services, when false use json.
+  # Best to be false in production environments, true for clean logs on local dev.
+  useTTY: true
 
-sudoAuthorityKey: 1c0c490f1b5528d8173c5de46d131160e4b2c0c3
+  sequencer:
+    sudoAuthorityKey: 1c0c490f1b5528d8173c5de46d131160e4b2c0c3
+    genesisAccounts:
+    - address: 1c0c490f1b5528d8173c5de46d131160e4b2c0c3
+      balance: 1000000000000000000
+    - address: 34fec43c7fcab9aef3b3cf8aba855e41ee69ca3a
+      balance: 1000000000000000000
+    - address: 60709e2d391864b732b4f0f51e387abb76743871
+      balance: 1000000000000000000
+      # NOTE - the following address matches the privKey that funds the sequencer-faucet
+    - address: 00d75b270542084a54fcf0d0f6eab0402982d156
+      balance: 500000000000000000000
+  
+  relayer:
+    enabled: false
+    celestiaRpc: http://celestia-service:26658
 
-genesisAccounts:
-  - address: 1c0c490f1b5528d8173c5de46d131160e4b2c0c3
-    balance: 1000000000000000000
-  - address: 34fec43c7fcab9aef3b3cf8aba855e41ee69ca3a
-    balance: 1000000000000000000
-  - address: 60709e2d391864b732b4f0f51e387abb76743871
-    balance: 1000000000000000000
-    # NOTE - the following address matches the privKey that funds the sequencer-faucet
-  - address: 00d75b270542084a54fcf0d0f6eab0402982d156
-    balance: 500000000000000000000
+  # Values for CometBFT node configuration
+  cometBFT:
+    chainId: 'sequencer-test-chain'
+    # If using postgres for indexing, update to enabled and set the connection
+    psql:
+      enabled: false
+      conn: postgresql://<user>:<password>@<host>:<port>/<db>?<opts>
 
-# endpoint with which to access celestia network bridge node
-celestiaEndpoint: http://celestia-service:26658"
-
-# Whether to use tty readable logging for astria services, when false use json.
-# Best to be false in production environments, true for clean logs on local dev.
-useTTY: true
-
-# Values for CometBFT node configuration
-CometBFT:
-  chainId: 'sequencer-test-chain'
-  # CometBFT P2P Private key.
-  # This is a secret key, should use a secret manager for production deployments
-  privNodeKey: YWdl/6zNNNIhJX+ZCaw0dxWZ6xFunB9HEJ41bz22wvkrqDA8ls0DbwtCTBTEoM3H4ePdgq6Ha1hJonWWNpZekA==
-  # Fields associated with running a validator
-  privValidatorKey:
-    # Ed25519 address of validator
-    address: 091E47761C58C474534F4D414AF104A6CAF90C22
-    # public key for the validator address
-    pubKey: lV57+rGs2vac7mvkGHP1oBFGHPJM3a+WoAzeFDCJDNU=
-    # private key for the validator address
+    # CometBFT P2P Private key.
     # This is a secret key, should use a secret manager for production deployments
-    privKey: dGOTAweQV8Do9P2n+A8m5EnboDrlxgD3dg4vrYpdIRqVXnv6saza9pzua+QYc/WgEUYc8kzdr5agDN4UMIkM1Q==
+    privNodeKey: HGWRtLbV8WLGFgbYhaGyaLe++DC+DBoc7O3bri81vs2ZlpR28IFfQScoO1aNOE/ygs8LIPM9UzLzbaab4VMggQ==
+    p2p:
+      # Address to listen for incoming connections, port is inferred from ports.cometBFTP2P
+      laddr: "tcp://0.0.0.0"
+      # Address to advertise to peers for them to dial. If empty, will use the same
+      # port as the laddr, and will introspect on the listener to figure out the
+      # address. IP and port are required. Example: 159.89.10.97:26656
+      externalAddress: "192.168.65.120:26656"
+      # List of seeds to connect to
+      seeds: []
+      # List of nodes to keep persistent connections to
+      persistentPeers:
+        - 96c652f63b5d5d5027b42e9af906082ee7c598d9@192.168.65.121:26656
+        - 4a4345939744d64ca370dff266e2913dd41b4e88@192.168.65.122:26656
+    validator: 
+      # Ed25519 address of validator
+      address: 091E47761C58C474534F4D414AF104A6CAF90C22
+      # public key for the validator address
+      pubKey: lV57+rGs2vac7mvkGHP1oBFGHPJM3a+WoAzeFDCJDNU=
+      # private key for the validator address
+      # This is a secret key, should use a secret manager for production deployments
+      privKey: dGOTAweQV8Do9P2n+A8m5EnboDrlxgD3dg4vrYpdIRqVXnv6saza9pzua+QYc/WgEUYc8kzdr5agDN4UMIkM1Q==
+    validators:
+      - name: astria-core
+        power: '1'
+        address: 091E47761C58C474534F4D414AF104A6CAF90C22
+        pubKey: lV57+rGs2vac7mvkGHP1oBFGHPJM3a+WoAzeFDCJDNU=
+      - name: node1
+        address: E82D827830B163D5179291FB27BB58E605DF2FA2
+        pubKey: NDE9F44v3l4irmkZxNmrZkywoGmggLlaBo5rE/Cis8M=
+        power: '1'
+      - name: node2
+        power: '1'
+        address: 8C17BBDC7C350C83C550163458FC9B7A5B54A64E
+        pub_key: 4v1RdMiKkWgBBTTP26iRSLOEkAY99gMVfZijm6OCzjs=
+
+# sequencer core images
+images:
+  cometBFT: docker.io/cometbft/cometbft:v0.37.x
+  sequencer: ghcr.io/astriaorg/sequencer:0.4.1--sequencer
+  sequencerRelayer: ghcr.io/astriaorg/sequencer-relayer:0.5.1--sequencer-relayer
 
 ports:
   cometBFTP2P: 26656

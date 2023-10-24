@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       annotations:
-        cni.projectcalico.org/ipAddrs: '["192.168.65.120"]'
+        cni.projectcalico.org/ipAddrs: '[ "{{ .Values.config.calicoIP }}" ]'
       name: astria-sequencer
       labels:
         app: astria-dev-cluster
@@ -34,10 +34,10 @@ spec:
               subPath: cometbft
       containers:
         - name: sequencer
-          image: "{{ .Values.sequencerImage }}"
+          image: "{{ .Values.images.sequencer }}"
           command: [ "/usr/local/bin/astria-sequencer" ]
-          stdin: {{ .Values.useTTY }}
-          tty: {{ .Values.useTTY }}
+          stdin: {{ .Values.config.useTTY }}
+          tty: {{ .Values.config.useTTY }}
           envFrom:
             - configMapRef:
                 name: sequencer-env
@@ -53,7 +53,7 @@ spec:
           args:
           - "--home"
           - "/cometbft"
-          image: "{{ .Values.cometBFTImage }}"
+          image: "{{ .Values.images.cometBFT }}"
           envFrom:
             - configMapRef:
                 name: cometbft-env
@@ -66,11 +66,12 @@ spec:
               name: cometbft-p2p
             - containerPort: {{ .Values.ports.cometBFTRPC }}
               name: cometbft-rpc
+        {{- if .Values.config.relayer.enabled }}
         - name: sequencer-relayer
-          image: "{{ .Values.sequencerRelayerImage }}"
+          image: "{{ .Values.images.sequencerRelayer }}"
           command: [ "/scripts/start-relayer.sh" ]
-          stdin: {{ .Values.useTTY }}
-          tty: {{ .Values.useTTY }}
+          stdin: {{ .Values.config.useTTY }}
+          tty: {{ .Values.config.useTTY }}
           envFrom:
             - configMapRef:
                 name: relayer-env
@@ -84,6 +85,7 @@ spec:
               readOnly: true
             - mountPath: /scripts/
               name: relayer-scripts-volume
+        {{- end }}
       volumes:
         - name: cometbft-config-volume
           configMap:
@@ -93,10 +95,12 @@ spec:
           configMap:
             name: cometbft-data
             defaultMode: 0700
+        {{- if .Values.config.relayer.enabled }}
         - name: relayer-scripts-volume
           configMap:
             name: relayer-scripts
             defaultMode: 0500
+        {{- end }}
         - name: sequencer-shared-storage-vol
           {{- if .Values.storage.enabled }}
           persistentVolumeClaim:
