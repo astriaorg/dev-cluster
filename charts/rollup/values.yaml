@@ -8,7 +8,7 @@ config:
 
   # The level at which core astria components will log out
   # Options are: error, warn, info, and debug
-  logLevel: "info"
+  logLevel: "debug"
 
   rollup:
     # Default name for the rollup chain
@@ -61,7 +61,7 @@ images:
   # Core images for the rollup, developed for Astria
   geth: "ghcr.io/astriaorg/go-ethereum:0.3.0"
   conductor: "ghcr.io/astriaorg/conductor:0.7.0--conductor"
-  composer: "ghcr.io/astriaorg/composer:0.2.3--composer"
+  composer: "ghcr.io/astriaorg/composer:0.2.4--composer"
 
   # Rollup faucet
   faucet: "ghcr.io/astriaorg/ria-faucet:0.0.1"
