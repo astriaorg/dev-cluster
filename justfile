@@ -36,6 +36,15 @@ restart deployment:
 
 deploy-astria-local: (deploy-chart "celestia-local") (deploy-chart "sequencer")
 
+validatorName := "core"
+deploy-sequencer-validator name=validatorName:
+  helm install --debug \
+    {{ if name != 'core' { replace('-f validator-values/#.yml' , '#', name) } else { '' } }} \
+    -n astria-validator-{{name}} --create-namespace \
+    {{name}}-sequencer-chart ./charts/sequencer
+delete-sequencer-validator name=validatorName:
+  helm uninstall {{name}}-sequencer-chart -n astria-validator-{{name}}
+
 wait-for-sequencer:
   kubectl wait -n astria-dev-cluster deployment celestia-local --for=condition=Available=True --timeout=600s
   kubectl wait -n astria-dev-cluster deployment sequencer --for=condition=Available=True --timeout=600s

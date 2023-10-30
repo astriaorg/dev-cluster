@@ -15,7 +15,7 @@
 proxy_app = "tcp://127.0.0.1:{{ .Values.ports.sequencerABCI }}"
 
 # A custom human readable name for this node
-moniker = "astria-sequencer-1"
+moniker = "{{ .Values.config.cometBFT.moniker }}"
 
 # If this node is many blocks behind the tip of the chain, BlockSync
 # allows them to catchup quickly by downloading blocks in parallel
@@ -210,10 +210,10 @@ laddr = "{{ .Values.config.cometBFT.p2p.laddr }}:{{ .Values.ports.cometBFTP2P }}
 external_address = "{{ .Values.config.cometBFT.p2p.externalAddress }}"
 
 # Comma separated list of seed nodes to connect to
-seeds = "{{ join ',' .Values.config.cometBFT.p2p.seeds }}"
+seeds = "{{ join "," .Values.config.cometBFT.p2p.seeds }}"
 
 # Comma separated list of nodes to keep persistent connections to
-persistent_peers = "{{ join ',' .Values.config.cometBFT.p2p.persistentPeers }}"
+persistent_peers = "{{ join "," .Values.config.cometBFT.p2p.persistentPeers }}"
 
 # Path to address book
 addr_book_file = "config/addrbook.json"
