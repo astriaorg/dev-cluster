@@ -16,7 +16,22 @@ spec:
       labels:
         app: {{ .Values.config.rollup.name }}-astria-dev-cluster
     spec:
+      securityContext:
+        runAsUser: 10001
+        fsGroup: 10001
+        fsGroupChangePolicy: "OnRootMismatch"
       initContainers:
+        - name: init-bridge
+          command: [ "/scripts/init-bridge.sh" ]
+          image: {{ .Values.images.celestiaNodeImage }}
+          volumeMounts:
+            - mountPath: /scripts/
+              name: {{ .Values.config.rollup.name }}-bridge-scripts-volume
+            - mountPath: /home/celestia
+              name: {{ .Values.config.rollup.name }}-celestia-home-vol
+          envFrom:
+            - configMapRef:
+                name: celestia-local-env
         - name: init-geth
           command: [ "/scripts/init-geth.sh" ]
           image: {{ .Values.images.geth }}
@@ -30,6 +45,44 @@ spec:
             - configMapRef:
                 name: {{ .Values.config.rollup.name }}-geth-env
       containers:
+        - name: celestia-bridge
+          command: [ "/scripts/start-bridge.sh" ]
+          image: {{ .Values.images.celestiaNodeImage }}
+          volumeMounts:
+            - mountPath: /scripts/
+              name: {{ .Values.config.rollup.name }}-bridge-scripts-volume
+            - mountPath: /home/celestia
+              name: {{ .Values.config.rollup.name }}-celestia-home-vol
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.config.rollup.name }}-celestia-local-env
+          ports:
+            - containerPort: {{ .Values.ports.bridgeHTTP }}
+              name: bridge-rest
+            - containerPort: {{ .Values.ports.bridgeRPC }}
+              name: bridge-jsonrpc
+          startupProbe:
+            httpGet:
+              path: /header/1
+              port: bridge-rest
+            failureThreshold: 30
+            periodSeconds: 10
+        - name: token-server
+          image: {{ .Values.images.tokenServerImage }}
+          command: [ "/bin/httpd", "-v", "-f", "-p", "5353", "-h", "/home/celestia/token-server/" ]
+          ports:
+            - containerPort: {{ .Values.ports.celestiaTokenService }}
+              name: token-svc
+          volumeMounts:
+            - mountPath: /home/celestia
+              name:  {{ .Values.config.rollup.name }}-celestia-home-vol
+              readOnly: true
+          startupProbe:
+            httpGet:
+              path: /
+              port: token-svc
+            failureThreshold: 30
+            periodSeconds: 5
         - name: geth
           command: [ "/scripts/start-geth.sh" ]
           image: {{ .Values.images.geth }}
@@ -107,6 +160,17 @@ spec:
             volumeAttributes:
               secretProviderClass: sequencer-private-key
         {{- end }}
+        - name:  {{ .Values.config.rollup.name }}-bridge-scripts-volume
+          configMap:
+            name:  {{ .Values.config.rollup.name }}-celestia-local-bridge-scripts
+            defaultMode: 0550
+        - name:  {{ .Values.config.rollup.name }}-celestia-home-vol
+          {{- if .Values.storage.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.storage.entities.celestiaSharedStorage.persistentVolumeName }}-pvc
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment

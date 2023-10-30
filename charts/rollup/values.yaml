@@ -56,12 +56,16 @@ config:
   celestia:
     # Full node which client will connect to
     fullNodeUrl: "http://celestia-service:26658"
+    # App node which bridge node will connect to
+    appNodeUrl: "http://celestia-service:26657"
 
 images:
   # Core images for the rollup, developed for Astria
   geth: "ghcr.io/astriaorg/go-ethereum:0.3.0"
   conductor: "ghcr.io/astriaorg/conductor:0.7.0--conductor"
   composer: "ghcr.io/astriaorg/composer:0.2.3--composer"
+  celestiaNodeImage: "ghcr.io/astriaorg/test-images-celestia-node:v0.11.0-rc7"
+  tokenServerImage: "busybox:1.35.0-musl"
 
   # Rollup faucet
   faucet: "ghcr.io/astriaorg/ria-faucet:0.0.1"
@@ -162,3 +166,7 @@ ports:
   gossipnet: 2451
   faucet: 8080
   blockscout: 4000
+  bridgeRPC: 26658
+  bridgeHTTP: 26659
+  celestiaTokenService: 5353
+
