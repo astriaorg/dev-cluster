@@ -1,12 +1,10 @@
 # Override value example for second validator from main chart
-namespace: astria-validator-node1
-
 config:
   calicoIP: "192.168.65.120"
 
   # Values for CometBFT node configuration
   cometBFT:
-    moniker: 'node1'
+    moniker: 'node0'
     privNodeKey: HGWRtLbV8WLGFgbYhaGyaLe++DC+DBoc7O3bri81vs2ZlpR28IFfQScoO1aNOE/ygs8LIPM9UzLzbaab4VMggQ==
     p2p:
       # Address to advertise to peers for them to dial. If empty, will use the same
@@ -41,6 +39,3 @@ config:
         power: '1'
         address: 8C17BBDC7C350C83C550163458FC9B7A5B54A64E
         pubKey: 4v1RdMiKkWgBBTTP26iRSLOEkAY99gMVfZijm6OCzjs=
-
-ingress:
-  enabled: false
