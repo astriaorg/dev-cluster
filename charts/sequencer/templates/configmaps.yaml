@@ -39,6 +39,7 @@ data:
   ASTRIA_SEQUENCER_LOG: "astria_sequencer=debug"
   ASTRIA_SEQUENCER_LISTEN_ADDR: "127.0.0.1:{{ .Values.ports.sequencerABCI }}"
   ASTRIA_SEQUENCER_DB_FILEPATH: "/sequencer/penumbra.db"
+  ASTRIA_SEQUENCER_ENABLE_MINT: "false"
 ---
 {{- if .Values.config.relayer.enabled }}
 apiVersion: v1
