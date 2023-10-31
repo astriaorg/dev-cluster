@@ -36,17 +36,17 @@ restart deployment:
 
 deploy-astria-local: (deploy-chart "celestia-local") (deploy-chart "sequencer")
 
-validatorName := "node0"
+validatorName := "single"
 deploy-sequencer-validator name=validatorName:
   helm install --debug \
-    {{ if name != 'node0' { replace('-f validator-values/#.yml' , '#', name) } else { '' } }} \
+    {{ if name != 'single' { replace('-f validator-values/#.yml' , '#', name) } else { '' } }} \
     -n astria-validator-{{name}} --create-namespace \
     {{name}}-sequencer-chart ./charts/sequencer
-deploy-sequencer-validators: (deploy-sequencer-validator) (deploy-sequencer-validator "node1") (deploy-sequencer-validator "node2")
+deploy-sequencer-validators: (deploy-sequencer-validator "node0") (deploy-sequencer-validator "node1") (deploy-sequencer-validator "node2")
 
 delete-sequencer-validator name=validatorName:
   helm uninstall {{name}}-sequencer-chart -n astria-validator-{{name}}
-delete-sequencer-validators: (delete-sequencer-validator) (delete-sequencer-validator "node1") (delete-sequencer-validator "node2")
+delete-sequencer-validators: (delete-sequencer-validator "node0") (delete-sequencer-validator "node1") (delete-sequencer-validator "node2")
 
 wait-for-sequencer:
   kubectl wait -n astria-dev-cluster deployment celestia-local --for=condition=Available=True --timeout=600s
