@@ -3,20 +3,20 @@ kind: Deployment
 metadata:
   name: sequencer
   labels:
-    app: astria-dev-cluster
+    app: {{ .Values.config.moniker }}-sequencer
   namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: astria-dev-cluster
+      app: {{ .Values.config.moniker }}-sequencer
   template:
     metadata:
       annotations:
         cni.projectcalico.org/ipAddrs: '[ "{{ .Values.config.calicoIP }}" ]'
       name: astria-sequencer
       labels:
-        app: astria-dev-cluster
+        app: {{ .Values.config.moniker }}-sequencer
     spec:
       initContainers:
         - command: [ "/bin/sh", "-c" ]
@@ -40,7 +40,7 @@ spec:
           tty: {{ .Values.config.useTTY }}
           envFrom:
             - configMapRef:
-                name: sequencer-env
+                name: {{ .Values.config.moniker }}-sequencer-env
           volumeMounts:
             - mountPath: /sequencer
               name: sequencer-shared-storage-vol
@@ -56,7 +56,7 @@ spec:
           image: "{{ .Values.images.cometBFT }}"
           envFrom:
             - configMapRef:
-                name: cometbft-env
+                name: {{ .Values.config.moniker }}-cometbft-env
           volumeMounts:
             - mountPath: /cometbft
               name: sequencer-shared-storage-vol
@@ -74,7 +74,7 @@ spec:
           tty: {{ .Values.config.useTTY }}
           envFrom:
             - configMapRef:
-                name: relayer-env
+                name: {{ .Values.config.moniker }}-relayer-env
           volumeMounts:
             - mountPath: /home/relayer
               name: sequencer-shared-storage-vol
@@ -89,22 +89,22 @@ spec:
       volumes:
         - name: cometbft-config-volume
           configMap:
-            name: cometbft-config
+            name: {{ .Values.config.moniker }}-cometbft-config
             defaultMode: 0700
         - name: cometbft-data-volume
           configMap:
-            name: cometbft-data
+            name: {{ .Values.config.moniker }}-cometbft-data
             defaultMode: 0700
         {{- if .Values.config.relayer.enabled }}
         - name: relayer-scripts-volume
           configMap:
-            name: relayer-scripts
+            name: {{ .Values.config.moniker }}-relayer-scripts
             defaultMode: 0500
         {{- end }}
         - name: sequencer-shared-storage-vol
           {{- if .Values.storage.enabled }}
           persistentVolumeClaim:
-            claimName: sequencer-shared-storage-pvc
+            claimName: {{ .Values.config.moniker }}-sequencer-shared-storage-pvc
           {{- else }}
           emptyDir: {}
           {{- end }}

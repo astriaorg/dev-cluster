@@ -1,12 +1,15 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: sequencer-service
+  name: {{ .Values.config.moniker }}-sequencer-service
   namespace: {{ .Values.namespace }}
 spec:
   selector:
-    app: astria-dev-cluster
+    app: {{ .Values.config.moniker }}-sequencer
   ports:
     - name: cometbft-rpc
       port: {{ .Values.ports.cometBFTRPC }}
       targetPort: cometbft-rpc
+    - name: cometbft-p2p
+      port: {{ .Values.ports.cometBFTP2P }}
+      name: cometbft-p2p

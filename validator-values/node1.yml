@@ -2,11 +2,11 @@
 namespace: astria-validator-node1
 
 config:
+  moniker: 'node1'
   calicoIP: "192.168.65.121"
 
   # Values for CometBFT node configuration
   cometBFT:
-    moniker: 'node1'
     privNodeKey: YhbLhsKYUexcVOPBHUS6nNy7AOjVX0DxvIQW0mZBHwjbGbIgGlfuzuswG+uetk5zhPHYZMMCz77fa5/B/KP0lw==
     p2p:
       # Address to advertise to peers for them to dial. If empty, will use the same

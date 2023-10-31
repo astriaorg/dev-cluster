@@ -6,7 +6,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ $value.persistentVolumeName }}-pv
+  name: {{ $.Values.config.moniker }}-{{ $value.persistentVolumeName }}-pv
 spec:
   capacity:
     storage: {{ $value.size }}
