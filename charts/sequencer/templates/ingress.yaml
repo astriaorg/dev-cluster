@@ -16,11 +16,15 @@ metadata:
     {{- with .Values.ingress.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-  {{- with .Values.ingress.annotations }}
   annotations:
+  {{- if .Values.ingress.annotations  }}
+  {{- with .Values.ingress.annotations }}
     {{- range $key, $value := . }}
     {{ $key }}: {{ tpl $value $ | quote }}
     {{- end }}
+  {{- end }}
+  {{- else }}
+    kubernetes.io/ingress.class: cilium
   {{- end }}
 spec:
   {{- if and $ingressSupportsIngressClassName .Values.ingress.ingressClassName }}

@@ -47,7 +47,7 @@ config:
       # Address to advertise to peers for them to dial. If empty, will use the same
       # port as the laddr, and will introspect on the listener to figure out the
       # address. IP and port are required. Example: 159.89.10.97:26656
-      externalAddress: "192.168.65.120:26656"
+      externalAddress: ""
       # List of seeds to connect to
       seeds: []
       # List of nodes to keep persistent connections to
@@ -92,7 +92,7 @@ ingress:
   # For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
   # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
   # ingressClassName: nginx
-  # Values can be templated
+  # Values can be templdated
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"

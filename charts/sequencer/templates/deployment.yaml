@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       annotations:
-        cni.projectcalico.org/ipAddrs: '[ "{{ .Values.config.calicoIP }}" ]'
+        # cni.projectcalico.org/ipAddrs: '[ "{{ .Values.config.calicoIP }}" ]'
       name: astria-sequencer
       labels:
         app: {{ .Values.config.moniker }}-sequencer
@@ -34,6 +34,7 @@ spec:
               subPath: cometbft
       containers:
         - name: sequencer
+          imagePullPolicy: IfNotPresent
           image: "{{ .Values.images.sequencer }}"
           command: [ "/usr/local/bin/astria-sequencer" ]
           stdin: {{ .Values.config.useTTY }}
@@ -49,6 +50,7 @@ spec:
             - containerPort: {{ .Values.ports.sequencerABCI }}
               name: sequencer-abci
         - name: cometbft
+          imagePullPolicy: IfNotPresent
           command: [ "cometbft", "start" ]
           args:
           - "--home"
@@ -68,6 +70,7 @@ spec:
               name: cometbft-rpc
         {{- if .Values.config.relayer.enabled }}
         - name: sequencer-relayer
+          imagePullPolicy: IfNotPresent
           image: "{{ .Values.images.sequencerRelayer }}"
           command: [ "/scripts/start-relayer.sh" ]
           stdin: {{ .Values.config.useTTY }}

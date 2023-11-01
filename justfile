@@ -3,7 +3,16 @@ default:
 
 create-cluster:
   kind create cluster --config ./kubernetes/kind-cluster-config.yml
-  kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml
+  docker pull quay.io/cilium/cilium:v1.14.3
+  kind load docker-image quay.io/cilium/cilium:v1.14.3 --name astria-dev-cluster
+  helm repo add cilium https://helm.cilium.io/
+  helm install cilium cilium/cilium --version 1.14.3 \
+      --set image.pullPolicy=IfNotPresent \
+      --set nodePort.enabled=true \
+      --set ingressController.enabled=true \
+      --set ingressController.loadbalancerMode=dedicated \
+      --namespace kube-system \
+      --set ipam.mode=kubernetes
   kubectl apply -f kubernetes/namespace.yml
 
 deploy-secrets-store:

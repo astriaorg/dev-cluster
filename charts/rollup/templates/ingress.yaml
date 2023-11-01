@@ -21,7 +21,7 @@ metadata:
     {{- end }}
   {{- end }}
   {{- else }}
-    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: cilium
   {{- end }}
 spec:
   {{- if and $ingressSupportsIngressClassName .Values.ingress.ingressClassName }}
