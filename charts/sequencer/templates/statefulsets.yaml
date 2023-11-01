@@ -29,7 +29,7 @@ spec:
               name: cometbft-data-volume
             - mountPath: /cometbft
               name: sequencer-shared-storage-vol
-              subPath: cometbft
+              subPath: {{ .Values.config.moniker }}/cometbft
       containers:
         - name: sequencer
           imagePullPolicy: IfNotPresent
@@ -43,7 +43,7 @@ spec:
           volumeMounts:
             - mountPath: /sequencer
               name: sequencer-shared-storage-vol
-              subPath: sequencer
+              subPath: {{ .Values.config.moniker }}/sequencer
           ports:
             - containerPort: {{ .Values.ports.sequencerABCI }}
               name: sequencer-abci
@@ -60,7 +60,7 @@ spec:
           volumeMounts:
             - mountPath: /cometbft
               name: sequencer-shared-storage-vol
-              subPath: cometbft
+              subPath: {{ .Values.config.moniker }}/cometbft
           ports:
             - containerPort: {{ .Values.ports.cometBFTP2P }}
               name: cometbft-p2p
