@@ -68,27 +68,6 @@ spec:
               name: cometbft-p2p
             - containerPort: {{ .Values.ports.cometBFTRPC }}
               name: cometbft-rpc
-        {{- if .Values.config.relayer.enabled }}
-        - name: sequencer-relayer
-          imagePullPolicy: IfNotPresent
-          image: "{{ .Values.images.sequencerRelayer }}"
-          command: [ "/scripts/start-relayer.sh" ]
-          stdin: {{ .Values.config.useTTY }}
-          tty: {{ .Values.config.useTTY }}
-          envFrom:
-            - configMapRef:
-                name: {{ .Values.config.moniker }}-relayer-env
-          volumeMounts:
-            - mountPath: /home/relayer
-              name: sequencer-shared-storage-vol
-              subPath: relayer
-            - mountPath: /cometbft
-              name: sequencer-shared-storage-vol
-              subPath: cometbft
-              readOnly: true
-            - mountPath: /scripts/
-              name: relayer-scripts-volume
-        {{- end }}
       volumes:
         - name: cometbft-config-volume
           configMap:
@@ -98,12 +77,6 @@ spec:
           configMap:
             name: {{ .Values.config.moniker }}-cometbft-data
             defaultMode: 0700
-        {{- if .Values.config.relayer.enabled }}
-        - name: relayer-scripts-volume
-          configMap:
-            name: {{ .Values.config.moniker }}-relayer-scripts
-            defaultMode: 0500
-        {{- end }}
         - name: sequencer-shared-storage-vol
           {{- if .Values.storage.enabled }}
           persistentVolumeClaim:

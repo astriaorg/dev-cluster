@@ -63,7 +63,7 @@ spec:
     {{- tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
   {{- else }}
-    - host: sequencer.localdev.me
+    - host: rpc.sequencer.localdev.me
       http:
         paths:
           - path: "/"
@@ -73,5 +73,15 @@ spec:
                 name: {{ .Values.config.moniker }}-sequencer-service
                 port:
                   name: cometbft-rpc
+    - host: p2p.sequencer.localdev.me
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.config.moniker }}-sequencer-service
+                port:
+                  name: cometbft-p2p
   {{- end -}}
 {{- end }}

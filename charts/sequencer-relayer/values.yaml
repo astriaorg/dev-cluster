@@ -1,0 +1,22 @@
+# Default values for sequencer.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+namespace: "astria-dev-cluster"
+replicaCount: 1
+
+config:
+  # Whether to use tty readable logging for astria services, when false use json.
+  # Best to be false in production environments, true for clean logs on local dev.
+  useTTY: true
+  relayer:
+    enabled: false
+    celestiaRpc: http://celestia-service:26658
+    sequencerRpc: http://node0-sequencer-service.astria-dev-cluster.svc.cluster.local:26656
+
+# sequencer core images
+images:
+  sequencerRelayer: ghcr.io/astriaorg/sequencer-relayer:latest
+
+ports:
+  relayerRPC: 2450
