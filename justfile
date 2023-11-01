@@ -3,16 +3,10 @@ default:
 
 create-cluster:
   kind create cluster --config ./kubernetes/kind-cluster-config.yml
-  docker pull quay.io/cilium/cilium:v1.14.3
-  kind load docker-image quay.io/cilium/cilium:v1.14.3 --name astria-dev-cluster
   helm repo add cilium https://helm.cilium.io/
   helm install cilium cilium/cilium --version 1.14.3 \
-      --set image.pullPolicy=IfNotPresent \
-      --set nodePort.enabled=true \
-      --set ingressController.enabled=true \
-      --set ingressController.loadbalancerMode=dedicated \
-      --namespace kube-system \
-      --set ipam.mode=kubernetes
+      -f ./values/cilium.yml \
+      --namespace kube-system
   kubectl apply -f kubernetes/namespace.yml
 
 deploy-secrets-store:
@@ -48,7 +42,7 @@ deploy-astria-local: (deploy-chart "celestia-local") (deploy-chart "sequencer")
 validatorName := "single"
 deploy-sequencer-validator name=validatorName:
   helm install --debug \
-    {{ if name != 'single' { replace('-f validator-values/#.yml' , '#', name) } else { '' } }} \
+    {{ if name != 'single' { replace('-f values/validators/#.yml' , '#', name) } else { '' } }} \
     -n astria-validator-{{name}} --create-namespace \
     {{name}}-sequencer-chart ./charts/sequencer
 deploy-sequencer-validators: (deploy-sequencer-validator "node0") (deploy-sequencer-validator "node1") (deploy-sequencer-validator "node2")
