@@ -11,12 +11,12 @@ config:
   useTTY: true
   relayer:
     enabled: false
-    celestiaRpc: http://celestia-service:26658
-    sequencerRpc: http://node0-sequencer-service.astria-dev-cluster.svc.cluster.local:26656
+    celestiaRpc: http://celestia-service.astria-dev-cluster.svc.cluster.local:26658
+    sequencerRpc: http://node0-sequencer-rpc-service.astria-dev-cluster.svc.cluster.local:26657
 
 # sequencer core images
 images:
-  sequencerRelayer: ghcr.io/astriaorg/sequencer-relayer:latest
+  sequencerRelayer: ghcr.io/astriaorg/sequencer-relayer:pr-538
 
 ports:
   relayerRPC: 2450

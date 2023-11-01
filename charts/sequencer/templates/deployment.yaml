@@ -12,8 +12,6 @@ spec:
       app: {{ .Values.config.moniker }}-sequencer
   template:
     metadata:
-      annotations:
-        # cni.projectcalico.org/ipAddrs: '[ "{{ .Values.config.calicoIP }}" ]'
       name: astria-sequencer
       labels:
         app: {{ .Values.config.moniker }}-sequencer

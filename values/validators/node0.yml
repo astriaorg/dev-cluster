@@ -1,24 +1,23 @@
 # Override value example for second validator from main chart
 config:
   moniker: 'node0'
-  calicoIP: "192.168.65.120"
 
   # Values for CometBFT node configuration
   cometBFT:
     privNodeKey: HGWRtLbV8WLGFgbYhaGyaLe++DC+DBoc7O3bri81vs2ZlpR28IFfQScoO1aNOE/ygs8LIPM9UzLzbaab4VMggQ==
     p2p:
-      # laddr: "tcp://node0-sequencer-service.astria-dev-cluster.svc.cluster.local"
+      laddr: "tcp://0.0.0.0"
       # Address to advertise to peers for them to dial. If empty, will use the same
       # port as the laddr, and will introspect on the listener to figure out the
       # address. IP and port are required. Example: 159.89.10.97:26656
-      externalAddress: "127.0.0.1:80"
+      externalAddress: ""
       # List of seeds to connect to
       seeds: []
       # List of nodes to keep persistent connections to
       persistentPeers:
-        - 2490c1fc41736a357c523fe049c319386d59d759@node0-sequencer-service.astria-dev-cluster.svc.cluster.local:26656
-        - 96c652f63b5d5d5027b42e9af906082ee7c598d9@node1-sequencer-service.astria-validator-node1.svc.cluster.local:26656
-        - 4a4345939744d64ca370dff266e2913dd41b4e88@node2-sequencer-service.astria-validator-node2.svc.cluster.local:26656
+        - 2490c1fc41736a357c523fe049c319386d59d759@node0-sequencer-p2p-service.astria-dev-cluster.svc.cluster.local:26656
+        - 96c652f63b5d5d5027b42e9af906082ee7c598d9@node1-sequencer-p2p-service.astria-validator-node1.svc.cluster.local:26656
+        - 4a4345939744d64ca370dff266e2913dd41b4e88@node2-sequencer-p2p-service.astria-validator-node2.svc.cluster.local:26656
     validator: 
       # Ed25519 address of validator
       address: 091E47761C58C474534F4D414AF104A6CAF90C22
@@ -40,3 +39,7 @@ config:
         power: '1'
         address: 8C17BBDC7C350C83C550163458FC9B7A5B54A64E
         pubKey: 4v1RdMiKkWgBBTTP26iRSLOEkAY99gMVfZijm6OCzjs=
+
+ingress:
+  p2p:
+    enabled: true

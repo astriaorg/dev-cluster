@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ .Values.config.moniker }}-sequencer-service
+  name: {{ .Values.config.moniker }}-sequencer-rpc-service
   namespace: {{ .Values.namespace }}
 spec:
   selector:
@@ -13,3 +13,19 @@ spec:
     - name: cometbft-p2p
       port: {{ .Values.ports.cometBFTP2P }}
       name: cometbft-p2p
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.config.moniker }}-sequencer-p2p-service
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: {{ .Values.config.moniker }}-sequencer
+  ports:
+    - name: cometbft-p2p
+      port: {{ .Values.ports.cometBFTP2P }}
+      name: cometbft-p2p
+  externalIPs:
+    - 192.168.1.54
+---
