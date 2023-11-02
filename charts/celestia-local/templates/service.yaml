@@ -8,7 +8,7 @@ spec:
     app: astria-dev-cluster
   ports:
     - name: app-rpc
-      port: {{ .Values.ports.celestiaAppHostPort }}
+      port: {{ .Values.ports.appRPC }}
       targetPort: app-rpc
     - name: bridge-rest
       port: {{ .Values.ports.bridgeHTTP }}

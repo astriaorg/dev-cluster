@@ -13,8 +13,7 @@ data:
   evm_address: "{{ .Values.evmAddress }}"
   bridge_host_port: "{{ .Values.ports.bridgeHTTP }}"
   bridge_rpc_port: "{{ .Values.ports.bridgeRPC }}"
-  celestia_app_rpc_port: "{{ .Values.ports.celestiaAppRpcPort }}}}"
-  celestia_app_host_port: "{{ .Values.ports.celestiaAppHostPort }}"
+  celestia_app_rpc_port: "{{ .Values.ports.appRPC }}"
 ---
 apiVersion: v1
 kind: ConfigMap

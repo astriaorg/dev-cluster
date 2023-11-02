@@ -59,7 +59,7 @@ spec:
             - configMapRef:
                 name: celestia-local-env
           ports:
-            - containerPort: {{ .Values.ports.celestiaAppHostPort }}
+            - containerPort: {{ .Values.ports.appRPC }}
               name: app-rpc
         - name: celestia-bridge
           command: [ "/scripts/start-bridge.sh" ]
