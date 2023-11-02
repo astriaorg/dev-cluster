@@ -169,7 +169,7 @@ ports:
   bridgeRPC: 26658
   bridgeHTTP: 26659
   celestiaTokenService: 5353
-  appRPC: 26657
+  celestiaAppHostPort: 26657
 
 
 validatorKeyName: "validator"

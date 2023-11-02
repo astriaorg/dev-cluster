@@ -10,6 +10,6 @@ fi
 celestia bridge init \
   --node.store "$home_dir/bridge" \
   --core.ip celestia-service \
-  --core.rpc.port $celestia_app_rpc_port \
+  --core.rpc.port $celestia_app_host_port \
   --gateway.port $bridge_host_port
 cp -r "$home_dir/keyring-test" "$home_dir/bridge/keys/"

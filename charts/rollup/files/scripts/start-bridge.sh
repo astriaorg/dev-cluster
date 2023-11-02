@@ -20,7 +20,7 @@ if [ ! -f "$home_dir"/token-server/index.html ]; then
   set_token
 fi
 
-genesis_hash=$(curl -s -S -X GET "http://celestia-service:$celestia_app_rpc_port/block?height=1" | jq -r '.result.block_id.hash')
+genesis_hash=$(curl -s -S -X GET "http://celestia-service:$celestia_app_host_port/block?height=1" | jq -r '.result.block_id.hash')
   if [ -z "$genesis_hash" ]; then
     echo "did not receive genesis hash from celestia; exiting"
     exit 1
@@ -41,7 +41,7 @@ echo "staring bridge!"
 exec celestia bridge start \
   --node.store "$home_dir/bridge" \
   --core.ip celestia-service \
-  --core.rpc.port "$celestia_app_rpc_port" \
+  --core.rpc.port "$celestia_app_host_port" \
   --gateway \
   --gateway.port "$bridge_host_port" \
   --gateway.deprecated-endpoints \
