@@ -1,0 +1,16 @@
+{{- $label := include "baseLabel" . }}
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ $label }}-service
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: {{ $label }}
+  ports:
+  {{- range $name, $port := .Values.ports }}
+    - name: {{ $name }}
+      port: {{ $port }}
+      targetPort: {{ $name }}
+  {{- end }}
+---
