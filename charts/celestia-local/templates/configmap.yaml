@@ -14,6 +14,7 @@ data:
   bridge_host_port: "{{ .Values.ports.bridgeHTTP }}"
   bridge_rpc_port: "{{ .Values.ports.bridgeRPC }}"
   celestia_app_host_port: "{{ .Values.ports.celestiaAppHostPort }}"
+  celestia_app_grpc_port: "{{ .Values.ports.celestiaAppGrpcPort }}"
 ---
 apiVersion: v1
 kind: ConfigMap

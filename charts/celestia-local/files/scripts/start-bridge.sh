@@ -21,7 +21,8 @@ if [ ! -f "$home_dir"/token-server/index.html ]; then
 fi
 
 genesis_hash=$(curl -s -S -X GET "http://127.0.0.1:$celestia_app_host_port/block?height=1" | jq -r '.result.block_id.hash')
-  if [ -z "$genesis_hash" ]; then
+  echo 
+  if [ "$genesis_hash" = "null" ]; then
     echo "did not receive genesis hash from celestia; exiting"
     exit 1
   else
@@ -29,7 +30,6 @@ genesis_hash=$(curl -s -S -X GET "http://127.0.0.1:$celestia_app_host_port/block
   fi
 
 export CELESTIA_CUSTOM="test:$genesis_hash"
-# --p2p.network "test:$celestia_custom"
 export GOLOG_LOG_LEVEL="debug"
 
 # fixes: keystore: permissions of key 'p2p-key' are too relaxed: required: 0600, got: 0660
@@ -42,8 +42,8 @@ exec celestia bridge start \
   --node.store "$home_dir/bridge" \
   --core.ip 127.0.0.1 \
   --core.rpc.port "$celestia_app_host_port" \
+  --core.grpc.port "$celestia_app_grpc_port" \
   --gateway \
   --gateway.port "$bridge_host_port" \
-  --gateway.deprecated-endpoints \
   --rpc.port "$bridge_rpc_port" \
   --keyring.accname "$validator_key_name"
