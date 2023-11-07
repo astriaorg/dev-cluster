@@ -1,8 +1,8 @@
-{{- $label := include "baseLabel" . }}
+{{- $label := include "celestiaNode.baseLabel" . }}
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ $label }}-service
+  name: {{ include "celestiaNode.service.name" .Subcharts. }}
   namespace: {{ .Values.global.namespace }}
 spec:
   selector:

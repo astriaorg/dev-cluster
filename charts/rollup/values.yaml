@@ -53,11 +53,6 @@ config:
     #       `sequencerPrivateKey` is used instead of this value.
     privateKey: "2bd806c97f0e00af1a1fc3328fa763a9269723c8db8fac4f93af71db186d6e90"
 
-  # Configuration for Celestia DA
-  celestia:
-    # Full node which client will connect to
-    fullNodeUrl: "http://celestia-service:26658"
-
 celestia-node:
   config:
     labelPrefix: "astria"

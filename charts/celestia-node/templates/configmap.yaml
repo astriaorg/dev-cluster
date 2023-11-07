@@ -1,4 +1,4 @@
-{{- $label := include "baseLabel" . }}
+{{- $label := include "celestiaNode.baseLabel" . }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

@@ -1,4 +1,4 @@
-{{- $label := include "baseLabel" . }}
+{{- $label := include "celestiaNode.baseLabel" . }}
 {{- $image := tpl "{{ .Values.image.registry }}/{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}" . }}
 apiVersion: apps/v1
 kind: StatefulSet
