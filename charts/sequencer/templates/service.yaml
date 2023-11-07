@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: {{ .Values.config.moniker }}-sequencer-rpc-service
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
   selector:
     app: {{ .Values.config.moniker }}-sequencer
@@ -18,7 +18,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: {{ .Values.config.moniker }}-sequencer-p2p-service
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
   selector:
     app: {{ .Values.config.moniker }}-sequencer

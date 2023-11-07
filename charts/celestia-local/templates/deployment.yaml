@@ -4,9 +4,9 @@ metadata:
   name: celestia-local
   labels:
     app: astria-dev-cluster
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.global.replicaCount }}
   selector:
     matchLabels:
       app: astria-dev-cluster

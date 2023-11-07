@@ -34,7 +34,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ $.Values.config.moniker }}-{{ $value.persistentVolumeName }}-pvc
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.global.namespace }}
   labels:
     "app.kubernetes.io/name": "{{$.Values.config.moniker}}-{{ $.Chart.Name }}"
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}

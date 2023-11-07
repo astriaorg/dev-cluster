@@ -1,5 +1,6 @@
 # Override value example for second validator from main chart
-namespace: astria-validator-node2
+global:
+  namespace: astria-validator-node2
 
 config:
   moniker: 'node2'

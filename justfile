@@ -62,7 +62,7 @@ defaultPrivateKey          := ""
 defaultSequencerStartBlock := ""
 deploy-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey sequencerStartBlock=defaultSequencerStartBlock:
   helm install --debug \
-    {{ if rollupName          != '' { replace('--set config.rollup.name=# --set config.rollup.chainId=#chain', '#', rollupName) } else { '' } }} \
+    {{ if rollupName          != '' { replace('--set config.rollup.name=# --set config.rollup.chainId=#chain --set celestia-node.config.labelPrefix=#', '#', rollupName) } else { '' } }} \
     {{ if networkId           != '' { replace('--set config.rollup.networkId=#', '#', networkId) } else { '' } }} \
     {{ if genesisAllocAddress != '' { replace('--set config.rollup.genesisAccounts[0].address=#', '#', genesisAllocAddress) } else { '' } }} \
     {{ if privateKey          != '' { replace('--set config.faucet.privateKey=#', '#', privateKey) } else { '' } }} \

@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ $label }}-files-env
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 data:
   config.toml: |
   {{- tpl (.Files.Get "files/config.toml") $ | nindent 4 }}
@@ -12,7 +12,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ $label }}-scripts-env
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 data:
   {{- (.Files.Glob "files/scripts/*").AsConfig | nindent 2 }}
 ---

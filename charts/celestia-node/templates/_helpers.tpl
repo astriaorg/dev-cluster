@@ -2,5 +2,5 @@
 Define the base label
 */}}
 {{- define "baseLabel" -}}
-{{ .Values.config.name }}-{{ .Values.config.type }}-{{ .Values.config.chainId }}
+{{- if .Values.config.labelPrefix }}{{ .Values.config.labelPrefix }}-{{- end }}{{ .Values.config.name }}-{{ .Values.config.type }}-{{ .Values.config.chainId }}
 {{- end -}}

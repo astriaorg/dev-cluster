@@ -4,9 +4,9 @@ metadata:
   name: sequencer-relayer
   labels:
     app: sequencer-relayer
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.global.replicaCount }}
   selector:
     matchLabels:
       app: sequencer-relayer

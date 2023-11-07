@@ -4,9 +4,9 @@ metadata:
   name: sequencer
   labels:
     app: {{ .Values.config.moniker }}-sequencer
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.global.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Values.config.moniker }}-sequencer

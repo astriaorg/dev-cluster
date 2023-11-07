@@ -3,18 +3,18 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: celestia-node
+  name: {{ $label }}
   labels:
     app: {{ $label }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.global.replicaCount }}
   selector:
     matchLabels:
       app: {{ $label }}
   template:
     metadata:
-      name: celestia-{{ .Values.config.type }}-node
+      name: {{ $label }}
       labels:
         app: {{ $label }}
     spec:

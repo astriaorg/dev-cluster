@@ -1,5 +1,6 @@
-namespace: "astria-dev-cluster"
-replicaCount: 1
+global:
+  namespace: "astria-dev-cluster"
+  replicaCount: 1
 
 config:
   # Whether to use tty readable logging for astria services, when false use json.
@@ -56,6 +57,10 @@ config:
   celestia:
     # Full node which client will connect to
     fullNodeUrl: "http://celestia-service:26658"
+
+celestia-node:
+  config:
+    labelPrefix: "astria"
 
 images:
   # Core images for the rollup, developed for Astria
