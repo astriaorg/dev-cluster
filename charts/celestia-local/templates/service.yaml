@@ -2,10 +2,10 @@ apiVersion: v1
 kind: Service
 metadata:
   name: celestia-service
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
   selector:
-    app: astria-dev-cluster
+    app: celestia-local-network
   ports:
     - name: bridge-rest
       port: {{ .Values.ports.bridgeHTTP }}
@@ -16,3 +16,19 @@ spec:
     - name: token-svc
       port: {{ .Values.ports.celestiaTokenService }}
       targetPort: token-svc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: celestia-app-service
+  namespace: {{ .Values.global.namespace }}
+spec:
+  selector:
+    app: celestia-local-network
+  ports:
+    - name: app-rpc
+      port: {{ .Values.ports.celestiaAppHostPort }}
+      targetPort: app-rpc
+    - name: app-grpc
+      port: {{ .Values.ports.celestiaAppGrpcPort }}
+      targetPort: app-grpc

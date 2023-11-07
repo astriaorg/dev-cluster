@@ -1,8 +1,9 @@
 # Default values for celestia-local.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-namespace: "astria-dev-cluster"
-replicaCount: 1
+global:
+  namespace: "astria-dev-cluster"
+  replicaCount: 1
 
 # Default storage type for local development workflow.
 storage:

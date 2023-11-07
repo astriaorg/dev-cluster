@@ -2,7 +2,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ include "celestiaNode.service.name" .Subcharts. }}
+  name: {{ include "celestiaNode.service.name" . }}
   namespace: {{ .Values.global.namespace }}
 spec:
   selector:

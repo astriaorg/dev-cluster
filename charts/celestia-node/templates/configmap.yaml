@@ -16,3 +16,13 @@ metadata:
 data:
   {{- (.Files.Glob "files/scripts/*").AsConfig | nindent 2 }}
 ---
+{{- if eq .Values.config.network "custom" }}
+{{- $customInfo := .Values.config.customInfo | required "customInfo is required for custom network" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $label }}-env
+  namespace: {{ .Values.global.namespace }}
+data:
+  CELESTIA_CUSTOM: {{ .Values.config.chainId }}:{{ $customInfo }}
+{{- end }}

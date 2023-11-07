@@ -9,8 +9,10 @@ config:
   name: celestia-node
   chainId: arabica-10
   network: arabica-10
+  configInfo: false
   type: light
   coreIp: http://consensus-validator.celestia-arabica-10.com
+  coreGrpcPort: 9090
 
 image:
   registry: ghcr.io

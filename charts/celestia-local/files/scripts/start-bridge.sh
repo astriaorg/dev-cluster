@@ -40,7 +40,7 @@ find "$home_dir/bridge/keys" -type f -exec chmod 0600 {} \;
 echo "staring bridge!"
 exec celestia bridge start \
   --node.store "$home_dir/bridge" \
-  --core.ip 127.0.0.1 \
+  --core.ip 0.0.0.0 \
   --core.rpc.port "$celestia_app_host_port" \
   --core.grpc.port "$celestia_app_grpc_port" \
   --gateway \

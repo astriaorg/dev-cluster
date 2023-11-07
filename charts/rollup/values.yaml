@@ -55,7 +55,13 @@ config:
 
 celestia-node:
   config:
-    labelPrefix: "astria"
+    labelPrefix: astria
+    type: light
+    # By default will deploy on top of arabica, to use custom network use below settings
+    # and fill in the `customInfo` to fit form described
+    # network: custom
+    # chainId: test
+    # customInfo: "GENESIS_HASH:BRIDGE_MULTIADDRESS"
 
 images:
   # Core images for the rollup, developed for Astria

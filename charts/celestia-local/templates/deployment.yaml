@@ -3,18 +3,18 @@ kind: Deployment
 metadata:
   name: celestia-local
   labels:
-    app: astria-dev-cluster
+    app: celestia-local-network
   namespace: {{ .Values.global.namespace }}
 spec:
   replicas: {{ .Values.global.replicaCount }}
   selector:
     matchLabels:
-      app: astria-dev-cluster
+      app: celestia-local-network
   template:
     metadata:
       name: celestia-local
       labels:
-        app: astria-dev-cluster
+        app: celestia-local-network
         "app.kubernetes.io/name": "celestia-local"
         "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
         "helm.sh/chart": {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -60,7 +60,9 @@ spec:
                 name: celestia-local-env
           ports:
             - containerPort: {{ .Values.ports.celestiaAppHostPort }}
+              name: app-rpc
             - containerPort: {{ .Values.ports.celestiaAppGrpcPort }}
+              name: app-grpc
         - name: celestia-bridge
           command: [ "/scripts/start-bridge.sh" ]
           image: {{ .Values.celestiaNodeImage }}
