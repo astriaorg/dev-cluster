@@ -37,7 +37,7 @@ redeploy-chart chart:
 restart deployment:
   kubectl rollout restart -n astria-dev-cluster deployment {{deployment}}
 
-deploy-astria-local: (deploy-chart "celestia-local") (deploy-chart "sequencer")
+deploy-astria-local: (deploy-chart "celestia-local") (deploy-sequencer-validators) (deploy-chart "sequencer-relayer")
 
 validatorName := "single"
 deploy-sequencer-validator name=validatorName:
