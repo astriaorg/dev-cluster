@@ -8,7 +8,7 @@
 {{- $serviceName := $ingress.service.name -}}
 {{- $ingressPath := $ingress.path -}}
 {{- $ingressPathType := $ingress.pathType -}}
-{{- $extraPaths := $ingress.extraPaths -}}
+{{- $extraPaths := $ingress.extraPaths }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
