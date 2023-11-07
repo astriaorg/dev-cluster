@@ -13,16 +13,18 @@ config:
   type: light
   coreIp: http://consensus-validator.celestia-arabica-10.com
   coreGrpcPort: 9090
+  tokenAuthLevel: ''
 
-image:
-  registry: ghcr.io
-  repository: celestiaorg
-  name: celestia-node
-  tag: v0.12.0
+images:
   pullPolicy: IfNotPresent
+  node: ghcr.io/celestiaorg/celestia-node:v0.12.0
+  tokenServer: "busybox:1.35.0-musl"
+
 
 ports:
-  rpc: 26658
+  celestia:
+    rpc: 26658
+  tokenServer: 5353
 
 # When deploying in a production environment should use a secret provider
 # This is configured for use with GCP, need to set own resource names

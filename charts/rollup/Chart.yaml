@@ -27,6 +27,7 @@ dependencies:
   - name: celestia-node
     version: "0.1.0"
     repository: "file://../celestia-node"
+    condition: celestia-node.enabled
 
 maintainers:
   - name: wafflesvonmaple

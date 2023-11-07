@@ -16,7 +16,20 @@ Define the service name
 Define the k8s path to rpc service
 */}}
 {{- define "celestiaNode.service.adresses.rpc" -}}
-http://{{ include "celestiaNode.service.name" . }}.{{ .Values.global.namespace }}.svc.cluster.local:{{ .Values.ports.rpc }}
+http://{{ include "celestiaNode.service.name" . }}.{{ .Values.global.namespace }}.svc.cluster.local:{{ .Values.ports.celestia.rpc }}
+{{- end }}
+
+{{/*
+Define the token service name
+*/}}
+{{- define "celestiaNode.service.token.name" -}}
+{{ include "celestiaNode.baseLabel" . }}-token-service
+{{- end }}
+{{/*
+Define the k8s path to token service
+*/}}
+{{- define "celestiaNode.service.adresses.token" -}}
+http://{{ include "celestiaNode.service.token.name" . }}.{{ .Values.global.namespace }}.svc.cluster.local:{{ .Values.ports.tokenServer }}
 {{- end }}
 
 

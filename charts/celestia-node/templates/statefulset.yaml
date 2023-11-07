@@ -1,5 +1,4 @@
 {{- $label := include "celestiaNode.baseLabel" . }}
-{{- $image := tpl "{{ .Values.image.registry }}/{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}" . }}
 {{- $isCustomNetwork := eq .Values.config.network "custom" }}
 apiVersion: apps/v1
 kind: StatefulSet
@@ -21,30 +20,19 @@ spec:
     spec:
       initContainers:
         - name: init-{{ $label }}
-          image: {{ $image }}
+          image: {{ .Values.images.node }}
           command: [/bin/celestia, "{{ .Values.config.type }}", init]
           args:
             - --node.store
             - /celestia
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
           volumeMounts:
             - name: {{ $label }}-vol
               mountPath: /celestia
       containers:
         - name: {{ $label }}
-          image: {{ $image }}
-          command: [/bin/celestia, "{{ .Values.config.type }}", start]
-          args:
-            - --node.store
-            - /celestia
-            {{- if not $isCustomNetwork }}
-            - --core.ip
-            - {{ .Values.config.coreIp }}
-            - --core.grpc.port
-            - "{{ .Values.config.coreGrpcPort }}"
-            - --p2p.network
-            - {{ .Values.config.network }}
-            {{- end }}
+          image: {{ .Values.images.node }}
+          command: ["./celestia/scripts/start-node.sh"]
           securityContext:
             runAsUser: 10001
             runAsGroup: 10001
@@ -53,15 +41,17 @@ spec:
             - configMapRef:
                 name: {{ $label }}-env
           {{- end }}
-          {{- if .Values.ports }}
+          {{- if .Values.ports.celestia }}
           ports:
-          {{- range $name, $port := .Values.ports }}
+          {{- range $name, $port := .Values.ports.celestia }}
             - containerPort: {{ $port }}
               name: {{ $name }}
               protocol: TCP
           {{- end }}
           {{- end }}
           volumeMounts:
+            - name: {{ $label }}-scripts-vol
+              mountPath: /celestia/scripts
             - name: {{ $label }}-vol
               mountPath: /celestia
             - name: {{ $label }}-files-volume
@@ -74,12 +64,30 @@ spec:
               subPath: {{ $secret.filename }}
             {{- end }}
             {{- end }}
+        {{- if .Values.config.tokenAuthLevel }}
+        - name: token-server
+          image: {{ .Values.images.tokenServer }}
+          command: [ "/bin/httpd", "-v", "-f", "-p", "{{ .Values.ports.tokenServer }}", "-h", "/celestia/token-server/" ]
+          ports:
+            - containerPort: {{ .Values.ports.tokenServer }}
+              name: token-svc
+          volumeMounts:
+            - mountPath: /celestia
+              name: {{ $label }}-vol
+              readOnly: true
+          startupProbe:
+            httpGet:
+              path: /
+              port: token-svc
+            failureThreshold: 30
+            periodSeconds: 5
+        {{- end }}
       volumes:
-        # ------------ INIT  SCRIPT -------------
-        - name: {{ $label }}-scripts-volume
+        # ------------ Startup scripts -------------
+        - name: {{ $label }}-scripts-vol
           configMap:
             defaultMode: 0744
-            name: {{ $label }}-scripts-vol
+            name: {{ $label }}-scripts-env
         # ------------ Config file -------------
         - name: {{ $label }}-files-volume
           configMap:

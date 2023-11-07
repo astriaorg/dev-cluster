@@ -18,13 +18,11 @@ config:
     chainId: astria
     # EVM network ID used by the chain
     networkId: 1337
-    # Set to true to have rollup blocks only be generated when there are transactions
-    skipEmptyBlocks: false
     # Determines what will drive block execution, options are:
     # - "SoftOnly" -> blocks are only pulled from the sequencer
     # - "FirmOnly" -> blocks are only pulled from DA
     # - "SoftAndFirm" -> blocks are pulled from both the sequencer and DA
-    executionCommitLevel: 'SoftOnly'
+    executionCommitLevel: 'SoftAndFirm'
     # Definitions around who has funding on startup
     genesisAccounts:
       - address: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
@@ -45,27 +43,35 @@ config:
     # Block height to start syncing rollup from
     initialBlockHeight: 1
     # Websocket connection used for
-    websocket: "ws://sequencer-service:26657/websocket"
+    websocket: "ws://node0-sequencer-rpc-service.astria-dev-cluster.svc.cluster.local:26657/websocket"
     # URL path for the sequencer
-    rpc: "http://sequencer-service:26657"
+    rpc: "http://node0-sequencer-rpc-service.astria-dev-cluster.svc.cluster.local:26657"
     # Private key which is used for wrapping txs for sequencer submission
     # Note: When secretProvider.enabled is true the secret provided by
     #       `sequencerPrivateKey` is used instead of this value.
     privateKey: "2bd806c97f0e00af1a1fc3328fa763a9269723c8db8fac4f93af71db186d6e90"
 
+  celestia:
+    # if config.rollup.executionLevel is NOT 'SoftOnly' AND celestia-node is not enabled
+    # this must be set to access celestia network.
+    rpc: ""
+
 celestia-node:
+  # Strongly recommend leaving enabled when not doing `SoftOnly` execution
+  enabled: true
   config:
     labelPrefix: astria
     type: light
     # By default will deploy on top of arabica, to use custom network use below settings
     # and fill in the `customInfo` to fit form described
-    # network: custom
-    # chainId: test
-    # customInfo: "GENESIS_HASH:BRIDGE_MULTIADDRESS"
+    network: custom
+    chainId: test
+    customInfo: "DFBA9E2995EED8DE93BC2AA9991CB22A37D1885F17E6CF218857261CCB4D9065:/ip4/10.10.2.92/tcp/2121/p2p/12D3KooWFHhGwLejRSpPv6rY2EZ67t63hB1c6omKQ5SPHBuYit1N"
+    tokenAuthLevel: 'read'
 
 images:
   # Core images for the rollup, developed for Astria
-  geth: "ghcr.io/astriaorg/go-ethereum:0.3.0"
+  geth: "ghcr.io/astriaorg/go-ethereum:0.4.0"
   conductor: "ghcr.io/astriaorg/conductor:0.8.0--conductor"
   composer: "ghcr.io/astriaorg/composer:0.2.5--composer"
 

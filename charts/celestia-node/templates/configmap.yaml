@@ -14,7 +14,8 @@ metadata:
   name: {{ $label }}-scripts-env
   namespace: {{ .Values.global.namespace }}
 data:
-  {{- (.Files.Glob "files/scripts/*").AsConfig | nindent 2 }}
+  start-node.sh: |
+  {{- tpl (.Files.Get "files/scripts/start-node.sh") $ | nindent 4 }}
 ---
 {{- if eq .Values.config.network "custom" }}
 {{- $customInfo := .Values.config.customInfo | required "customInfo is required for custom network" }}
@@ -24,5 +25,5 @@ metadata:
   name: {{ $label }}-env
   namespace: {{ .Values.global.namespace }}
 data:
-  CELESTIA_CUSTOM: {{ .Values.config.chainId }}:{{ $customInfo }}
+  CELESTIA_CUSTOM_TO_BE: {{ .Values.config.chainId }}:{{ $customInfo }}
 {{- end }}

@@ -8,9 +8,22 @@ spec:
   selector:
     app: {{ $label }}
   ports:
-  {{- range $name, $port := .Values.ports }}
+  {{- range $name, $port := .Values.ports.celestia }}
     - name: {{ $name }}
       port: {{ $port }}
       targetPort: {{ $name }}
   {{- end }}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "celestiaNode.service.token.name" . }}
+  namespace: {{ .Values.global.namespace }}
+spec:
+  selector:
+    app: {{ $label }}
+  ports:
+    - name: token-svc
+      port: {{ .Values.ports.tokenServer }}
+      targetPort: token-svc
 ---
