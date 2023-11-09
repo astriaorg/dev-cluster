@@ -26,6 +26,4 @@ spec:
     - name: cometbft-p2p
       port: {{ .Values.ports.cometBFTP2P }}
       name: cometbft-p2p
-  externalIPs:
-    - 192.168.1.54
 ---

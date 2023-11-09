@@ -23,6 +23,12 @@ version: 0.6.0
 # It is recommended to use it with quotes.
 appVersion: "0.6.0"
 
+dependencies:
+  - name: sequencer-relayer
+    version: "0.1.0"
+    repository: "file://../sequencer-relayer"
+    condition: sequencer-relayer.enabled
+
 maintainers:
   - name: wafflesvonmaple
     url: astria.org

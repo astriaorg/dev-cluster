@@ -43,3 +43,6 @@ config:
 ingress:
   p2p:
     enabled: true
+
+sequencer-relayer:
+  enabled: true

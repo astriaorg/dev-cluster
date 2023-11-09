@@ -1,5 +1,5 @@
 apiVersion: v2
-name: astria-sequencer-relayer
+name: sequencer-relayer
 description: A Helm chart for deploying a relayer which writes data from Astria sequencer network to Celestia.
 
 # A chart can be either an 'application' or a 'library' chart.
