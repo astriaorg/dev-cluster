@@ -78,7 +78,7 @@ spec:
         - name: sequencer-shared-storage-vol
           {{- if .Values.storage.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.config.moniker }}-sequencer-shared-storage-pvc
+            claimName: {{ .Values.config.moniker }}-{{ .Values.storage.entities.sequencerSharedStorage.persistentVolumeName }}-pvc
           {{- else }}
           emptyDir: {}
           {{- end }}
