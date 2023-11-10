@@ -65,7 +65,7 @@ spec:
     {{- tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
   {{- else }}
-    - host: {{ $service }}.sequencer.localdev.me
+    - host: {{ $service }}.{{ $ingress.hostname }}
       http:
         paths:
           - path: "/"
