@@ -15,7 +15,7 @@ config:
 
 # sequencer core images
 images:
-  sequencerRelayer: ghcr.io/astriaorg/sequencer-relayer:pr-538
+  sequencerRelayer: ghcr.io/astriaorg/sequencer-relayer:pr-577
 
 ports:
   relayerRPC: 2450

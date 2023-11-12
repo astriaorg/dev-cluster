@@ -64,7 +64,7 @@ spec:
   tls:
     {{- tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
-  {{- else }}
+  {{- else if $ingress.hostname }}
     - host: {{ $service }}.{{ $ingress.hostname }}
       http:
         paths:
