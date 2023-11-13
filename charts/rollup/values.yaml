@@ -64,14 +64,15 @@ celestia-node:
     type: light
     # By default will deploy on top of arabica, to use custom network use below settings
     # and fill in the `customInfo` to fit form described
-    network: custom
-    chainId: test
-    customInfo: "DFBA9E2995EED8DE93BC2AA9991CB22A37D1885F17E6CF218857261CCB4D9065:/ip4/10.10.2.92/tcp/2121/p2p/12D3KooWFHhGwLejRSpPv6rY2EZ67t63hB1c6omKQ5SPHBuYit1N"
+    network: mocha-4
+    chainId: mocha-4
+    coreIp: "full.consensus.mocha-4.celestia-mocha.com"
+    customInfo: ""
     tokenAuthLevel: 'read'
 
 images:
   # Core images for the rollup, developed for Astria
-  geth: "ghcr.io/astriaorg/go-ethereum:pr-34"
+  geth: "ghcr.io/astriaorg/go-ethereum:0.4.1"
   conductor: "ghcr.io/astriaorg/conductor:pr-577"
   composer: "ghcr.io/astriaorg/composer:0.2.5--composer"
 
