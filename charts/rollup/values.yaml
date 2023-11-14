@@ -40,7 +40,7 @@ config:
   # Configuration related to sequencer connection for rollup
   sequencer:
     # Block height to start syncing rollup from
-    initialBlockHeight: 1
+    initialSequencerBlockHeight: 1
     # Websocket connection used for
     websocket: "ws://node0-sequencer-rpc-service.astria-dev-cluster.svc.cluster.local:26657/websocket"
     # URL path for the sequencer
@@ -51,6 +51,7 @@ config:
     privateKey: "2bd806c97f0e00af1a1fc3328fa763a9269723c8db8fac4f93af71db186d6e90"
 
   celestia:
+    initialDaBlockHeight: 1
     # if config.rollup.executionLevel is NOT 'SoftOnly' AND celestia-node is not enabled
     # this must be set to access celestia network.
     rpc: ""
@@ -65,18 +66,19 @@ celestia-node:
     tokenAuthLevel: read
     # You can deploy on top of a custom celestia network, uncomment below and
     # update fields with notes
-    # network: custom
-    # chainId: test
-    # # The below information will depend on your local celestia deployment,
-    # # using the default generated when deploying "celestia-local" chart
-    # coreIp: celestia-service.astria-dev-cluster.svc.cluster.local
-    # # The custom info below must be grabbed from the custom network bridge on startup
+    network: custom
+    chainId: test
+    # The below information will depend on your local celestia deployment,
+    # using the default generated when deploying "celestia-local" chart
+    coreIp: celestia-service.astria-dev-cluster.svc.cluster.local
+    # The custom info below must be grabbed from the custom network bridge on startup
     # customInfo: "<GENESIS_HASH>:<BRIDGE_MULTIADDRESS>"
+    customInfo: "1739E3C10C5DC80523BF2E5A3CF41B8A9719E9A7AADF3761E8EC0270CA2B1654:/ip4/10.10.3.190/tcp/2121/p2p/12D3KooWGuTw5jaYd7hWef2BbefWxdvPGiwxC91CPx4o7KmvrgME"
 
 images:
   # Core images for the rollup, developed for Astria
   geth: "ghcr.io/astriaorg/go-ethereum:0.4.1"
-  conductor: "ghcr.io/astriaorg/conductor:0.9.0--conductor"
+  conductor: "astria-conductor:local"
   composer: "ghcr.io/astriaorg/composer:0.2.5--composer"
 
   # Rollup faucet
