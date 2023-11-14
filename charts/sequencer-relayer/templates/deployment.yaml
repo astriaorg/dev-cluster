@@ -22,8 +22,8 @@ spec:
           imagePullPolicy: IfNotPresent
           image: "{{ .Values.images.sequencerRelayer }}"
           command: [ "/scripts/start-relayer.sh" ]
-          stdin: {{ .Values.config.useTTY }}
-          tty: {{ .Values.config.useTTY }}
+          stdin: {{ .Values.global.useTTY }}
+          tty: {{ .Values.global.useTTY }}
           envFrom:
             - configMapRef:
                 name: relayer-env

@@ -7,13 +7,13 @@ global:
 
 config:
   name: celestia-node
-  chainId: arabica-10
-  network: arabica-10
+  network: mocha-4
+  chainId: mocha-4
+  coreIp: "full.consensus.mocha-4.celestia-mocha.com"
   configInfo: false
   type: light
-  coreIp: http://consensus-validator.celestia-arabica-10.com
   coreGrpcPort: 9090
-  tokenAuthLevel: ''
+  tokenAuthLevel: 'read'
 
 images:
   pullPolicy: IfNotPresent

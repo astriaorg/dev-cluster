@@ -4,12 +4,12 @@
 global:
   namespace: "astria-dev-cluster"
   replicaCount: 1
-
-config:
-  moniker: "node0"
   # Whether to use tty readable logging for astria services, when false use json.
   # Best to be false in production environments, true for clean logs on local dev.
   useTTY: true
+
+config:
+  moniker: "node0"
 
   sequencer:
     sudoAuthorityKey: 1c0c490f1b5528d8173c5de46d131160e4b2c0c3

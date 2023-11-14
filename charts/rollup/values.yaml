@@ -1,12 +1,11 @@
 global:
   namespace: "astria-dev-cluster"
   replicaCount: 1
-
-config:
   # Whether to use tty readable logging for astria services, when false use json.
   # Best to be false in production environments, true for clean logs on local dev.
   useTTY: true
 
+config:
   # The level at which core astria components will log out
   # Options are: error, warn, info, and debug
   logLevel: "debug"
@@ -59,16 +58,22 @@ config:
 celestia-node:
   # Strongly recommend leaving enabled when not doing `SoftOnly` execution
   enabled: true
+  # By default the celestia node deploys on top of the Celestia testnet mocha network
   config:
     labelPrefix: astria
     type: light
-    # By default will deploy on top of arabica, to use custom network use below settings
-    # and fill in the `customInfo` to fit form described
-    network: mocha-4
-    chainId: mocha-4
-    coreIp: "full.consensus.mocha-4.celestia-mocha.com"
-    customInfo: ""
-    tokenAuthLevel: 'read'
+    tokenAuthLevel: read
+    # You can deploy on top of a custom celestia network, uncomment below and 
+    # update fields with notes
+    # network: custom
+    # chainId: test
+    # # The below information will depend on your local celestia deployment,
+    # # using the default generated when deploying "celestia-local" chart
+    # coreIp: celestia-service.astria-dev-cluster.svc.cluster.local
+    # # The custom info below must be grabbed from the custom network bridge on startup
+    # customInfo: "<GENESIS_HASH>:<BRIDGE_MULTIADDRESS>"
+    # You can deploy on top of a custom celestia network, uncomment below and 
+    # update fields with notes
 
 images:
   # Core images for the rollup, developed for Astria
