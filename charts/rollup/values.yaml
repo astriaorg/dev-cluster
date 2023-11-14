@@ -63,7 +63,7 @@ celestia-node:
     labelPrefix: astria
     type: light
     tokenAuthLevel: read
-    # You can deploy on top of a custom celestia network, uncomment below and 
+    # You can deploy on top of a custom celestia network, uncomment below and
     # update fields with notes
     # network: custom
     # chainId: test
@@ -72,7 +72,7 @@ celestia-node:
     # coreIp: celestia-service.astria-dev-cluster.svc.cluster.local
     # # The custom info below must be grabbed from the custom network bridge on startup
     # customInfo: "<GENESIS_HASH>:<BRIDGE_MULTIADDRESS>"
-    # You can deploy on top of a custom celestia network, uncomment below and 
+    # You can deploy on top of a custom celestia network, uncomment below and
     # update fields with notes
 
 images:
