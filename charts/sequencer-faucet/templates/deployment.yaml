@@ -6,7 +6,7 @@ metadata:
     app: astria-dev-cluster
   namespace: {{ .Values.global.namespace }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.global.replicaCount }}
   selector:
     matchLabels:
       app: astria-dev-cluster
