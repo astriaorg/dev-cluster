@@ -72,13 +72,11 @@ celestia-node:
     # coreIp: celestia-service.astria-dev-cluster.svc.cluster.local
     # # The custom info below must be grabbed from the custom network bridge on startup
     # customInfo: "<GENESIS_HASH>:<BRIDGE_MULTIADDRESS>"
-    # You can deploy on top of a custom celestia network, uncomment below and
-    # update fields with notes
 
 images:
   # Core images for the rollup, developed for Astria
   geth: "ghcr.io/astriaorg/go-ethereum:0.4.1"
-  conductor: "ghcr.io/astriaorg/conductor:pr-577"
+  conductor: "ghcr.io/astriaorg/conductor:0.9.0--conductor"
   composer: "ghcr.io/astriaorg/composer:0.2.5--composer"
 
   # Rollup faucet
