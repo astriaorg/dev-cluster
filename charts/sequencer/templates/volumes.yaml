@@ -6,7 +6,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ $value.persistentVolumeName }}-pv
+  name: {{ $.Values.config.moniker }}-{{ $value.persistentVolumeName }}-pv
 spec:
   capacity:
     storage: {{ $value.size }}
@@ -14,7 +14,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: {{ $value.persistentVolumeName }}-local
+  storageClassName: {{ $.Values.config.moniker }}-{{ $value.persistentVolumeName }}-local
   local:
     path: {{ $value.path }}
   nodeAffinity:
@@ -25,20 +25,23 @@ spec:
               operator: In
               values:
                 - astria-dev-cluster-control-plane
+                - astria-dev-cluster-worker
+                - astria-dev-cluster-worker2
+                - astria-dev-cluster-worker3
 ---
     {{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ $value.persistentVolumeName }}-pvc
-  namespace: astria-dev-cluster
+  name: {{ $.Values.config.moniker }}-{{ $value.persistentVolumeName }}-pvc
+  namespace: {{ $.Values.global.namespace }}
   labels:
-    "app.kubernetes.io/name": "{{ $.Chart.Name }}"
+    "app.kubernetes.io/name": "{{$.Values.config.moniker}}-{{ $.Chart.Name }}"
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
     "helm.sh/chart": {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
 spec:
   {{- if $.Values.storage.local }}
-  storageClassName: {{ $value.persistentVolumeName }}-local
+  storageClassName: {{ $.Values.config.moniker }}-{{ $value.persistentVolumeName }}-local
   {{- end }}
   accessModes:
     - ReadWriteOnce

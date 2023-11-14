@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: {{ .Values.config.rollup.name }}-evm-service
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
   selector:
     app: {{ .Values.config.rollup.name }}-astria-dev-cluster
@@ -21,7 +21,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: {{ .Values.config.rollup.name }}-faucet-service
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
   selector:
     app: {{ .Values.config.rollup.name }}-astria-dev-cluster
@@ -34,7 +34,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: {{ .Values.config.rollup.name }}-blockscout-svc
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
   selector:
     app: {{ .Values.config.rollup.name }}-astria-dev-cluster

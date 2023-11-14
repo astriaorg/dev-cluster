@@ -1,1 +1,1 @@
-{"priv_key":{"type":"tendermint/PrivKeyEd25519","value":"{{ .Values.CometBFT.privNodeKey }}"}}
+{"priv_key":{"type":"tendermint/PrivKeyEd25519","value":"{{ .Values.config.cometBFT.privNodeKey }}"}}

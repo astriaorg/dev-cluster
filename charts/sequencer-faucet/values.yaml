@@ -1,5 +1,6 @@
-namespace: "astria-dev-cluster"
-replicaCount: 1
+global:
+  namespace: "astria-dev-cluster"
+  replicaCount: 1
 
 config:
   sequencerRpcUrl: http://sequencer-service:26657

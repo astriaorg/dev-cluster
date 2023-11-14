@@ -3,7 +3,10 @@ default:
 
 create-cluster:
   kind create cluster --config ./kubernetes/kind-cluster-config.yml
-  kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml
+  helm repo add cilium https://helm.cilium.io/
+  helm install cilium cilium/cilium --version 1.14.3 \
+      -f ./values/cilium.yml \
+      --namespace kube-system
   kubectl apply -f kubernetes/namespace.yml
 
 deploy-secrets-store:
@@ -22,7 +25,7 @@ load-image image:
   kind load docker-image {{image}} --name astria-dev-cluster
 
 deploy-chart chart:
-  helm install --debug {{chart}}-chart ./charts/{{chart}}
+  helm install --debug {{chart}}-chart ./charts/{{chart}} 
 
 delete-chart chart:
   helm uninstall {{chart}}-chart
@@ -34,7 +37,19 @@ redeploy-chart chart:
 restart deployment:
   kubectl rollout restart -n astria-dev-cluster deployment {{deployment}}
 
-deploy-astria-local: (deploy-chart "celestia-local") (deploy-chart "sequencer")
+deploy-astria-local: (deploy-chart "celestia-local") (deploy-sequencer-validators)
+
+validatorName := "single"
+deploy-sequencer-validator name=validatorName:
+  helm install --debug \
+    {{ if name != 'single' { replace('-f values/validators/#.yml' , '#', name) } else { '' } }} \
+    -n astria-validator-{{name}} --create-namespace \
+    {{name}}-sequencer-chart ./charts/sequencer
+deploy-sequencer-validators: (deploy-sequencer-validator "node0") (deploy-sequencer-validator "node1") (deploy-sequencer-validator "node2")
+
+delete-sequencer-validator name=validatorName:
+  helm uninstall {{name}}-sequencer-chart -n astria-validator-{{name}}
+delete-sequencer-validators: (delete-sequencer-validator "node0") (delete-sequencer-validator "node1") (delete-sequencer-validator "node2")
 
 wait-for-sequencer:
   kubectl wait -n astria-dev-cluster deployment celestia-local --for=condition=Available=True --timeout=600s
@@ -47,7 +62,7 @@ defaultPrivateKey          := ""
 defaultSequencerStartBlock := ""
 deploy-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey sequencerStartBlock=defaultSequencerStartBlock:
   helm install --debug \
-    {{ if rollupName          != '' { replace('--set config.rollup.name=# --set config.rollup.chainId=#chain', '#', rollupName) } else { '' } }} \
+    {{ if rollupName          != '' { replace('--set config.rollup.name=# --set config.rollup.chainId=#chain --set celestia-node.config.labelPrefix=#', '#', rollupName) } else { '' } }} \
     {{ if networkId           != '' { replace('--set config.rollup.networkId=#', '#', networkId) } else { '' } }} \
     {{ if genesisAllocAddress != '' { replace('--set config.rollup.genesisAccounts[0].address=#', '#', genesisAllocAddress) } else { '' } }} \
     {{ if privateKey          != '' { replace('--set config.faucet.privateKey=#', '#', privateKey) } else { '' } }} \

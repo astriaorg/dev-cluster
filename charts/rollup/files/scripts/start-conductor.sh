@@ -2,10 +2,11 @@
 
 set -o errexit -o nounset -o pipefail
 
+
 # Request Celestia token if connecting to celestia
 BEARER_TOKEN=""
 if [ "$ASTRIA_CONDUCTOR_EXECUTION_COMMIT_LEVEL" != "SoftOnly" ]; then
-    BEARER_TOKEN=$(wget -qO- http://celestia-service:5353)
+    BEARER_TOKEN=$(wget -qO- "$TOKEN_SERVER_URL")
 
     if [ -z "$BEARER_TOKEN" ]; then
         echo "Failed to fetch the Celestia bearer token."
