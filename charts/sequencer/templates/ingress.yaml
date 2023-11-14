@@ -36,6 +36,10 @@ spec:
   defaultBackend:
     {{- tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
+  {{- with  $ingress.tls }}
+  tls:
+    {{- tpl (toYaml .) $ | nindent 4 }}
+  {{- end }}
   rules:
     {{- if $ingress.hosts  }}
   {{- range $ingress.hosts }}
@@ -59,10 +63,6 @@ spec:
               serviceName: {{ $serviceName }}
               servicePort: {{ $servicePort }}
               {{- end }}
-  {{- end }}
-  {{- with $ingress.tls }}
-  tls:
-    {{- tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
   {{- else if $ingress.hostname }}
     - host: {{ $service }}.{{ $ingress.hostname }}
