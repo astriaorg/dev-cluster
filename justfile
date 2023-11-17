@@ -76,7 +76,7 @@ deploy-local-rollup rollupName=defaultRollupName networkId=defaultNetworkId gene
     {{ if genesisAllocAddress != '' { replace('--set config.rollup.genesisAccounts[0].address=#', '#', genesisAllocAddress) } else { '' } }} \
     {{ if privateKey          != '' { replace('--set config.faucet.privateKey=#', '#', privateKey) } else { '' } }} \
     {{ if sequencerStartBlock != '' { replace('--set config.sequencer.initialBlockHeight=#', '#', sequencerStartBlock) } else { '' } }} \
-    -f values/rollup/local.yaml \
+    -f values/rollup/dev.yaml \
     {{rollupName}}chain-chart-deploy ./charts/rollup
 
 wait-for-rollup rollupName=defaultRollupName:
