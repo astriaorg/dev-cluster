@@ -4,7 +4,7 @@ set -o errexit -o nounset -o pipefail
 
 if [ -z "$ASTRIA_SEQUENCER_RELAYER_CELESTIA_BEARER_TOKEN" ]; then
     # FIXME - how to use `token-svc` port here instead of hardcoding?
-    BEARER_TOKEN=$(wget -qO- http://celestia-service:5353)
+    BEARER_TOKEN=$(wget -qO- $TOKEN_SERVER)
 
     if [ -z "$BEARER_TOKEN" ]; then
         echo "Failed to fetch the Celestia bearer token."

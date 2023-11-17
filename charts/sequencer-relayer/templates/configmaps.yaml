@@ -13,6 +13,7 @@ data:
   ASTRIA_SEQUENCER_RELAYER_RPC_PORT: "{{ .Values.ports.relayerRPC }}"
   ASTRIA_SEQUENCER_RELAYER_RELAY_ONLY_VALIDATOR_KEY_BLOCKS: "false"
   ASTRIA_SEQUENCER_RELAYER_CELESTIA_BEARER_TOKEN: "{{ .Values.config.relayer.celestiaBearerToken }}"
+  TOKEN_SERVER: "{{ .Values.config.relayer.tokenServer }}"
 ---
 apiVersion: v1
 kind: ConfigMap

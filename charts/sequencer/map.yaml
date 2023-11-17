@@ -1,0 +1,3 @@
+sequencer-relayer:
+  config: "http://{{ .Values.config.moniker }}-sequencer-rpc-service.{{ .Values.global.namespace }}.svc.cluster.local:{{ .Values.ports.cometBFTRPC }}"
+
