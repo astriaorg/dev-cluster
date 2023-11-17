@@ -69,6 +69,16 @@ deploy-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAll
     {{ if sequencerStartBlock != '' { replace('--set config.sequencer.initialBlockHeight=#', '#', sequencerStartBlock) } else { '' } }} \
     {{rollupName}}chain-chart-deploy ./charts/rollup
 
+deploy-local-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey sequencerStartBlock=defaultSequencerStartBlock:
+  helm install --debug \
+    {{ if rollupName          != '' { replace('--set config.rollup.name=# --set config.rollup.chainId=#chain --set celestia-node.config.labelPrefix=#', '#', rollupName) } else { '' } }} \
+    {{ if networkId           != '' { replace('--set config.rollup.networkId=#', '#', networkId) } else { '' } }} \
+    {{ if genesisAllocAddress != '' { replace('--set config.rollup.genesisAccounts[0].address=#', '#', genesisAllocAddress) } else { '' } }} \
+    {{ if privateKey          != '' { replace('--set config.faucet.privateKey=#', '#', privateKey) } else { '' } }} \
+    {{ if sequencerStartBlock != '' { replace('--set config.sequencer.initialBlockHeight=#', '#', sequencerStartBlock) } else { '' } }} \
+    -f values/rollup/dev.yaml \
+    {{rollupName}}chain-chart-deploy ./charts/rollup
+
 wait-for-rollup rollupName=defaultRollupName:
   kubectl wait -n astria-dev-cluster deployment {{rollupName}}-geth --for=condition=Available=True --timeout=600s
   kubectl wait -n astria-dev-cluster deployment {{rollupName}}-blockscout --for=condition=Available=True --timeout=600s
