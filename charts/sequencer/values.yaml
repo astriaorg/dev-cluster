@@ -71,8 +71,6 @@ config:
 
 sequencer-relayer:
   enabled: false
-  config:
-    sequencerRpc: "http://{{ .Values.config.moniker }}-sequencer-rpc-service.{{ .Values.global.namespace }}.svc.cluster.local:{{ .Values.ports.cometBFTRPC }}"
 
 # sequencer core images
 images:
