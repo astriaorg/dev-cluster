@@ -10,6 +10,7 @@ global:
 
 config:
   relayer:
+    celestiaBearerToken: ""
     celestiaRpc: http://celestia-service.astria-dev-cluster.svc.cluster.local:26658
     sequencerRpc: http://node0-sequencer-rpc-service.astria-dev-cluster.svc.cluster.local:26657
 

@@ -12,6 +12,7 @@ data:
   ASTRIA_SEQUENCER_RELAYER_VALIDATOR_KEY_FILE: /cometbft/config/priv_validator_key.json
   ASTRIA_SEQUENCER_RELAYER_RPC_PORT: "{{ .Values.ports.relayerRPC }}"
   ASTRIA_SEQUENCER_RELAYER_RELAY_ONLY_VALIDATOR_KEY_BLOCKS: "false"
+  ASTRIA_SEQUENCER_RELAYER_CELESTIA_BEARER_TOKEN: "{{ .Values.config.relayer.celestiaBearerToken }}"
 ---
 apiVersion: v1
 kind: ConfigMap
