@@ -34,7 +34,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ $.Values.config.rollup.name }}-{{ $value.persistentVolumeName }}-pvc-geth
-  namespace: astria-dev-cluster
+  namespace: {{ $.Values.global.namespace }}
   labels:
     "app.kubernetes.io/name": "{{ $.Values.config.rollup.name }}-{{ $.Chart.Name }}"
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
@@ -53,7 +53,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ $.Values.config.rollup.name }}-{{ $value.persistentVolumeName }}-pvc-blockscout
-  namespace: astria-dev-cluster
+  namespace: {{ $.Values.global.namespace }}
   labels:
     "app.kubernetes.io/name": {{ $.Values.config.rollup.name }}-{{ $.Chart.Name }}
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
