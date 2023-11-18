@@ -37,6 +37,7 @@ config:
       # The block height of the Ethereum L1 chain that the
       # OptimismPortal contract was deployed at.
       initialEthereumL1BlockHeight: 1
+
   faucet:
     # The account from which the faucet disburses funds, likely want to have
     # the corresponding account given a balance in genesis accounts.
