@@ -16,6 +16,7 @@ data:
   ASTRIA_CONDUCTOR_EXECUTION_COMMIT_LEVEL: "{{ .Values.config.rollup.executionCommitLevel }}"
   ASTRIA_CONDUCTOR_SEQUENCER_URL: "{{ .Values.config.sequencer.websocket }}"
   ASTRIA_CONDUCTOR_INITIAL_SEQUENCER_BLOCK_HEIGHT: "{{ .Values.config.sequencer.initialBlockHeight }}"
+  ASTRIA_CONDUCTOR_ENABLE_OPTIMISM: "{{ .Values.config.rollup.enableOptimism }}"
 ---
 apiVersion: v1
 kind: ConfigMap
