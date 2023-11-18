@@ -75,8 +75,7 @@ sequencer-relayer:
 # sequencer core images
 images:
   cometBFT: docker.io/cometbft/cometbft:v0.37.x
-  sequencer: ghcr.io/astriaorg/sequencer:0.5.0--sequencer
-  sequencerRelayer: ghcr.io/astriaorg/sequencer-relayer:0.6.0--sequencer-relayer
+  sequencer: ghcr.io/astriaorg/sequencer:pr-591
 
 ports:
   cometBFTP2P: 26656
