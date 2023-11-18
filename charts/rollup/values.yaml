@@ -22,13 +22,21 @@ config:
     # - "FirmOnly" -> blocks are only pulled from DA
     # - "SoftAndFirm" -> blocks are pulled from both the sequencer and DA
     executionCommitLevel: 'SoftAndFirm'
-    enableOptimism: false
     # Definitions around who has funding on startup
     genesisAccounts:
       - address: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
         # The balance must be a string due to size
         balance: "1000000000000000000000"
-
+    optimism:
+      # set to true to enable op-stack integration, and setup rest of config
+      enabled: false
+      # Websocket URL of Ethereum L1 node.
+      ethereumL1Websocket: "ws://127.0.0.1:8545"
+      # Contract address of the OptimismPortal contract on L1.
+      portalContractAddress: ""
+      # The block height of the Ethereum L1 chain that the
+      # OptimismPortal contract was deployed at.
+      initialEthereumL1BlockHeight: 1
   faucet:
     # The account from which the faucet disburses funds, likely want to have
     # the corresponding account given a balance in genesis accounts.
