@@ -15,14 +15,14 @@ metadata:
   namespace: {{ $.Values.global.namespace }}
   labels:
     {{- with $ingress.labels }}
-    {{- toYaml . | nindent 4 }}
+      {{- toYaml . | nindent 4 }}
     {{- end }}
   annotations:
   {{- if $ingress.annotations  }}
   {{- with $ingress.annotations }}
-    {{- range $key, $value := . }}
+  {{- range $key, $value := . }}
     {{ $key }}: {{ tpl $value $ | quote }}
-    {{- end }}
+  {{- end }}
   {{- end }}
   {{- else }}
     kubernetes.io/ingress.class: nginx
@@ -58,9 +58,6 @@ spec:
               serviceName: {{ $serviceName }}
               servicePort: {{ $servicePort }}
               {{- end }}
-  {{- end -}}
-  {{- end }}
-  {{- tpl (toYaml .) $ | nindent 6 }}
   {{- end }}
   {{- with $ingress.tls }}
   tls:
@@ -109,4 +106,4 @@ spec:
                   name: blockscout-svc
   {{- end -}}
 {{- end }}
-
+{{- end }}
