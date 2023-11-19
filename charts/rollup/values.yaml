@@ -194,11 +194,11 @@ ingress:
       pathType: Prefix
       defaultBackend:
         service:
-          name: "{{ .Values.config.rollup.name }}-blockscout-service"
+          name: "{{ .Values.config.rollup.name }}-blockscout-svc"
           port: 
             name: blockscout-svc
       service:
-        name: "{{ .Values.config.rollup.name }}-blockscout-service"
+        name: "{{ .Values.config.rollup.name }}-blockscout-svc"
         port: blockscout-svc
       annotations: {}
         # kubernetes.io/ingress.class: nginx
