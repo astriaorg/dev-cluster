@@ -86,7 +86,7 @@ celestia-node:
 images:
   # Core images for the rollup, developed for Astria
   geth: "ghcr.io/astriaorg/go-ethereum:0.4.1"
-  conductor: "ghcr.io/astriaorg/conductor:0.10.0--conductor"
+  conductor: "ghcr.io/astriaorg/conductor:0.10.1--conductor"
   composer: "ghcr.io/astriaorg/composer:0.2.5--composer"
 
   # Rollup faucet
