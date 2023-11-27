@@ -2,7 +2,7 @@
 {{- $ingressApiIsStable := eq (include "sequencer.ingress.isStable" .) "true" -}}
 {{- $ingressSupportsIngressClassName := eq (include "sequencer.ingress.supportsIngressClassName" .) "true" -}}
 {{- $ingressSupportsPathType := eq (include "sequencer.ingress.supportsPathType" .) "true" -}}
-{{- $servicePort := tpl .Values.ingress.service.port . -}}
+{{- $servicePort := tpl .Values.ingress.service.port.name . -}}
 {{- $serviceName := tpl .Values.ingress.service.name . -}}
 {{- $ingressPath := .Values.ingress.path -}}
 {{- $ingressPathType := .Values.ingress.pathType -}}
@@ -18,15 +18,16 @@ metadata:
     {{- end }}
   {{- with .Values.ingress.annotations }}
   annotations:
+    kubernetes.io/ingress.class: {{ $.Values.ingress.className }}
     {{- range $key, $value := . }}
     {{ $key }}: {{ tpl $value $ | quote }}
     {{- end }}
   {{- end }}
 spec:
   {{- if and $ingressSupportsIngressClassName .Values.ingress.ingressClassName }}
-  ingressClassName: {{ .Values.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.ingress.className }}
   {{- end -}}
-  {{- with .Values.ingress.defaultBackend }}
+  {{- with .Values.ingress.service }}
   defaultBackend:
     {{- tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
@@ -46,9 +47,7 @@ spec:
             backend:
               {{- if $ingressApiIsStable }}
               service:
-                name: {{ tpl $serviceName }}
-                port:
-                  name: {{ $servicePort }}
+                {{- tpl (toYaml $.Values.ingress.service) $ | nindent 16 }}
               {{- else }}
               serviceName: {{ $serviceName }}
               servicePort: {{ $servicePort }}
