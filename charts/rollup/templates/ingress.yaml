@@ -19,23 +19,23 @@ metadata:
       {{- toYaml . | nindent 4 }}
     {{- end }}
   annotations:
-  {{- with $ingress.annotations  }}
-  {{- range $key, $value := . }}
+    kubernetes.io/ingress.class: {{ $.Values.ingress.className }}
+  {{- if $ingressApiIsStable }}
+  {{- range $key, $value := $ingress.annotations }}
     {{ $key }}: {{ tpl $value $ | quote }}
   {{- end }}
-  {{- else }}
-    kubernetes.io/ingress.class: nginx
   {{- end }}
 spec:
-  {{- if and $ingressSupportsIngressClassName $ingress.ingressClassName }}
-  ingressClassName: {{ $ingress.ingressClassName }}
+  {{- if $ingressSupportsIngressClassName }}
+  ingressClassName: {{ $.Values.ingress.className }}
   {{- end -}}
-  {{- with $ingress.defaultBackend }}
+  {{- with $ingress.service }}
   defaultBackend:
-    {{- tpl (toYaml .) $ | nindent 4 }}
+    service: 
+      {{- tpl (toYaml .) $ | nindent 6 }}
   {{- end }}
   rules:
-  {{- with $ingress.hosts  }}
+  {{- with $ingress.hosts }}
   {{- range $host := . }}
     - host: {{ tpl $host $ }}
       http:
@@ -49,10 +49,8 @@ spec:
             {{- end }}
             backend:
               {{- if $ingressApiIsStable }}
-              service:
-                name: {{ tpl $serviceName $ }}
-                port:
-                  name: {{ tpl $servicePort $ }}
+              service: 
+                {{- tpl (toYaml $ingress.service) $ | nindent 16 }}
               {{- else }}
               serviceName: {{ tpl $serviceName $ }}
               servicePort: {{ tpl $servicePort $ }}

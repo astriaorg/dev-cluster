@@ -123,20 +123,17 @@ ingress:
   enabled: true
   labels: {}
   hostname: localdev.me
+  className: nginx
   services:
     rpc:
       hosts:
         - executor.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
       path: /
       pathType: Prefix
-      defaultBackend:
-        service:
-          name: "{{ .Values.config.rollup.name }}-evm-service"
-          port: 
-            name: json-rpc-svc
       service:
         name: "{{ .Values.config.rollup.name }}-evm-service"
-        port: json-rpc-svc
+        port:
+          name: json-rpc-svc
       annotations: {}
         # kubernetes.io/ingress.class: nginx
         # kubernetes.io/tls-acme: "true"
@@ -150,14 +147,10 @@ ingress:
         - ws-executor.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
       path: /
       pathType: Prefix
-      defaultBackend:
-        service:
-          name: "{{ .Values.config.rollup.name }}-evm-service"
-          port: 
-            name: ws-rpc-svc
       service:
         name: "{{ .Values.config.rollup.name }}-evm-service"
-        port: ws-rpc-svc
+        port:
+          name: ws-rpc-svc
       annotations: {}
         # kubernetes.io/ingress.class: nginx
         # kubernetes.io/tls-acme: "true"
@@ -171,14 +164,10 @@ ingress:
         - faucet.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
       path: /
       pathType: Prefix
-      defaultBackend:
-        service:
-          name: "{{ .Values.config.rollup.name }}-faucet-service"
-          port: 
-            name: faucet-svc
       service:
         name: "{{ .Values.config.rollup.name }}-faucet-service"
-        port: faucet-svc
+        port:
+          name: faucet-svc
       annotations: {}
         # kubernetes.io/ingress.class: nginx
         # kubernetes.io/tls-acme: "true"
@@ -192,14 +181,10 @@ ingress:
         - blockscout.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
       path: /
       pathType: Prefix
-      defaultBackend:
-        service:
-          name: "{{ .Values.config.rollup.name }}-blockscout-svc"
-          port: 
-            name: blockscout-svc
       service:
         name: "{{ .Values.config.rollup.name }}-blockscout-svc"
-        port: blockscout-svc
+        port:
+          name: blockscout-svc
       annotations: {}
         # kubernetes.io/ingress.class: nginx
         # kubernetes.io/tls-acme: "true"
