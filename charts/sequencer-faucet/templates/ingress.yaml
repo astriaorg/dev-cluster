@@ -6,8 +6,8 @@
 {{- $serviceName := tpl .Values.ingress.service.name . -}}
 {{- $ingressPath := .Values.ingress.path -}}
 {{- $ingressPathType := .Values.ingress.pathType -}}
-{{- $extraPaths := tpl .Values.ingress.extraPaths . -}}
-apiVersion: networking.k8s.io/v1
+{{- $extraPaths := .Values.ingress.extraPaths -}}
+apiVersion: {{ include "sequencer.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: sequencer-faucet-ingress
@@ -24,12 +24,13 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
-  {{- if and $ingressSupportsIngressClassName .Values.ingress.ingressClassName }}
+  {{- if and $ingressSupportsIngressClassName .Values.ingress.className }}
   ingressClassName: {{ .Values.ingress.className }}
   {{- end -}}
   {{- with .Values.ingress.service }}
   defaultBackend:
-    {{- tpl (toYaml .) $ | nindent 4 }}
+    service:
+      {{- tpl (toYaml .) $ | nindent 6 }}
   {{- end }}
   rules:
     {{- if .Values.ingress.hosts  }}
@@ -57,16 +58,5 @@ spec:
   tls:
     {{- tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
-  {{- else }}
-    - host: sequencer-faucet.localdev.me
-      http:
-        paths:
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: sequencer-faucet-service
-                port:
-                  name: seq-faucet-svc
   {{- end -}}
 {{- end }}
