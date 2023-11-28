@@ -2,7 +2,8 @@
   "app_hash": "",
   "app_state": {
     "accounts": {{ toPrettyJson .Values.config.sequencer.genesisAccounts | indent 4 | trim }},
-    "authority_sudo_key": "{{ .Values.config.sequencer.sudoAuthorityKey }}"
+    "authority_sudo_key": "{{ .Values.config.sequencer.sudoAuthorityKey }}",
+    "native_asset_base_denomination": "nria"
   },
   "chain_id": "{{ .Values.config.cometBFT.chainId }}",
   "consensus_params": {
