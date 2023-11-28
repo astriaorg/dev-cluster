@@ -64,6 +64,7 @@ config:
     # if config.rollup.executionLevel is NOT 'SoftOnly' AND celestia-node is not enabled
     # this must be set to access celestia network.
     rpc: ""
+    token: ""
 
 celestia-node:
   # Strongly recommend leaving enabled when not doing `SoftOnly` execution
