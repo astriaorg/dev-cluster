@@ -10,12 +10,14 @@ global:
 
 config:
   relayer:
+    celestiaBearerToken: ""
     celestiaRpc: http://celestia-service.astria-dev-cluster.svc.cluster.local:26658
-    sequencerRpc: http://node0-sequencer-rpc-service.astria-dev-cluster.svc.cluster.local:26657
+    tokenServer: http://celestia-service.astria-dev-cluster.svc.cluster.local:5353
+    sequencerRpc: ""
 
 # sequencer core images
 images:
-  sequencerRelayer: ghcr.io/astriaorg/sequencer-relayer:0.7.0--sequencer-relayer
+  sequencerRelayer: ghcr.io/astriaorg/sequencer-relayer:0.8.0--sequencer-relayer
 
 ports:
   relayerRPC: 2450

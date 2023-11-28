@@ -16,8 +16,11 @@ data:
   ASTRIA_CONDUCTOR_EXECUTION_RPC_URL: "http://127.0.0.1:{{ .Values.ports.executionGRPC }}"
   ASTRIA_CONDUCTOR_EXECUTION_COMMIT_LEVEL: "{{ .Values.config.rollup.executionCommitLevel }}"
   ASTRIA_CONDUCTOR_SEQUENCER_URL: "{{ .Values.config.sequencer.websocket }}"
-  ASTRIA_CONDUCTOR_INITIAL_SEQUENCER_BLOCK_HEIGHT: "{{ .Values.config.sequencer.initialSequencerBlockHeight }}"
-  ASTRIA_CONDUCTOR_INITIAL_DA_BLOCK_HEIGHT: "{{ .Values.config.celestia.initialDaBlockHeight }}"
+  ASTRIA_CONDUCTOR_INITIAL_SEQUENCER_BLOCK_HEIGHT: "{{ .Values.config.sequencer.initialBlockHeight }}"
+  ASTRIA_CONDUCTOR_ENABLE_OPTIMISM: "{{ .Values.config.rollup.optimism.enabled }}"
+  ASTRIA_CONDUCTOR_ETHEREUM_L1_URL: "{{ .Values.config.rollup.optimism.ethereumL1Websocket }}"
+  ASTRIA_CONDUCTOR_OPTIMISM_PORTAL_CONTRACT_ADDRESS: "{{ .Values.config.rollup.optimism.portalContractAddress }}"
+  ASTRIA_CONDUCTOR_INITIAL_ETHEREUM_L1_BLOCK_HEIGHT: "{{ .Values.config.rollup.optimism.initialEthereumL1BlockHeight }}"
 ---
 apiVersion: v1
 kind: ConfigMap

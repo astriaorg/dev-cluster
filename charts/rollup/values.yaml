@@ -27,6 +27,16 @@ config:
       - address: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
         # The balance must be a string due to size
         balance: "1000000000000000000000"
+    optimism:
+      # set to true to enable op-stack integration, and setup rest of config
+      enabled: false
+      # Websocket URL of Ethereum L1 node.
+      ethereumL1Websocket: "ws://127.0.0.1:8545"
+      # Contract address of the OptimismPortal contract on L1.
+      portalContractAddress: ""
+      # The block height of the Ethereum L1 chain that the
+      # OptimismPortal contract was deployed at.
+      initialEthereumL1BlockHeight: 1
 
   faucet:
     # The account from which the faucet disburses funds, likely want to have
@@ -79,7 +89,7 @@ celestia-node:
 images:
   # Core images for the rollup, developed for Astria
   geth: "ghcr.io/astriaorg/go-ethereum:0.4.1"
-  conductor: "astria-conductor:local"
+  conductor: "ghcr.io/astriaorg/conductor:0.10.0--conductor"
   composer: "ghcr.io/astriaorg/composer:0.2.5--composer"
 
   # Rollup faucet
@@ -114,51 +124,78 @@ secretProvider:
 
 ingress:
   enabled: true
-  # This is only used when using the default hosts and not overriding below.
-  hostname: localdev.me
-  # For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
-  # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
-  # ingressClassName: nginx
-  # Values can be templated
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
   labels: {}
-  hosts: {}
-    # - host: executor.example.com
-    #   http:
-    #     paths:
-    #       - path: "/"
-    #         pathType: Prefix
-    #         backend:
-    #           service:
-    #             name: astria-evm-service
-    #             port:
-    #               name: json-rpc-svc
-    # - host: faucet.example.com
-    #   http:
-    #     paths:
-    #       - path: "/"
-    #         pathType: Prefix
-    #         backend:
-    #           service:
-    #             name: astria-faucet-service
-    #             port:
-    #               name: faucet-svc
-    # - host: blockscout.example.com
-    #   http:
-    #     paths:
-    #       - path: "/"
-    #         pathType: Prefix
-    #         backend:
-    #           service:
-    #             name: astria-blockscout-svc
-    #             port:
-    #               name: blockscout-svc
-  tls: {}
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  hostname: localdev.me
+  className: nginx
+  services:
+    rpc:
+      hosts:
+        - executor.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
+      path: /
+      pathType: Prefix
+      service:
+        name: "{{ .Values.config.rollup.name }}-evm-service"
+        port:
+          name: json-rpc-svc
+      annotations: {}
+        # kubernetes.io/ingress.class: nginx
+        # kubernetes.io/tls-acme: "true"
+      labels: {}
+      tls: {}
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+    ws:
+      hosts:
+        - ws-executor.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
+      path: /
+      pathType: Prefix
+      service:
+        name: "{{ .Values.config.rollup.name }}-evm-service"
+        port:
+          name: ws-rpc-svc
+      annotations: {}
+        # kubernetes.io/ingress.class: nginx
+        # kubernetes.io/tls-acme: "true"
+      labels: {}
+      tls: {}
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+    faucet:
+      hosts:
+        - faucet.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
+      path: /
+      pathType: Prefix
+      service:
+        name: "{{ .Values.config.rollup.name }}-faucet-service"
+        port:
+          name: faucet-svc
+      annotations: {}
+        # kubernetes.io/ingress.class: nginx
+        # kubernetes.io/tls-acme: "true"
+      labels: {}
+      tls: {}
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+    explorer:
+      hosts:
+        - blockscout.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
+      path: /
+      pathType: Prefix
+      service:
+        name: "{{ .Values.config.rollup.name }}-blockscout-svc"
+        port:
+          name: blockscout-svc
+      annotations: {}
+        # kubernetes.io/ingress.class: nginx
+        # kubernetes.io/tls-acme: "true"
+      labels: {}
+      tls: {}
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
 
 # Default persistent storage values
 # NOTE - `rollupName` will be used with `persistentVolumeName` to generate names for kubernetes resources.
