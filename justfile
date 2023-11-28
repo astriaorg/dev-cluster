@@ -25,7 +25,7 @@ load-image image:
   kind load docker-image {{image}} --name astria-dev-cluster
 
 deploy-chart chart:
-  helm install --debug {{chart}}-chart ./charts/{{chart}} 
+  helm install --debug --dry-run {{chart}}-chart ./charts/{{chart}} 
 
 delete-chart chart:
   helm uninstall {{chart}}-chart
