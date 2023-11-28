@@ -25,7 +25,7 @@ load-image image:
   kind load docker-image {{image}} --name astria-dev-cluster
 
 deploy-chart chart:
-  helm install --debug --dry-run {{chart}}-chart ./charts/{{chart}} 
+  helm install --debug {{chart}}-chart ./charts/{{chart}} 
 
 delete-chart chart:
   helm uninstall {{chart}}-chart
@@ -69,7 +69,7 @@ deploy-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAll
     {{ if sequencerStartBlock != '' { replace('--set config.sequencer.initialBlockHeight=#', '#', sequencerStartBlock) } else { '' } }} \
     {{rollupName}}chain-chart-deploy ./charts/rollup
 
-deploy-local-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey sequencerStartBlock=defaultSequencerStartBlock:
+deploy-dev-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey sequencerStartBlock=defaultSequencerStartBlock:
   helm install --debug \
     {{ if rollupName          != '' { replace('--set config.rollup.name=# --set config.rollup.chainId=#chain --set celestia-node.config.labelPrefix=#', '#', rollupName) } else { '' } }} \
     {{ if networkId           != '' { replace('--set config.rollup.networkId=#', '#', networkId) } else { '' } }} \
