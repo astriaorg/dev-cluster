@@ -26,7 +26,7 @@ config:
     genesisAccounts:
       - address: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
         # The balance must be a string due to size
-        balance: "1000000000000000000000"
+        balance: "1000000000000000000000000000"
     optimism:
       # set to true to enable op-stack integration, and setup rest of config
       enabled: false
@@ -87,8 +87,8 @@ celestia-node:
 images:
   # Core images for the rollup, developed for Astria
   geth: "ghcr.io/astriaorg/go-ethereum:0.4.1"
-  conductor: "ghcr.io/astriaorg/conductor:sha-2521343"
-  composer: "ghcr.io/astriaorg/composer:sha-2521343"
+  conductor: "ghcr.io/astriaorg/conductor:0.11.0--conductor"
+  composer: "ghcr.io/astriaorg/composer:0.3.0--composer"
 
   # Rollup faucet
   faucet: "ghcr.io/astriaorg/ria-faucet:0.0.1"
@@ -98,9 +98,9 @@ images:
     core: "docker.io/blockscout/blockscout:5.1.0"
     postgres: "docker.io/library/postgres:14"
     redis: "docker.io/library/redis:alpine"
-    sigProvider: "ghcr.io/blockscout/sig-provider:latest@sha256:ae371ce8d0a20993bf61ca81b3394416f4778c9edd398250fd4d81a8d6820950"
-    smartContractVerifier: "ghcr.io/blockscout/smart-contract-verifier:v1.3.0@sha256:f07b2d874c28d45f5ba81f297c868a746a03771e8b6d9b8e96f0eba0beeb1016"
-    visualizer: "ghcr.io/blockscout/visualizer:v0.2.0@sha256:99479da126248e0aba5c32b1e32625f8c527b72924f55cb510b50e5f854b2d15"
+    sigProvider: "ghcr.io/blockscout/sig-provider@sha256:ae371ce8d0a20993bf61ca81b3394416f4778c9edd398250fd4d81a8d6820950"
+    smartContractVerifier: "ghcr.io/blockscout/smart-contract-verifier@sha256:f07b2d874c28d45f5ba81f297c868a746a03771e8b6d9b8e96f0eba0beeb1016"
+    visualizer: "ghcr.io/blockscout/visualizer@sha256:99479da126248e0aba5c32b1e32625f8c527b72924f55cb510b50e5f854b2d15"
 
 # When deploying in a production environment should use a secret provider
 # This is configured for use with GCP, need to set own resource names
