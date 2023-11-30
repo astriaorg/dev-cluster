@@ -1,12 +1,27 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: sequencer-service
-  namespace: {{ .Values.namespace }}
+  name: {{ .Values.config.moniker }}-sequencer-rpc-service
+  namespace: {{ .Values.global.namespace }}
 spec:
   selector:
-    app: astria-dev-cluster
+    app: {{ .Values.config.moniker }}-sequencer
   ports:
     - name: cometbft-rpc
       port: {{ .Values.ports.cometBFTRPC }}
       targetPort: cometbft-rpc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.config.moniker }}-sequencer-p2p-service
+  namespace: {{ .Values.global.namespace }}
+spec:
+  type: NodePort
+  selector:
+    app: {{ .Values.config.moniker }}-sequencer
+  ports:
+    - name: cometbft-p2p
+      port: {{ .Values.ports.cometBFTP2P }}
+      name: cometbft-p2p
+---

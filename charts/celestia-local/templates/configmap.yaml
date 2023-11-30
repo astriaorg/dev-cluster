@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: celestia-local-env
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 data:
   home_dir: "/home/celestia"
   coins: "{{ .Values.coins }}"
@@ -14,12 +14,13 @@ data:
   bridge_host_port: "{{ .Values.ports.bridgeHTTP }}"
   bridge_rpc_port: "{{ .Values.ports.bridgeRPC }}"
   celestia_app_host_port: "{{ .Values.ports.celestiaAppHostPort }}"
+  celestia_app_grpc_port: "{{ .Values.ports.celestiaAppGrpcPort }}"
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: celestia-local-bridge-scripts
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 data:
   init-bridge.sh: |
     {{- .Files.Get "files/scripts/init-bridge.sh" | nindent 4 }}
@@ -30,7 +31,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: celestia-local-appd-scripts
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 data:
   init-celestia-appd.sh: |
     {{- .Files.Get "files/scripts/init-celestia-appd.sh" | nindent 4 }}

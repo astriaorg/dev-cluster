@@ -2,85 +2,65 @@
 {{- $ingressApiIsStable := eq (include "rollup.ingress.isStable" .) "true" -}}
 {{- $ingressSupportsIngressClassName := eq (include "rollup.ingress.supportsIngressClassName" .) "true" -}}
 {{- $ingressSupportsPathType := eq (include "rollup.ingress.supportsPathType" .) "true" -}}
-{{- $ingressPathType := .Values.ingress.pathType -}}
-{{- $extraPaths := .Values.ingress.extraPaths -}}
-apiVersion: networking.k8s.io/v1
+
+{{- range $service, $ingress := .Values.ingress.services }}
+{{- $servicePort := $ingress.service.port -}}
+{{- $serviceName := $ingress.service.name -}}
+{{- $ingressPath := $ingress.path -}}
+{{- $ingressPathType := $ingress.pathType -}}
+{{- $extraPaths := $ingress.extraPaths }}
+---
+apiVersion: {{ include "rollup.ingress.apiVersion" $ }}
 kind: Ingress
 metadata:
-  name: {{ .Values.config.rollup.name }}-ingress
-  namespace: {{ .Values.namespace }}
+  name: {{ $.Values.config.rollup.name }}-{{ $service }}-ingress
+  namespace: {{ $.Values.global.namespace }}
   labels:
-    {{- with .Values.ingress.labels }}
-    {{- toYaml . | nindent 4 }}
+    {{- with $ingress.labels }}
+      {{- toYaml . | nindent 4 }}
     {{- end }}
   annotations:
-  {{- if .Values.ingress.annotations  }}
-  {{- with .Values.ingress.annotations }}
-    {{- range $key, $value := . }}
+    kubernetes.io/ingress.class: {{ $.Values.ingress.className }}
+  {{- if $ingressApiIsStable }}
+  {{- range $key, $value := $ingress.annotations }}
     {{ $key }}: {{ tpl $value $ | quote }}
-    {{- end }}
   {{- end }}
-  {{- else }}
-    kubernetes.io/ingress.class: nginx
   {{- end }}
 spec:
-  {{- if and $ingressSupportsIngressClassName .Values.ingress.ingressClassName }}
-  ingressClassName: {{ .Values.ingress.ingressClassName }}
+  {{- if $ingressSupportsIngressClassName }}
+  ingressClassName: {{ $.Values.ingress.className }}
   {{- end -}}
-  {{- with .Values.ingress.defaultBackend }}
+  {{- with $ingress.service }}
   defaultBackend:
-    {{- tpl (toYaml .) $ | nindent 4 }}
+    service: 
+      {{- tpl (toYaml .) $ | nindent 6 }}
   {{- end }}
   rules:
-    {{- if .Values.ingress.hosts  }}
-  {{- with .Values.ingress.hosts }} 
-  {{- tpl (toYaml .) $ | nindent 6 }}
+  {{- with $ingress.hosts }}
+    {{- range $host := . }}
+    - host: {{ tpl $host $ }}
+      http:
+        paths:
+          {{- with $extraPaths }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+          - path: {{ $ingressPath }}
+            {{- if $ingressSupportsPathType }}
+            pathType: {{ $ingressPathType }}
+            {{- end }}
+            backend:
+              {{- if $ingressApiIsStable }}
+              service: 
+                {{- tpl (toYaml $ingress.service) $ | nindent 16 }}
+              {{- else }}
+              serviceName: {{ tpl $serviceName $ }}
+              servicePort: {{ tpl $servicePort $ }}
+              {{- end }}
+    {{- end }}
   {{- end }}
-  {{- with .Values.ingress.tls }}
+  {{- if $ingress.tls }}
   tls:
-    {{- tpl (toYaml .) $ | nindent 4 }}
+    {{- tpl (toYaml $ingress.tls) $ | nindent 4 }}
   {{- end }}
-  {{- else }}
-    - host: executor.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
-      http:
-        paths:
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ .Values.config.rollup.name }}-evm-service
-                port:
-                  name: json-rpc-svc
-    - host: ws-executor.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
-      http:
-        paths:
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ .Values.config.rollup.name }}-evm-service
-                port:
-                  name: ws-rpc-svc
-    - host: faucet.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
-      http:
-        paths:
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ .Values.config.rollup.name }}-faucet-service
-                port:
-                  name: faucet-svc
-    - host: blockscout.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
-      http:
-        paths:
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ .Values.config.rollup.name }}-blockscout-svc
-                port:
-                  name: blockscout-svc
-  {{- end -}}
 {{- end }}
-
+{{- end }}

@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: sequencer-faucet-service
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
   selector:
     app: astria-dev-cluster

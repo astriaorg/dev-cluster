@@ -28,6 +28,5 @@ celestia-appd gentx \
   --keyring-backend="$keyring_backend" \
   --chain-id "$chainid" \
   --home "$home_dir" \
-  --evm-address "$evm_address"
 
 celestia-appd collect-gentxs --home "$home_dir"

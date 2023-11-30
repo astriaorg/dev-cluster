@@ -1,10 +1,11 @@
 {
   "app_hash": "",
   "app_state": {
-    "accounts": {{ toPrettyJson .Values.genesisAccounts | indent 4 | trim }},
-    "authority_sudo_key": "{{ .Values.sudoAuthorityKey }}"
+    "accounts": {{ toPrettyJson .Values.config.sequencer.genesisAccounts | indent 4 | trim }},
+    "authority_sudo_key": "{{ .Values.config.sequencer.sudoAuthorityKey }}",
+    "native_asset_base_denomination": "nria"
   },
-  "chain_id": "{{ .Values.CometBFT.chainId }}",
+  "chain_id": "{{ .Values.config.cometBFT.chainId }}",
   "consensus_params": {
     "block": {
       "max_bytes": "22020096",
@@ -27,14 +28,17 @@
   "genesis_time": "2023-09-22T17:22:35.092832Z",
   "initial_height": "0",
   "validators": [
-    {
-      "address": "{{ .Values.CometBFT.privValidatorKey.address }}",
-      "name": "",
-      "power": "10",
-      "pub_key": {
-        "type": "tendermint/PubKeyEd25519",
-        "value": "{{ .Values.CometBFT.privValidatorKey.pubKey }}"
+  {{- range $index, $value := .Values.config.cometBFT.validators }}
+      {{- if $index }},{{- end }}
+      {
+        "address": "{{ $value.address }}",
+        "name": "{{ $value.name }}",
+        "power": "{{ $value.power }}",
+        "pub_key": {
+          "type": "tendermint/PubKeyEd25519",
+          "value": "{{ $value.pubKey }}"
+        }
       }
-    }
+  {{- end }}
   ]
 }

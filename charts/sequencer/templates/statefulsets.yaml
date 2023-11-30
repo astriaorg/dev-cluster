@@ -1,22 +1,20 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: sequencer
   labels:
-    app: astria-dev-cluster
-  namespace: {{ .Values.namespace }}
+    app: {{ .Values.config.moniker }}-sequencer
+  namespace: {{ .Values.global.namespace }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.global.replicaCount }}
   selector:
     matchLabels:
-      app: astria-dev-cluster
+      app: {{ .Values.config.moniker }}-sequencer
   template:
     metadata:
-      annotations:
-        cni.projectcalico.org/ipAddrs: '["192.168.65.120"]'
       name: astria-sequencer
       labels:
-        app: astria-dev-cluster
+        app: {{ .Values.config.moniker }}-sequencer
     spec:
       initContainers:
         - command: [ "/bin/sh", "-c" ]
@@ -31,76 +29,56 @@ spec:
               name: cometbft-data-volume
             - mountPath: /cometbft
               name: sequencer-shared-storage-vol
-              subPath: cometbft
+              subPath: {{ .Values.config.moniker }}/cometbft
       containers:
         - name: sequencer
-          image: "{{ .Values.sequencerImage }}"
+          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.images.sequencer }}"
           command: [ "/usr/local/bin/astria-sequencer" ]
-          stdin: {{ .Values.useTTY }}
-          tty: {{ .Values.useTTY }}
+          stdin: {{ .Values.global.useTTY }}
+          tty: {{ .Values.global.useTTY }}
           envFrom:
             - configMapRef:
-                name: sequencer-env
+                name: {{ .Values.config.moniker }}-sequencer-env
           volumeMounts:
             - mountPath: /sequencer
               name: sequencer-shared-storage-vol
-              subPath: sequencer
+              subPath: {{ .Values.config.moniker }}/sequencer
           ports:
             - containerPort: {{ .Values.ports.sequencerABCI }}
               name: sequencer-abci
         - name: cometbft
+          imagePullPolicy: IfNotPresent
           command: [ "cometbft", "start" ]
           args:
           - "--home"
           - "/cometbft"
-          image: "{{ .Values.cometBFTImage }}"
+          image: "{{ .Values.images.cometBFT }}"
           envFrom:
             - configMapRef:
-                name: cometbft-env
+                name: {{ .Values.config.moniker }}-cometbft-env
           volumeMounts:
             - mountPath: /cometbft
               name: sequencer-shared-storage-vol
-              subPath: cometbft
+              subPath: {{ .Values.config.moniker }}/cometbft
           ports:
             - containerPort: {{ .Values.ports.cometBFTP2P }}
               name: cometbft-p2p
             - containerPort: {{ .Values.ports.cometBFTRPC }}
               name: cometbft-rpc
-        - name: sequencer-relayer
-          image: "{{ .Values.sequencerRelayerImage }}"
-          command: [ "/scripts/start-relayer.sh" ]
-          stdin: {{ .Values.useTTY }}
-          tty: {{ .Values.useTTY }}
-          envFrom:
-            - configMapRef:
-                name: relayer-env
-          volumeMounts:
-            - mountPath: /home/relayer
-              name: sequencer-shared-storage-vol
-              subPath: relayer
-            - mountPath: /cometbft
-              name: sequencer-shared-storage-vol
-              subPath: cometbft
-              readOnly: true
-            - mountPath: /scripts/
-              name: relayer-scripts-volume
       volumes:
         - name: cometbft-config-volume
           configMap:
-            name: cometbft-config
+            name: {{ .Values.config.moniker }}-cometbft-config
             defaultMode: 0700
         - name: cometbft-data-volume
           configMap:
-            name: cometbft-data
+            name: {{ .Values.config.moniker }}-cometbft-data
             defaultMode: 0700
-        - name: relayer-scripts-volume
-          configMap:
-            name: relayer-scripts
-            defaultMode: 0500
         - name: sequencer-shared-storage-vol
           {{- if .Values.storage.enabled }}
           persistentVolumeClaim:
-            claimName: sequencer-shared-storage-pvc
+            claimName: {{ .Values.config.moniker }}-{{ .Values.storage.entities.sequencerSharedStorage.persistentVolumeName }}-pvc
           {{- else }}
           emptyDir: {}
           {{- end }}

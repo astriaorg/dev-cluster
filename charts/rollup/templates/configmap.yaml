@@ -2,22 +2,31 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-conductor-env
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 data:
   ASTRIA_CONDUCTOR_LOG: "astria_conductor={{ .Values.config.logLevel }}"
-  ASTRIA_CONDUCTOR_CELESTIA_NODE_URL: "{{ .Values.config.celestia.fullNodeUrl }}"
+  {{- if (index .Values "celestia-node").enabled }}
+  ASTRIA_CONDUCTOR_CELESTIA_NODE_URL: "{{ include "celestiaNode.service.adresses.rpc" (index .Subcharts "celestia-node") }}"
+  TOKEN_SERVER_URL: "{{ include "celestiaNode.service.adresses.token" (index .Subcharts "celestia-node") }}"
+  {{- else }}
+  ASTRIA_CONDUCTOR_CELESTIA_NODE_URL: "{{ .Values.config.celestia.rpc }}"
+  TOKEN_SERVER_URL: "{{ .Values.config.celestia.token }}"
+  {{- end }}
   ASTRIA_CONDUCTOR_CHAIN_ID: "{{ .Values.config.rollup.chainId }}"
   ASTRIA_CONDUCTOR_EXECUTION_RPC_URL: "http://127.0.0.1:{{ .Values.ports.executionGRPC }}"
   ASTRIA_CONDUCTOR_EXECUTION_COMMIT_LEVEL: "{{ .Values.config.rollup.executionCommitLevel }}"
   ASTRIA_CONDUCTOR_SEQUENCER_URL: "{{ .Values.config.sequencer.websocket }}"
-  ASTRIA_CONDUCTOR_DISABLE_EMPTY_BLOCK_EXECUTION: "{{ .Values.config.rollup.skipEmptyBlocks }}"
   ASTRIA_CONDUCTOR_INITIAL_SEQUENCER_BLOCK_HEIGHT: "{{ .Values.config.sequencer.initialBlockHeight }}"
+  ASTRIA_CONDUCTOR_ENABLE_OPTIMISM: "{{ .Values.config.rollup.optimism.enabled }}"
+  ASTRIA_CONDUCTOR_ETHEREUM_L1_URL: "{{ .Values.config.rollup.optimism.ethereumL1Websocket }}"
+  ASTRIA_CONDUCTOR_OPTIMISM_PORTAL_CONTRACT_ADDRESS: "{{ .Values.config.rollup.optimism.portalContractAddress }}"
+  ASTRIA_CONDUCTOR_INITIAL_ETHEREUM_L1_BLOCK_HEIGHT: "{{ .Values.config.rollup.optimism.initialEthereumL1BlockHeight }}"
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-conductor-scripts
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 data:
   start-conductor.sh: |
     {{- .Files.Get "files/scripts/start-conductor.sh" | nindent 4 }}
@@ -26,7 +35,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-composer-env
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 data:
   ASTRIA_COMPOSER_LOG: "astria_composer={{ .Values.config.logLevel }}"
   ASTRIA_COMPOSER_API_LISTEN_ADDR: "0.0.0.0:0"
@@ -40,7 +49,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-faucet-env
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 data:
   ETH_FAUCET_PORT: "{{ .Values.ports.faucet }}"
   ETH_FAUCET_EVM_PROVIDER_URL: "http://{{ .Values.config.rollup.name }}-evm-service:{{ .Values.ports.jsonRPC }}"
@@ -53,7 +62,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-geth-env
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 data:
   home_dir: "/home/geth"
   data_dir: "/home/geth/{{ .Values.config.rollup.name }}geth"
@@ -67,7 +76,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-executor-scripts
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 data:
   geth-genesis.json: |
     {{- tpl (.Files.Get "files/genesis/geth-genesis.json") $ | nindent 4 }}
@@ -80,7 +89,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-blockscout-env
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 data:
   ACCOUNT_CLOAK_KEY: ""
   ACCOUNT_ENABLED: "false"
@@ -198,7 +207,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-smart-contract-verifier-env
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 data:
   SMART_CONTRACT_VERIFIER__JAEGER__AGENT_ENDPOINT: "localhost:6831"
   SMART_CONTRACT_VERIFIER__JAEGER__ENABLED: "false"
@@ -226,7 +235,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
   name: {{ .Values.config.rollup.name }}-visualizer-env
 data:
   VISUALIZER__SERVER__GRPC__ENABLED: "false"

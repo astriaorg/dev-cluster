@@ -15,7 +15,7 @@
 proxy_app = "tcp://127.0.0.1:{{ .Values.ports.sequencerABCI }}"
 
 # A custom human readable name for this node
-moniker = "astria-sequencer-1"
+moniker = "{{ .Values.config.moniker }}"
 
 # If this node is many blocks behind the tip of the chain, BlockSync
 # allows them to catchup quickly by downloading blocks in parallel
@@ -202,18 +202,18 @@ pprof_laddr = ""
 [p2p]
 
 # Address to listen for incoming connections
-laddr = "tcp://0.0.0.0:26656"
+laddr = "{{ .Values.config.cometBFT.p2p.laddr }}:{{ .Values.ports.cometBFTP2P }}"
 
 # Address to advertise to peers for them to dial. If empty, will use the same
 # port as the laddr, and will introspect on the listener to figure out the
 # address. IP and port are required. Example: 159.89.10.97:26656
-external_address = ""
+external_address = "{{ .Values.config.cometBFT.p2p.externalAddress }}"
 
 # Comma separated list of seed nodes to connect to
-seeds = ""
+seeds = "{{ join "," .Values.config.cometBFT.p2p.seeds }}"
 
 # Comma separated list of nodes to keep persistent connections to
-persistent_peers = ""
+persistent_peers = "{{ join "," .Values.config.cometBFT.p2p.persistentPeers }}"
 
 # Path to address book
 addr_book_file = "config/addrbook.json"
@@ -229,7 +229,7 @@ max_num_inbound_peers = 40
 max_num_outbound_peers = 10
 
 # List of node IDs, to which a connection will be (re)established ignoring any existing limits
-unconditional_peer_ids = ""
+unconditional_peer_ids = "{{ join "," .Values.config.cometBFT.p2p.unconditionalPeers }}"
 
 # Maximum pause when redialing a persistent peer (if zero, exponential backoff is used)
 persistent_peers_max_dial_period = "0s"
@@ -256,7 +256,7 @@ pex = true
 seed_mode = false
 
 # Comma separated list of peer IDs to keep private (will not be gossiped to other peers)
-private_peer_ids = ""
+private_peer_ids = "{{ join "," .Values.config.cometBFT.p2p.privatePeers }}"
 
 # Toggle to disable guard against peers connecting from the same ip.
 allow_duplicate_ip = false
@@ -437,11 +437,16 @@ discard_abci_responses = false
 # 		- When "kv" is chosen "tx.height" and "tx.hash" will always be indexed.
 #   3) "psql" - the indexer services backed by PostgreSQL.
 # When "kv" or "psql" is chosen "tx.height" and "tx.hash" will always be indexed.
-indexer = "kv"
+{{- if .Values.config.cometBFT.psql.enabled }}
+indexer = "psql"
 
 # The PostgreSQL connection configuration, the connection format:
 #   postgresql://<user>:<password>@<host>:<port>/<db>?<opts>
+psql-conn = "{{ .Values.config.cometBFt.psql.conn }}"
+{{- else }}
+indexer = "kv"
 psql-conn = ""
+{{- end }}
 
 #######################################################
 ###       Instrumentation Configuration Options     ###

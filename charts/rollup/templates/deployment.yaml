@@ -4,9 +4,9 @@ metadata:
   name: {{ .Values.config.rollup.name }}-geth
   labels:
     app: {{ .Values.config.rollup.name }}-astria-dev-cluster
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
-  replicas : {{ .Values.replicaCount }}
+  replicas : {{ .Values.global.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Values.config.rollup.name }}-astria-dev-cluster
@@ -53,8 +53,8 @@ spec:
         - name: composer
           image: {{ .Values.images.composer }}
           command: [ "/usr/local/bin/astria-composer" ]
-          stdin: {{ .Values.config.useTTY }}
-          tty: {{ .Values.config.useTTY }}
+          stdin: {{ .Values.global.useTTY }}
+          tty: {{ .Values.global.useTTY }}
           envFrom:
             - configMapRef:
                 name: {{ .Values.config.rollup.name }}-composer-env
@@ -74,8 +74,8 @@ spec:
         - name: conductor
           image: {{ .Values.images.conductor }}
           command: [ "/scripts/start-conductor.sh" ]
-          stdin: {{ .Values.config.useTTY }}
-          tty: {{ .Values.config.useTTY }}
+          stdin: {{ .Values.global.useTTY }}
+          tty: {{ .Values.global.useTTY }}
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.config.rollup.name }}-conductor-scripts-volume
@@ -114,9 +114,9 @@ metadata:
   name: {{ .Values.config.rollup.name }}-faucet
   labels:
     app: {{ .Values.config.rollup.name }}-astria-dev-cluster
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
-  replicas : {{ .Values.replicaCount }}
+  replicas : {{ .Values.global.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Values.config.rollup.name }}-astria-dev-cluster
@@ -175,9 +175,9 @@ metadata:
   name: {{ .Values.config.rollup.name }}-blockscout
   labels:
     app: {{ .Values.config.rollup.name }}-astria-dev-cluster
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
-  replicas : {{ .Values.replicaCount }}
+  replicas : {{ .Values.global.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Values.config.rollup.name }}-astria-dev-cluster
