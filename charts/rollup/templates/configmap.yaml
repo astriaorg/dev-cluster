@@ -12,7 +12,7 @@ data:
   ASTRIA_CONDUCTOR_CELESTIA_NODE_URL: "{{ .Values.config.celestia.rpc }}"
   TOKEN_SERVER_URL: "{{ .Values.config.celestia.token }}"
   {{- end }}
-  ASTRIA_CONDUCTOR_CHAIN_ID: "{{ .Values.config.rollup.chainId }}"
+  ASTRIA_CONDUCTOR_ROLLUP_NAME: "{{ .Values.config.rollup.name }}"
   ASTRIA_CONDUCTOR_EXECUTION_RPC_URL: "http://127.0.0.1:{{ .Values.ports.executionGRPC }}"
   ASTRIA_CONDUCTOR_EXECUTION_COMMIT_LEVEL: "{{ .Values.config.rollup.executionCommitLevel }}"
   ASTRIA_CONDUCTOR_SEQUENCER_URL: "{{ .Values.config.sequencer.websocket }}"

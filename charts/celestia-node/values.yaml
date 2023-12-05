@@ -7,6 +7,8 @@ global:
 
 config:
   name: celestia-node
+  labelPrefix: ''
+  labelTemplate: '{{ .Values.config.name }}-{{ .Values.config.type }}-{{ .Values.config.chainId }}'
   network: mocha-4
   chainId: mocha-4
   coreIp: "full.consensus.mocha-4.celestia-mocha.com"

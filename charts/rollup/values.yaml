@@ -13,8 +13,6 @@ config:
   rollup:
     # Default name for the rollup chain
     name: astria
-    # Chain ID used for submission to shared sequencer, and generating DA namespace
-    chainId: astria
     # EVM network ID used by the chain
     networkId: 1337
     # Determines what will drive block execution, options are:
@@ -72,6 +70,7 @@ celestia-node:
   # By default the celestia node deploys on top of the Celestia testnet mocha network
   config:
     labelPrefix: astria
+    labelTemplate: cel-light
     type: light
     tokenAuthLevel: read
     # You can deploy on top of a custom celestia network, uncomment below and
@@ -87,8 +86,8 @@ celestia-node:
 images:
   # Core images for the rollup, developed for Astria
   geth: "ghcr.io/astriaorg/go-ethereum:0.4.1"
-  conductor: "ghcr.io/astriaorg/conductor:0.11.0--conductor"
-  composer: "ghcr.io/astriaorg/composer:0.3.0--composer"
+  conductor: "ghcr.io/astriaorg/conductor:pr-633"
+  composer: "ghcr.io/astriaorg/composer:pr-633"
 
   # Rollup faucet
   faucet: "ghcr.io/astriaorg/ria-faucet:0.0.1"

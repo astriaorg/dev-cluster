@@ -2,7 +2,7 @@
 Define the base label
 */}}
 {{- define "celestiaNode.baseLabel" -}}
-{{- if .Values.config.labelPrefix }}{{ .Values.config.labelPrefix }}-{{- end }}{{ .Values.config.name }}-{{ .Values.config.type }}-{{ .Values.config.chainId }}
+{{- if .Values.config.labelPrefix }}{{ .Values.config.labelPrefix }}-{{- end }}{{ tpl .Values.config.labelTemplate . }}
 {{- end }}
 
 {{/*
