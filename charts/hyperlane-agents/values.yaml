@@ -1,0 +1,52 @@
+# Default values for sequencer.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+global:
+  namespace: "astria-dev-cluster"
+  replicaCount: 1
+
+images:
+  pullPolicy: IfNotPresent
+  agent: gcr.io/abacus-labs-dev/hyperlane-agent:3b1b8dc-20231115-202111
+
+secretProvider:
+  enabled: false
+  provider: gcp
+  secrets:
+    relayerPrivateKey:
+      filename: relayerPrivateKey.txt
+      resourceName: "projects/$PROJECT_ID/secrets/hyperlaneRelayerPrivateKey/versions/latest"
+      key: token
+    validatorPrivateKey:
+      filename: validatorPrivateKey.txt
+      resourceName: "projects/$PROJECT_ID/secrets/hyperlaneValidatorPrivateKey/versions/latest"
+      key: token
+
+config:
+  name: astria
+  agentConfig: files/agent-config-astria.json
+  interval: 1
+  tracing:
+    level: info
+    format: json
+  relayer:
+    # Note: When secretProvider.enabled is true the secret provided by
+    #       `relayerPrivateKey` is used instead of this value.
+    privateKey: "0x8b3a7999072c9c9314c084044fe705db11714c6c4ed7cddb64da18ea270dd203"
+    chains:
+      - sepolia
+      - astria
+  validator:
+    # Note: When secretProvider.enabled is true the secret provided by
+    #       `validatorPrivateKey` is used instead of this value.
+    privateKey: "0x8b3a7999072c9c9314c084044fe705db11714c6c4ed7cddb64da18ea270dd203"
+    chains:
+      - astria
+
+storage:
+  enabled: true
+  local: false
+  entities:
+    storage:
+      size: 5Gi
+      path: /data
