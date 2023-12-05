@@ -55,7 +55,7 @@ spec:
             - name: HYP_VALIDATOR_KEY
               valueFrom:
                 secretKeyRef:
-                  name: relayer-private-key
+                  name: validator-private-key
                   key: {{ $.Values.secretProvider.secrets.hyperlaneValidatorPrivateKey.key }}
             {{- end }}
           volumeMounts:
