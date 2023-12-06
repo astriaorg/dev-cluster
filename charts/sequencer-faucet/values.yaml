@@ -3,6 +3,7 @@ global:
   replicaCount: 1
 
 config:
+  proxyCount: 1
   sequencerRpcUrl: http://node0-sequencer-rpc-service.astria-dev-cluster.svc.cluster.local:26657
   # This private key will be replaced with `sequencerPrivateKey` when enabled
   # For testing purposes only, do not use except with local development cluster,
