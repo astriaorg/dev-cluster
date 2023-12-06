@@ -64,6 +64,8 @@ spec:
             - mountPath: /config/
               name: {{ $.Values.config.name }}-hyperlane-agent-config-vol
               readOnly: true
+            - mountPath: "/var/secrets"
+              name: validator-private-key
         {{- end }}
         - name: relayer
           image: "{{ .Values.images.agent }}"
@@ -88,10 +90,24 @@ spec:
             - mountPath: /config/
               name: {{ .Values.config.name }}-hyperlane-agent-config-vol
               readOnly: true
+            - mountPath: "/var/secrets"
+              name: relayer-private-key
       volumes:
         - name: {{ .Values.config.name }}-hyperlane-agent-config-vol
           configMap:
             name: {{ .Values.config.name }}-hyperlane-agent-config
+        - name: validator-private-key
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: validator-private-key
+        - name: relayer-private-key
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: relayer-private-key
         - name: {{ $.Values.config.name }}-hyperlane-shared-storage-vol
           {{- if .Values.storage.enabled }}
           persistentVolumeClaim:
