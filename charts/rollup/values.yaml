@@ -39,6 +39,7 @@ config:
       initialEthereumL1BlockHeight: 1
 
   faucet:
+    proxyCount: 1
     # The account from which the faucet disburses funds, likely want to have
     # the corresponding account given a balance in genesis accounts.
     # Note: When secretProvider.enabled is true the secret provided by
