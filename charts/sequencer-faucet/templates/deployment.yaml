@@ -25,6 +25,7 @@ spec:
             - -wallet.provider=$(SEQUENCER_FAUCET_SEQUENCER_RPC_URL)
             - -wallet.privkey=$(SEQUENCER_FAUCET_PRIVATE_KEY)
             - -faucet.amount=$(SEQUENCER_FAUCET_AMOUNT)
+            - -proxycount=$(SEQUENCER_FAUCET_PROXY_COUNT)
           envFrom:
             - configMapRef:
                 name: sequencer-faucet-env
