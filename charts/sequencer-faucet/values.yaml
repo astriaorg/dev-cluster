@@ -3,7 +3,8 @@ global:
   replicaCount: 1
 
 config:
-  sequencerRpcUrl: http://sequencer-service:26657
+  proxyCount: 1
+  sequencerRpcUrl: http://node0-sequencer-rpc-service.astria-dev-cluster.svc.cluster.local:26657
   # This private key will be replaced with `sequencerPrivateKey` when enabled
   # For testing purposes only, do not use except with local development cluster,
   # it corresponds with the following account:
@@ -14,7 +15,7 @@ config:
   amount: 1800
 
 images:
-  sequencerFaucet: "ghcr.io/astriaorg/seq-faucet:0.3.0"
+  sequencerFaucet: "ghcr.io/astriaorg/seq-faucet:0.4.0"
 
 # When deploying in a production environment should use a secret provider
 # This is configured for use with GCP, need to set own resource names
