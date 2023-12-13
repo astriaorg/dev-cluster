@@ -1,6 +1,6 @@
 dependencies:
 - name: celestia-node
   repository: file://../celestia-node
-  version: 0.1.0
-digest: sha256:da8b232bb97da84a4c0ed51f4626897d3cc44a85e21504d6bf94293ba535a197
-generated: "2023-11-07T18:02:03.76888+01:00"
+  version: 0.1.1
+digest: sha256:399c5d3f7c1df1d07fc4cc0f03183d429f5ba5be7f4909afd5938fbe32b55ae0
+generated: "2023-12-07T10:47:08.153993-08:00"
