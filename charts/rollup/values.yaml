@@ -16,7 +16,7 @@ config:
     # Chain ID used for submission to shared sequencer, and generating DA namespace
     chainId: astria
     # Set to true to keep history of all blocks
-    archiveNode: false
+    archiveNode: true
     # EVM network ID used by the chain
     networkId: 1337
     # Determines what will drive block execution, options are:
