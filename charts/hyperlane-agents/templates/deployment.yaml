@@ -55,7 +55,7 @@ spec:
             - name: HYP_VALIDATOR_KEY
               valueFrom:
                 secretKeyRef:
-                  name: validator-private-key
+                  name: hyperlane-validator-private-key
                   key: {{ $.Values.secretProvider.secrets.hyperlaneValidatorPrivateKey.key }}
             {{- end }}
           volumeMounts:
@@ -101,18 +101,18 @@ spec:
           configMap:
             name: {{ .Values.config.name }}-hyperlane-agent-config
          {{- if $.Values.secretProvider.enabled }}
-        - name: validator-private-key
+        - name: hyperlane-validator-private-key
           csi:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: validator-private-key
-        - name: relayer-private-key
+              secretProviderClass: hyperlane-validator-private-key
+        - name: hyperlane-relayer-private-key
           csi:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: relayer-private-key
+              secretProviderClass: hyperlane-relayer-private-key
         {{- end }}              
         - name: {{ $.Values.config.name }}-hyperlane-shared-storage-vol
           {{- if .Values.storage.enabled }}
