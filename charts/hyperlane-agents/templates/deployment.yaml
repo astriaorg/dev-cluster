@@ -94,7 +94,7 @@ spec:
               readOnly: true
             {{- if $.Values.secretProvider.enabled }}
             - mountPath: /var/secrets
-              name: hyperlane-relayer-private-key
+              name: relayer-private-key
             {{- end }}                
       volumes:
         - name: {{ .Values.config.name }}-hyperlane-agent-config-vol
