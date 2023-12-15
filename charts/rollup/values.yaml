@@ -95,7 +95,7 @@ celestia-node:
 
 images:
   # Core images for the rollup, developed for Astria
-  geth: "geth:test"
+  geth: "ghcr.io/astriaorg/go-ethereum:sha-a285e43"
   conductor: "ghcr.io/astriaorg/conductor:0.11.0--conductor"
   composer: "ghcr.io/astriaorg/composer:0.3.0--composer"
 
