@@ -12,8 +12,12 @@
         "berlinBlock": 0,
         "londonBlock": 0,
         "terminalTotalDifficulty": 0,
+        "terminalTotalDifficultyPassed": true,
         "ethash": {}
     },
+    {{- if .Values.config.rollup.extraDataOverride }}
+    "extraData": "{{ .Values.config.rollup.extraDataOverride }}",
+    {{ end -}}
     "difficulty": "10000000",
     "gasLimit": "8000000",
     "alloc": {
