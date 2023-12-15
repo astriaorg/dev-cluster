@@ -55,7 +55,7 @@ spec:
             - name: HYP_VALIDATOR_KEY
               valueFrom:
                 secretKeyRef:
-                  name: hyperlane-validator-private-key
+                  name: validator-private-key
                   key: {{ $.Values.secretProvider.secrets.ValidatorPrivateKey.key }}
             {{- end }}
           volumeMounts:
@@ -66,7 +66,7 @@ spec:
               readOnly: true
             {{- if $.Values.secretProvider.enabled }}
             - mountPath: /var/secrets
-              name: hyperlane-validator-private-key
+              name: validator-private-key
             {{- end }}     
         {{- end }}
         - name: relayer
@@ -83,7 +83,7 @@ spec:
             - name: HYP_DEFAULTSIGNER_KEY
               valueFrom:
                 secretKeyRef:
-                  name: hyperlane-relayer-private-key
+                  name: relayer-private-key
                   key: {{ $.Values.secretProvider.secrets.RelayerPrivateKey.key }}
           {{- end }}
           volumeMounts:
@@ -101,18 +101,18 @@ spec:
           configMap:
             name: {{ .Values.config.name }}-hyperlane-agent-config
          {{- if $.Values.secretProvider.enabled }}
-        - name: hyperlane-validator-private-key
+        - name: validator-private-key
           csi:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: hyperlane-validator-private-key
-        - name: hyperlane-relayer-private-key
+              secretProviderClass: validator-private-key
+        - name: relayer-private-key
           csi:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: hyperlane-relayer-private-key
+              secretProviderClass: relayer-private-key
         {{- end }}              
         - name: {{ $.Values.config.name }}-hyperlane-shared-storage-vol
           {{- if .Values.storage.enabled }}
