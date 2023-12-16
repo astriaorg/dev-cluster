@@ -13,11 +13,15 @@
         "londonBlock": 0,
         "terminalTotalDifficulty": 0,
         "terminalTotalDifficultyPassed": true,
-        "ethash": {}
+        "ethash": {},
+        {{- if .Values.config.rollup.extraDataOverride }}
+        "astriaExtraDataOverride": "{{ .Values.config.rollup.extraDataOverride }}",
+        {{ end -}}
+        "astriaOverrideGenesisExtraData": {{ .Values.config.rollup.overrideGenesisExtraData }},
+        "astriaSequencerInitialHeight": {{ .Values.config.sequencer.initialBlockHeight }},
+        "astriaDataAvailabilityInitialHeight": {{ .Values.config.celestia.initialBlockHeight }},
+        "astriaDataAvailabilityHeightVariance": {{ .Values.config.celestia.heightVariance }}
     },
-    {{- if .Values.config.rollup.extraDataOverride }}
-    "extraData": "{{ .Values.config.rollup.extraDataOverride }}",
-    {{ end -}}
     "difficulty": "10000000",
     "gasLimit": "8000000",
     "alloc": {
