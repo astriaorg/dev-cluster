@@ -2,4 +2,4 @@
 
 set -o errexit -o nounset
 
-geth --datadir $data_dir/ init /scripts/geth-genesis.json
+exec geth --datadir $data_dir/ init /scripts/geth-genesis.json
