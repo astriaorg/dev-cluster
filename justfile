@@ -89,6 +89,20 @@ delete-rollup rollupName=defaultRollupNameForDelete:
 
 deploy-all-local: create-cluster deploy-ingress-controller wait-for-ingress-controller deploy-astria-local wait-for-sequencer (deploy-chart "sequencer-faucet") deploy-rollup wait-for-rollup
 
+defaultHypAgentConfig         := ""
+defaultHypRelayerPrivateKey   := ""
+defaultHypValidatorPrivateKey := ""
+deploy-hyperlane-agents rollupName=defaultRollupName agentConfig=defaultHypAgentConfig relayerPrivateKey=defaultHypRelayerPrivateKey validatorPrivateKey=defaultHypValidatorPrivateKey:
+  helm install --debug \
+    {{ if rollupName          != '' { replace('--set config.name=# --set global.namespace=#-dev-cluster', '#', rollupName) } else { '' } }} \
+    {{ if agentConfig         != '' { replace('--set config.agentConfig=#', '#', agentConfig) } else { '' } }} \
+    {{ if relayerPrivateKey   != '' { replace('--set config.relayer.privateKey=#', '#', relayerPrivateKey) } else { '' } }} \
+    {{ if validatorPrivateKey != '' { replace('--set config.validator.privateKey=#', '#', validatorPrivateKey) } else { '' } }} \
+    {{rollupName}}-hyperlane-agents-chart ./charts/hyperlane-agents
+
+delete-hyperlane-agents rollupName=defaultRollupNameForDelete:
+  helm uninstall {{rollupName}}-hyperlane-agents-chart
+
 clean:
   kind delete cluster --name astria-dev-cluster
 
