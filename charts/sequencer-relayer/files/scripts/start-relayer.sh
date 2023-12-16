@@ -18,5 +18,5 @@ if [ -z "$ASTRIA_SEQUENCER_RELAYER_CELESTIA_BEARER_TOKEN" ]; then
 fi
 echo "ASTRIA_SEQUENCER_RELAYER_CELESTIA_BEARER_TOKEN set"
 
-/usr/local/bin/astria-sequencer-relayer
+exec /usr/local/bin/astria-sequencer-relayer
 
