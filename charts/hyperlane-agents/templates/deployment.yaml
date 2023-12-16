@@ -57,6 +57,11 @@ spec:
                 secretKeyRef:
                   name: validator-private-key
                   key: {{ $.Values.secretProvider.secrets.ValidatorPrivateKey.key }}
+            - name: HYP_DEFAULTSIGNER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: relayer-private-key
+                  key: {{ $.Values.secretProvider.secrets.RelayerPrivateKey.key }}                  
             {{- end }}
           volumeMounts:
             - mountPath: /data
@@ -65,8 +70,12 @@ spec:
               name: {{ $.Values.config.name }}-hyperlane-agent-config-vol
               readOnly: true
             {{- if $.Values.secretProvider.enabled }}
-            - mountPath: /var/secrets
+            - mountPath: /var/secrets/validatorPrivateKey.txt
               name: validator-private-key
+              subPath: validatorPrivateKey.txt
+            - mountPath: /var/secrets/relayerPrivateKey.txt
+              name: relayer-private-key
+              subPath: relayerPrivateKey.txt              
             {{- end }}     
         {{- end }}
         - name: relayer
