@@ -8,7 +8,7 @@ global:
 images:
   pullPolicy: IfNotPresent
 # Main as of 12/15/23
-  agent: gcr.io/abacus-labs-dev/hyperlane-agent:10c0ab1-20231215-220639 
+  agent: gcr.io/abacus-labs-dev/hyperlane-agent:10c0ab1-20231215-220639
 
 
 secretProvider:
