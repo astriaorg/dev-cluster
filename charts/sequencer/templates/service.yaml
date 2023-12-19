@@ -17,11 +17,9 @@ metadata:
   name: {{ .Values.config.moniker }}-sequencer-p2p-service
   namespace: {{ .Values.global.namespace }}
 spec:
-  {{- with .Values.config.cometBFT.p2p.externalAddress }}
-  {{- $parsedExternal := split ":" . }}
+  {{- $parsedExternal := split ":" .Values.config.cometBFT.p2p.externalAddress }}
   {{- $externalAddress := index $parsedExternal 0 }}
   {{- $externalPort := index $parsedExternal 1 }}
-  {{- end }}
   {{- if and .Values.ingress.p2p.enabled $externalAddress }}
   type: LoadBalancer
   loadBalancerIP: {{ $externalAddress }}
