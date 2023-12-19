@@ -79,17 +79,6 @@ deploy-dev-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesi
     -f values/rollup/dev.yaml \
     {{rollupName}}chain-chart-deploy ./charts/rollup
 
-deploy-astria-evm-node:
-  helm install \
-    astria-evm-node-chart-deploy ./charts/rollup -f values/rollup/dusk2-full.yaml
-
-upgrade-astria-evm-node:
-  helm upgrade \
-    astria-evm-node-chart-deploy ./charts/rollup -f values/rollup/dusk2-full.yaml --debug
-
-delete-astria-evm-node:
-  helm uninstall astria-evm-node-chart-deploy
-
 wait-for-rollup rollupName=defaultRollupName:
   kubectl wait -n astria-dev-cluster deployment {{rollupName}}-geth --for=condition=Available=True --timeout=600s
   kubectl wait -n astria-dev-cluster deployment {{rollupName}}-blockscout --for=condition=Available=True --timeout=600s
