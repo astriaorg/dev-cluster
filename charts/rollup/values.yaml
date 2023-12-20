@@ -50,7 +50,7 @@ config:
   # Configuration related to sequencer connection for rollup
   sequencer:
     # Block height to start syncing rollup from
-    initialSequencerBlockHeight: 1
+    initialBlockHeight: 48
     # Websocket connection used for
     websocket: "ws://node0-sequencer-rpc-service.astria-dev-cluster.svc.cluster.local:26657/websocket"
     # URL path for the sequencer
@@ -61,7 +61,11 @@ config:
     privateKey: "2bd806c97f0e00af1a1fc3328fa763a9269723c8db8fac4f93af71db186d6e90"
 
   celestia:
-    initialDaBlockHeight: 1
+    # Block height to start syncing rollup from
+    initialBlockHeight: 10
+    # The number of blocks on DA in which the first sequencer block for the rollup should be
+    # found
+    blockRange: 100
     # if config.rollup.executionLevel is NOT 'SoftOnly' AND celestia-node is not enabled
     # this must be set to access celestia network.
     rpc: ""
