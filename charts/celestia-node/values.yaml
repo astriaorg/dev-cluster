@@ -26,7 +26,7 @@ ports:
     rpc: 26658
   tokenServer: 5353
 
-resources: 
+resources:
   requests:
     cpu: 1
     memory: 500mi
