@@ -29,7 +29,7 @@ ports:
 resources:
   requests:
     cpu: 1
-    memory: 500mi
+    memory: 500Mi
   limits:
     cpu: 2
     memory: 2Gi
