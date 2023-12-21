@@ -70,8 +70,6 @@ config:
     # this must be set to access celestia network.
     rpc: ""
     token: ""
-    # Block height to start syncing rollup from
-    initialBlockHeight: 1
 
 celestia-node:
   # Strongly recommend leaving enabled when not doing `SoftOnly` execution
