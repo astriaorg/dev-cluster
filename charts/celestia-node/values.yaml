@@ -29,10 +29,10 @@ ports:
 resources:
   requests:
     cpu: 1
-    memory: 500Mi
+    memory: 4Gi
   limits:
     cpu: 2
-    memory: 2Gi
+    memory: 8Gi
 
 # When deploying in a production environment should use a secret provider
 # This is configured for use with GCP, need to set own resource names
