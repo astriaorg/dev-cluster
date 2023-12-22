@@ -131,9 +131,10 @@ ingress:
   services:
     rpc:
       hosts:
-        - executor.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
-      path: /
-      pathType: Prefix
+        - rpc.rollups.{{ .Values.ingress.hostname }}
+      path: /{{ .Values.config.rollup.name }}(/|$)(.*)
+      pathType: ImplementationSpecific
+      rewriteTarget: true
       service:
         name: "{{ .Values.config.rollup.name }}-evm-service"
         port:
@@ -148,9 +149,10 @@ ingress:
       #      - chart-example.local
     ws:
       hosts:
-        - ws-executor.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
-      path: /
-      pathType: Prefix
+        - ws.rollups.{{ .Values.ingress.hostname }}
+      path: /{{ .Values.config.rollup.name }}(/|$)(.*)
+      pathType: ImplementationSpecific
+      rewriteTarget: true
       service:
         name: "{{ .Values.config.rollup.name }}-evm-service"
         port:
