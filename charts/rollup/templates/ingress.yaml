@@ -6,7 +6,7 @@
 {{- range $service, $ingress := .Values.ingress.services }}
 {{- $servicePort := $ingress.service.port -}}
 {{- $serviceName := $ingress.service.name -}}
-{{- $ingressPath := $ingress.path -}}
+{{- $ingressPath := tpl $ingress.path $ -}}
 {{- $ingressPathType := $ingress.pathType -}}
 {{- $extraPaths := $ingress.extraPaths }}
 ---
@@ -21,6 +21,10 @@ metadata:
     {{- end }}
   annotations:
     kubernetes.io/ingress.class: {{ $.Values.ingress.className }}
+    {{- if $ingress.rewriteTarget }}
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    {{- end }}
   {{- if $ingressApiIsStable }}
   {{- range $key, $value := $ingress.annotations }}
     {{ $key }}: {{ tpl $value $ | quote }}
