@@ -131,8 +131,8 @@ ingress:
   services:
     rpc:
       hosts:
-        - rpc.rollups.{{ .Values.ingress.hostname }}
-      path: /{{ .Values.config.rollup.name }}(/|$)(.*)
+        - rollups.{{ .Values.ingress.hostname }}
+      path: /{{ .Values.config.rollup.name }}/rpc(/|$)(.*)
       pathType: ImplementationSpecific
       rewriteTarget: true
       service:
@@ -149,8 +149,8 @@ ingress:
       #      - chart-example.local
     ws:
       hosts:
-        - ws.rollups.{{ .Values.ingress.hostname }}
-      path: /{{ .Values.config.rollup.name }}(/|$)(.*)
+        - rollups.{{ .Values.ingress.hostname }}
+      path: /{{ .Values.config.rollup.name }}/ws(/|$)(.*)
       pathType: ImplementationSpecific
       rewriteTarget: true
       service:
