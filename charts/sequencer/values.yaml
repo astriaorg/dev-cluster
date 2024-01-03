@@ -80,6 +80,7 @@ images:
 ports:
   cometBFTP2P: 26656
   cometBFTRPC: 26657
+  cometBFTMETRICS: 26660
   sequencerABCI: 26658
   relayerRPC: 2450
 
