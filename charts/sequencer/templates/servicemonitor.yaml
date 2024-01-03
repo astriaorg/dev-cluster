@@ -1,0 +1,25 @@
+{{- if .Values.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "apps.fullname" $ }}-metrics
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "apps.metrics.labels" $ | nindent 4 }}
+    {{- with .Values.serviceMonitor.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  jobLabel: apps-metrics
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "apps.metrics.selectorLabels" . | nindent 6 }}
+  endpoints:
+    - port: 26660
+      path: /metrics
+      interval: 30s
+      scrapeTimeout: 10s
+{{- end }}
