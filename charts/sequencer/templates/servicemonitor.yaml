@@ -10,7 +10,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  jobLabel: apps-metrics
+  jobLabel: cometbft-metrics
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
@@ -18,8 +18,12 @@ spec:
     matchLabels:
       {{- include "apps.metrics.selectorLabels" . | nindent 6 }}
   endpoints:
-    - port: 26660
+    - port: http
       path: /metrics
-      interval: 30s
-      scrapeTimeout: 10s
+      {{- with .Values.serviceMonitor.interval }}
+      interval: {{ . }}
+      {{- end }}
+      {{- with .Values.serviceMonitor.scrapeTimeout  }}
+      scrapeTimeout: {{ . }}
+      {{- end }}
 {{- end }}

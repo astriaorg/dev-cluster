@@ -83,6 +83,13 @@ ports:
   sequencerABCI: 26658
   relayerRPC: 2450
 
+# ServiceMonitor configuration
+serviceMonitor:
+  enabled: true
+  port: 26660
+  labels:
+    release: kube-prometheus-stack
+
 storage:
   enabled: false
   local: true
