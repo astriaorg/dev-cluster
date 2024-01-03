@@ -30,3 +30,28 @@ Return the appropriate apiVersion for ingress.
 {{- print "extensions/v1beta1" }}
 {{- end }}
 {{- end }}
+
+
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "sequencer.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Common labels
+*/}}
+{{- define "sequencer.labels" -}}
+{{ include "sequencer.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "sequencer.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "sequencer.name" . }}
+{{- end }}

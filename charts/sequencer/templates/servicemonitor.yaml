@@ -2,21 +2,20 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "apps.fullname" $ }}-metrics
-  namespace: {{ .Release.Namespace }}
+  name: cometbft-metrics
   labels:
-    {{- include "apps.metrics.labels" $ | nindent 4 }}
-    {{- with .Values.serviceMonitor.labels }}
+    {{- include "sequencer.labels" . | nindent 4 }}
+    {{- with .Values.serviceMonitor.additionalLabels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
   jobLabel: cometbft-metrics
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ .Values.global.namespace }}
   selector:
     matchLabels:
-      {{- include "apps.metrics.selectorLabels" . | nindent 6 }}
+      {{- include "sequencer.selectorLabels" . | nindent 6 }}
   endpoints:
     - port: http
       path: /metrics
