@@ -36,7 +36,7 @@ Return the appropriate apiVersion for ingress.
 Expand the name of the chart.
 */}}
 {{- define "sequencer.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- default .Values.config.moniker | trunc 63 | trimSuffix "-" }}-sequencer
 {{- end }}
 
 {{/*
@@ -53,5 +53,5 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 Selector labels
 */}}
 {{- define "sequencer.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "sequencer.name" . }}
+app: {{ include "sequencer.name" . }}
 {{- end }}
