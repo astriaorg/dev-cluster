@@ -44,9 +44,6 @@ Common labels
 */}}
 {{- define "sequencer.labels" -}}
 {{ include "sequencer.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
 {{- end }}
 
 {{/*
@@ -54,4 +51,5 @@ Selector labels
 */}}
 {{- define "sequencer.selectorLabels" -}}
 app: {{ include "sequencer.name" . }}
+name: {{ .Values.config.moniker }}-sequencer-metrics
 {{- end }}
