@@ -47,7 +47,7 @@ config:
       enabled: false
       port: 6060
       additionalLabels:
-        release: kube-prometheus-stack      
+        release: kube-prometheus-stack
 
   faucet:
     proxyCount: 1
