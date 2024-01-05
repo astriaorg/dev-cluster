@@ -43,6 +43,9 @@ spec:
   {{- if $.Values.storage.local }}
   storageClassName: {{ $.Values.config.moniker }}-{{ $value.persistentVolumeName }}-local
   {{- end }}
+  {{- if $value.storageClassName }}
+  storageClassName: {{ $value.storageClassName }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:
