@@ -40,8 +40,14 @@ config:
       # OptimismPortal contract was deployed at.
       initialEthereumL1BlockHeight: 1
     metrics:
-      # set to enable prometheus metrics 
+      # set to enable prometheus metrics
       enabled: false
+    serviceMonitor:
+      # set to enable port svc and service monitor
+      enabled: false
+      port: 6060
+      additionalLabels:
+        release: kube-prometheus-stack      
 
   faucet:
     proxyCount: 1
@@ -222,3 +228,4 @@ ports:
   gossipnet: 2451
   faucet: 8080
   blockscout: 4000
+  metrics: 6060

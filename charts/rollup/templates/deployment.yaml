@@ -50,6 +50,10 @@ spec:
               name: ws-rpc
             - containerPort: {{ .Values.ports.executionGRPC }}
               name: execution-grpc
+            {{- if .Values.config.rollup.metrics.enabled }} 
+            - containerPort: {{ .Values.ports.metrics }}
+              name: geth-metrics
+            {{- end }}              
         - name: composer
           image: {{ .Values.images.composer }}
           command: [ "/usr/local/bin/astria-composer" ]
