@@ -39,6 +39,9 @@ config:
       # The block height of the Ethereum L1 chain that the
       # OptimismPortal contract was deployed at.
       initialEthereumL1BlockHeight: 1
+    metrics:
+      # set to enable prometheus metrics 
+      enabled: false
 
   faucet:
     proxyCount: 1
