@@ -86,9 +86,9 @@ ports:
 
 # ServiceMonitor configuration
 serviceMonitor:
-  enabled: true
+  enabled: false
   port: 26660
-  labels:
+  additionalLabels:
     release: kube-prometheus-stack
 
 storage:
