@@ -44,6 +44,9 @@ spec:
   {{- if $.Values.storage.local }}
   storageClassName: {{ $label }}-{{ $value.persistentVolumeName }}-local
   {{- end }}
+  {{- if $value.storageClassName }}
+  storageClassName: {{ $value.storageClassName }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:
