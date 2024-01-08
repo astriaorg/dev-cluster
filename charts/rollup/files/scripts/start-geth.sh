@@ -7,4 +7,5 @@ exec geth --datadir $data_dir/ --networkid=$evm_network_id \
   --ws --ws.addr "0.0.0.0" --ws.port $executor_host_ws_port --ws.origins='*' \
   --grpc --grpc.addr "0.0.0.0" --grpc.port $executor_host_grpc_port \
   {{ if .Values.config.rollup.archiveNode }}--gcmode "archive" --txlookuplimit "0" {{- end }} \
-  {{ if .Values.config.rollup.metrics }} "enabled" --metrics --metrics.addr "0.0.0.0" {{- end }}
+  {{ if .Values.config.rollup.metrics.enabled }} --metrics --metrics.addr "0.0.0.0"  --metrics.port {{ .Values.ports.metrics }} {{- end }}
+  
