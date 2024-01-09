@@ -34,3 +34,17 @@ spec:
   type: NodePort
   {{- end }}
 ---
+{{- if .Values.serviceMonitor.enabled }} 
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.config.moniker }}-sequencer-metrics
+  namespace: {{ .Values.global.namespace }}
+spec:
+  selector:
+    app: {{ .Values.config.moniker }}-sequencer
+  ports:
+    - name: cometbft-metrics
+      port: {{ .Values.ports.cometBFTMETRICS }}
+      targetPort: cometbft-metrics
+{{- end }}

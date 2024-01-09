@@ -30,3 +30,26 @@ Return the appropriate apiVersion for ingress.
 {{- print "extensions/v1beta1" }}
 {{- end }}
 {{- end }}
+
+
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "sequencer.name" -}}
+{{- default .Values.config.moniker | trunc 63 | trimSuffix "-" }}-sequencer
+{{- end }}
+
+{{/*
+Common labels
+*/}}
+{{- define "sequencer.labels" -}}
+{{ include "sequencer.selectorLabels" . }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "sequencer.selectorLabels" -}}
+app: {{ include "sequencer.name" . }}
+name: {{ .Values.config.moniker }}-sequencer-metrics
+{{- end }}
