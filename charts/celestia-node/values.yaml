@@ -26,6 +26,14 @@ ports:
     rpc: 26658
   tokenServer: 5353
 
+resources:
+  requests:
+    cpu: 1
+    memory: 4Gi
+  limits:
+    cpu: 2
+    memory: 8Gi
+
 # When deploying in a production environment should use a secret provider
 # This is configured for use with GCP, need to set own resource names
 # and keys

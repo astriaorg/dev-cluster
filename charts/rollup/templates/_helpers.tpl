@@ -1,4 +1,28 @@
 {{/*
+Expand the name of the chart.
+*/}}
+{{- define "rollup.name" -}}
+{{- default .Values.config.rollup.name | trunc 63 | trimSuffix "-" }}-astria-dev-cluster
+{{- end }}
+
+{{/*
+Common labels
+*/}}
+{{- define "rollup.labels" -}}
+{{ include "rollup.selectorLabels" . }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "rollup.selectorLabels" -}}
+app: {{ include "rollup.name" . }}
+name: geth-metrics
+{{- end }}
+
+
+
+{{/*
 Return if ingress is stable.
 */}}
 {{- define "rollup.ingress.isStable" -}}

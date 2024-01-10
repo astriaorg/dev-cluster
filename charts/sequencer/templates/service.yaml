@@ -17,11 +17,34 @@ metadata:
   name: {{ .Values.config.moniker }}-sequencer-p2p-service
   namespace: {{ .Values.global.namespace }}
 spec:
-  type: NodePort
   selector:
     app: {{ .Values.config.moniker }}-sequencer
   ports:
     - name: cometbft-p2p
+      targetPort: cometbft-p2p
+      {{- if and .Values.config.cometBFT.p2p.externalAddress (not  .Values.ingress.p2p.enabled)}}
+      {{- $parsedExternal := splitList ":" .Values.config.cometBFT.p2p.externalAddress }}
+      {{- $externalAddress := index $parsedExternal 0 }}
+      {{- $externalPort := index $parsedExternal 1 }}
+      port: {{ $externalPort }}
+  type: LoadBalancer
+  loadBalancerIP: {{ $externalAddress }}
+  {{- else }}
       port: {{ .Values.ports.cometBFTP2P }}
-      name: cometbft-p2p
+  type: NodePort
+  {{- end }}
 ---
+{{- if .Values.serviceMonitor.enabled }} 
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.config.moniker }}-sequencer-metrics
+  namespace: {{ .Values.global.namespace }}
+spec:
+  selector:
+    app: {{ .Values.config.moniker }}-sequencer
+  ports:
+    - name: cometbft-metrics
+      port: {{ .Values.ports.cometBFTMETRICS }}
+      targetPort: cometbft-metrics
+{{- end }}

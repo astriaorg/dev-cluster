@@ -41,6 +41,9 @@ spec:
   {{- if $.Values.storage.local }}
   storageClassName: {{ $.Values.config.rollup.name }}-{{ $value.persistentVolumeName }}-local
   {{- end }}
+  {{- if $value.storageClassName }}
+  storageClassName: {{ $value.storageClassName }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:
@@ -59,6 +62,9 @@ metadata:
 spec:
   {{- if $.Values.storage.local }}
   storageClassName: {{ $.Values.config.rollup.name }}-{{ $value.persistentVolumeName }}-local
+  {{- end }}
+  {{- if $value.storageClassName }}
+  storageClassName: {{ $value.storageClassName }}
   {{- end }}
   accessModes:
     - ReadWriteOnce

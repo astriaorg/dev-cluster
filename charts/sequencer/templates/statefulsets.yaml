@@ -66,6 +66,10 @@ spec:
               name: cometbft-p2p
             - containerPort: {{ .Values.ports.cometBFTRPC }}
               name: cometbft-rpc
+            {{- if .Values.serviceMonitor.enabled }} 
+            - containerPort: {{ .Values.ports.cometBFTMETRICS }}
+              name: cometbft-metrics
+            {{- end }}
       volumes:
         - name: cometbft-config-volume
           configMap:

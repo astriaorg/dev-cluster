@@ -25,14 +25,14 @@ config:
     # - "FirmOnly" -> blocks are only pulled from DA
     # - "SoftAndFirm" -> blocks are pulled from both the sequencer and DA
     executionCommitLevel: 'SoftAndFirm'
-    # Definitions around who has funding on startup
-    genesisAccounts:
+    # Initial genesis state allocations, can deploy contracts or set account balances
+    genesisAlloc:
       - address: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
-        # The balance must be a string due to size
-        balance: "1000000000000000000000000000"
+        value:
+          # The balance must be a string due to size
+          balance: "1000000000000000000000000000"
     extraDataOverride: ""
     overrideGenesisExtraData: true
-
     optimism:
       # set to true to enable op-stack integration, and setup rest of config
       enabled: false
@@ -43,6 +43,15 @@ config:
       # The block height of the Ethereum L1 chain that the
       # OptimismPortal contract was deployed at.
       initialEthereumL1BlockHeight: 1
+    metrics:
+      # set to enable prometheus metrics
+      enabled: false
+    serviceMonitor:
+      # set to enable port svc and service monitor
+      enabled: false
+      port: 6060
+      additionalLabels:
+        release: kube-prometheus-stack
 
   faucet:
     enabled: true
@@ -233,3 +242,4 @@ ports:
   gossipnet: 2451
   faucet: 8080
   blockscout: 4000
+  metrics: 6060

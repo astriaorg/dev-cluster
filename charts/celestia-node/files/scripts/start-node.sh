@@ -23,7 +23,7 @@ fi
 export CELESTIA_CUSTOM=$CELESTIA_CUSTOM_TO_BE
 {{- end }}
 
-/bin/celestia {{ .Values.config.type }} start \
+exec /bin/celestia {{ .Values.config.type }} start \
   --node.store /celestia \
   {{- if not $isCustomNetwork }}
   --core.ip {{ .Values.config.coreIp }} \

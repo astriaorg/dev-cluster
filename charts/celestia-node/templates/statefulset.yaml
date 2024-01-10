@@ -49,6 +49,10 @@ spec:
               protocol: TCP
           {{- end }}
           {{- end }}
+        {{- if .Values.resources }}
+          resources:
+            {{- toYaml .Values.resources | trim | nindent 12 }}
+        {{- end }}          
           volumeMounts:
             - name: {{ $label }}-scripts-vol
               mountPath: /celestia/scripts
