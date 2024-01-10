@@ -14,10 +14,10 @@
         "terminalTotalDifficulty": 0,
         "terminalTotalDifficultyPassed": true,
         "ethash": {},
-        {{- if .Values.config.rollup.extraDataOverride }}
-        "astriaExtraDataOverride": "{{ .Values.config.rollup.extraDataOverride }}",
+        {{- if .Values.config.rollup.genesis.extraDataOverride }}
+        "astriaExtraDataOverride": "{{ .Values.config.rollup.genesis.extraDataOverride }}",
         {{ end -}}
-        "astriaOverrideGenesisExtraData": {{ .Values.config.rollup.overrideGenesisExtraData }},
+        "astriaOverrideGenesisExtraData": {{ .Values.config.rollup.genesis.overrideGenesisExtraData }},
         "astriaSequencerInitialHeight": {{ .Values.config.sequencer.initialBlockHeight }},
         "astriaDataAvailabilityInitialHeight": {{ .Values.config.celestia.initialBlockHeight }},
         "astriaDataAvailabilityHeightVariance": {{ .Values.config.celestia.heightVariance }}
@@ -25,7 +25,7 @@
     "difficulty": "10000000",
     "gasLimit": "8000000",
     "alloc": {
-    {{- range $index, $value := .Values.config.rollup.genesisAlloc }}
+    {{- range $index, $value := .Values.config.rollup.genesis.alloc }}
         {{- if $index }},{{- end }}
         "{{ $value.address }}": {{ toPrettyJson $value.value | indent 8 | trim }}
     {{- end }}
