@@ -25,7 +25,7 @@ appVersion: "0.4.0"
 
 dependencies:
   - name: celestia-node
-    version: "0.1.6"
+    version: "0.1.7"
     repository: "file://../celestia-node"
     condition: celestia-node.enabled
 
