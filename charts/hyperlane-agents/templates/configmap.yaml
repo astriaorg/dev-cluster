@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Values.global.namespace }}
 data:
   agent-config.json: |
-    {{- .Files.Get .Values.config.agentConfig | nindent 4 }}
+    {{- toPrettyJson .Values.config.agentConfigData | nindent 4 | trim }}
 ---
 apiVersion: v1
 kind: ConfigMap
