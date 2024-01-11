@@ -67,11 +67,6 @@ metadata:
 data:
   home_dir: "/home/geth"
   data_dir: "/home/geth/{{ .Values.config.rollup.name }}geth"
-  executor_host_http_port: "{{ .Values.ports.jsonRPC }}"
-  executor_host_grpc_port: "{{ .Values.ports.executionGRPC }}"
-  executor_host_ws_port: "{{ .Values.ports.wsRPC }}"
-  evm_network_id: "{{ .Values.config.rollup.networkId }}"
-  evm_chain_id: "{{ .Values.config.rollup.chainId }}"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -82,9 +77,7 @@ data:
   geth-genesis.json: |
     {{- tpl (.Files.Get "files/genesis/geth-genesis.json") $ | nindent 4 }}
   init-geth.sh: |
-    {{- .Files.Get "files/scripts/init-geth.sh" | nindent 4 }}
-  start-geth.sh: |
-    {{- tpl (.Files.Get "files/scripts/start-geth.sh") $ | nindent 4 }}
+    {{- tpl (.Files.Get "files/scripts/init-geth.sh") $ | nindent 4 }}
 ---
 apiVersion: v1
 kind: ConfigMap

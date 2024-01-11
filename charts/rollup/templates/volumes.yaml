@@ -26,8 +26,6 @@ spec:
               values:
                 - astria-dev-cluster-control-plane
                 - astria-dev-cluster-worker
-                - astria-dev-cluster-worker2
-                - astria-dev-cluster-worker3
 ---
     {{- end }}
 apiVersion: v1

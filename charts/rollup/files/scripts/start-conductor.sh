@@ -2,7 +2,6 @@
 
 set -o errexit -o nounset -o pipefail
 
-
 # Request Celestia token if connecting to celestia
 BEARER_TOKEN=""
 if [ "$ASTRIA_CONDUCTOR_EXECUTION_COMMIT_LEVEL" != "SoftOnly" ]; then

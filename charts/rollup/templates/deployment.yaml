@@ -31,7 +31,35 @@ spec:
                 name: {{ .Values.config.rollup.name }}-geth-env
       containers:
         - name: geth
-          command: [ "/scripts/start-geth.sh" ]
+          command: [ "geth" ]
+          args:
+            - --datadir=$(data_dir)/
+            - --networkid={{ .Values.config.rollup.networkId }}
+            - --http
+            - --http.addr=0.0.0.0
+            - --http.port={{ .Values.ports.jsonRPC }}
+            - --http.corsdomain=*
+            - --http.vhosts=*
+            - --http.api=eth,net,web3,debug,txpool
+            - --ws
+            - --ws.addr=0.0.0.0
+            - --ws.port={{ .Values.ports.wsRPC }}
+            - --ws.origins=*
+            - --grpc
+            - --grpc.addr=0.0.0.0
+            - --grpc.port={{ .Values.ports.executionGRPC }}
+            - --db.engine={{ .Values.config.rollup.dbEngine }}
+            {{- if .Values.config.rollup.archiveNode }}
+            - --gcmode=archive
+            - --history.transactions=0
+            {{- else }}
+            - --state.scheme=path
+            {{- end }}
+            {{ if .Values.config.rollup.metrics.enabled }} 
+            - --metrics 
+            - --metrics.addr=0.0.0.0
+            - --metrics.port={{ .Values.ports.metrics }}
+            {{- end }}
           image: {{ .Values.images.geth }}
           volumeMounts:
             - mountPath: /scripts/
@@ -112,6 +140,7 @@ spec:
               secretProviderClass: sequencer-private-key
         {{- end }}
 ---
+{{- if .Values.config.faucet.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -174,6 +203,8 @@ spec:
               secretProviderClass: evm-private-key
         {{- end }}
 ---
+{{- end }}
+{{- if .Values.config.blockscout.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -262,3 +293,5 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+---
+{{- end }}

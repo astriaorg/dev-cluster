@@ -4,6 +4,7 @@
 {{- $ingressSupportsPathType := eq (include "rollup.ingress.supportsPathType" .) "true" -}}
 
 {{- range $service, $ingress := .Values.ingress.services }}
+{{- if $ingress.enabled -}}
 {{- $servicePort := $ingress.service.port -}}
 {{- $serviceName := $ingress.service.name -}}
 {{- $ingressPath := $ingress.path -}}
@@ -62,5 +63,6 @@ spec:
   tls:
     {{- tpl (toYaml $ingress.tls) $ | nindent 4 }}
   {{- end }}
+{{- end }}
 {{- end }}
 {{- end }}

@@ -15,6 +15,8 @@ config:
     name: astria
     # Chain ID used for submission to shared sequencer, and generating DA namespace
     chainId: astria
+    # Can be set to 'pebble' or 'leveldb'
+    dbEngine: pebble
     # Set to true to keep history of all blocks
     archiveNode: false
     # EVM network ID used by the chain
@@ -24,12 +26,17 @@ config:
     # - "FirmOnly" -> blocks are only pulled from DA
     # - "SoftAndFirm" -> blocks are pulled from both the sequencer and DA
     executionCommitLevel: 'SoftAndFirm'
-    # Initial genesis state allocations, can deploy contracts or set account balances
-    genesisAlloc:
-      - address: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
-        value:
-          # The balance must be a string due to size
-          balance: "1000000000000000000000000000"
+    # Configuration specific to EVM rollup genesis
+    genesis:
+      # Set to a hex set of bytes if your rollup has manually configured extra data
+      extraDataOverride: ""
+      # If set to true the genesis block will contain extra data
+      overrideGenesisExtraData: true
+      alloc:
+        - address: "0xaC21B97d35Bf75A7dAb16f35b111a50e78A72F30"
+          value:
+            # The balance must be a string due to size
+            balance: "1000000000000000000000000000"
     optimism:
       # set to true to enable op-stack integration, and setup rest of config
       enabled: false
@@ -51,6 +58,7 @@ config:
         release: kube-prometheus-stack
 
   faucet:
+    enabled: true
     proxyCount: 1
     # The account from which the faucet disburses funds, likely want to have
     # the corresponding account given a balance in genesis accounts.
@@ -78,6 +86,11 @@ config:
     # this must be set to access celestia network.
     rpc: ""
     token: ""
+    initialBlockHeight: 1
+    heightVariance: 10
+
+  blockscout:
+    enabled: true
 
 celestia-node:
   # Strongly recommend leaving enabled when not doing `SoftOnly` execution
@@ -99,9 +112,9 @@ celestia-node:
 
 images:
   # Core images for the rollup, developed for Astria
-  geth: "ghcr.io/astriaorg/go-ethereum:0.4.1"
-  conductor: "ghcr.io/astriaorg/conductor:0.11.0--conductor"
-  composer: "ghcr.io/astriaorg/composer:0.3.0--composer"
+  geth: "ghcr.io/astriaorg/go-ethereum:0.5.1"
+  conductor: "ghcr.io/astriaorg/conductor:0.11.1"
+  composer: "ghcr.io/astriaorg/composer:0.3.1"
 
   # Rollup faucet
   faucet: "ghcr.io/astriaorg/ria-faucet:0.0.1"
@@ -140,6 +153,7 @@ ingress:
   className: nginx
   services:
     rpc:
+      enabled: true
       hosts:
         - executor.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
       path: /
@@ -157,6 +171,7 @@ ingress:
       #    hosts:
       #      - chart-example.local
     ws:
+      enabled: true
       hosts:
         - ws-executor.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
       path: /
@@ -174,6 +189,7 @@ ingress:
       #    hosts:
       #      - chart-example.local
     faucet:
+      enabled: true
       hosts:
         - faucet.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
       path: /
@@ -191,6 +207,7 @@ ingress:
       #    hosts:
       #      - chart-example.local
     explorer:
+      enabled: true
       hosts:
         - blockscout.{{ .Values.config.rollup.name }}.{{ .Values.ingress.hostname }}
       path: /

@@ -40,4 +40,6 @@ data:
   ASTRIA_SEQUENCER_LISTEN_ADDR: "127.0.0.1:{{ .Values.ports.sequencerABCI }}"
   ASTRIA_SEQUENCER_DB_FILEPATH: "/sequencer/penumbra.db"
   ASTRIA_SEQUENCER_ENABLE_MINT: "false"
+  # Socket address for gRPC server
+  ASTRIA_SEQUENCER_GRPC_ADDR: "127.0.0.1:{{ .Values.ports.sequencerGRPC }}"
 ---
