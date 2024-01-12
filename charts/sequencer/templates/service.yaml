@@ -46,5 +46,5 @@ spec:
   ports:
     - name: cometbft-metrics
       port: {{ .Values.ports.cometBFTMETRICS }}
-      targetPort: cometbft-metrics
+      targetPort: cometbft-metric
 {{- end }}
