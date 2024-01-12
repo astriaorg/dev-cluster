@@ -17,7 +17,7 @@ config:
 
 images:
   pullPolicy: IfNotPresent
-  node: ghcr.io/celestiaorg/celestia-node:v0.12.1
+  node: ghcr.io/celestiaorg/celestia-node:v0.12.3
   tokenServer: "busybox:1.35.0-musl"
 
 
