@@ -57,5 +57,6 @@ exec celestia bridge start \
   --gateway \
   --gateway.addr 0.0.0.0 \
   --gateway.port "$bridge_host_port" \
+  --rpc.addr 0.0.0.0 \
   --rpc.port "$bridge_rpc_port" \
   --keyring.accname "$validator_key_name"
