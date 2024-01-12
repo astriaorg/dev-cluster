@@ -17,7 +17,7 @@ spec:
     matchLabels:
       {{- include "sequencer.selectorLabels" . | nindent 6 }}
   endpoints:
-    - port: {{ .Values.serviceMonitor.port }}
+    - port: cometbft-metrics
       path: /metrics
       {{- with .Values.serviceMonitor.interval }}
       interval: {{ . }}
