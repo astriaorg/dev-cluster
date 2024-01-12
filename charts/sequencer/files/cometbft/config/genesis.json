@@ -6,7 +6,7 @@
       {{- if $index }},{{- end }}
       {
         "address": "{{  $value.address }}",
-        "balance": {{ $value.balance | replace "\"" "" }}
+        "balance": {{ toString $value.balance | replace "\"" "" }}
       }
       {{- end }}
     ],
