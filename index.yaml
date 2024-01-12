@@ -362,6 +362,29 @@ entries:
   astria-sequencer-validator:
   - apiVersion: v2
     appVersion: 0.8.0
+    created: "2024-01-12T20:55:18.897103451Z"
+    dependencies:
+    - condition: sequencer-relayer.enabled
+      name: sequencer-relayer
+      repository: file://../sequencer-relayer
+      version: 0.3.2
+    description: A Helm chart for deploying a k8s validating node on the Astria Sequencer
+      Network, which writes data to Celestia.
+    digest: 38aa9287336c2cb457202aa6e0d6de0942ebb426ee0ed3614e35411fd58f857a
+    maintainers:
+    - name: wafflesvonmaple
+      url: astria.org
+    - name: steezeburger
+      url: astria.org
+    - name: joroshiba
+      url: astria.org
+    name: astria-sequencer-validator
+    type: application
+    urls:
+    - https://github.com/astriaorg/dev-cluster/releases/download/astria-sequencer-validator-0.9.3/astria-sequencer-validator-0.9.3.tgz
+    version: 0.9.3
+  - apiVersion: v2
+    appVersion: 0.8.0
     created: "2024-01-12T03:26:41.724871467Z"
     dependencies:
     - condition: sequencer-relayer.enabled
@@ -1021,4 +1044,4 @@ entries:
     urls:
     - https://astriaorg.github.io/dev-cluster/sequencer-relayer-0.3.0.tgz
     version: 0.3.0
-generated: "2024-01-12T20:51:56.966468877Z"
+generated: "2024-01-12T20:55:18.897224286Z"
