@@ -17,7 +17,7 @@ spec:
     matchLabels:
       app: {{ .Values.config.rollup.name }}-astria-dev-cluster
   endpoints:
-    - port: {{ .Values.config.rollup.serviceMonitor.port }}
+    - port: geth-metrics
       path: /debug/metrics/prometheus
       {{- with .Values.config.rollup.serviceMonitor.interval }}
       interval: {{ . }}
