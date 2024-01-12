@@ -14,20 +14,31 @@ function set_token() {
   echo "$TOKEN" >"$home_dir"/token-server/index.html
 }
 
+function get_genesis() {
+  local genesis_hash=$(curl -s -S -X GET "http://127.0.0.1:$celestia_app_host_port/block?height=1" | jq -r '.result.block_id.hash')
+  echo "$genesis_hash"
+}
+
+function wait_for_genesis() {
+  local genesis_hash=$(get_genesis)
+
+  while [ "$genesis_hash" = "null" ]; do
+    sleep 1
+    genesis_hash=$(get_genesis)
+  done
+
+  echo "$genesis_hash"
+}
+
 # only create token if it does not already exist
 # FIXME - would it be bad to get a new token on every start?
 if [ ! -f "$home_dir"/token-server/index.html ]; then
   set_token
 fi
 
-genesis_hash=$(curl -s -S -X GET "http://127.0.0.1:$celestia_app_host_port/block?height=1" | jq -r '.result.block_id.hash')
-  echo 
-  if [ "$genesis_hash" = "null" ]; then
-    echo "did not receive genesis hash from celestia; exiting"
-    exit 1
-  else
-    echo "genesis hash received: $genesis_hash"
-  fi
+echo "waiting for genesis hash from celestia..."
+genesis_hash=$(wait_for_genesis)
+echo "genesis hash received: $genesis_hash"
 
 export CELESTIA_CUSTOM="test:$genesis_hash"
 export GOLOG_LOG_LEVEL="debug"
@@ -44,6 +55,7 @@ exec celestia bridge start \
   --core.rpc.port "$celestia_app_host_port" \
   --core.grpc.port "$celestia_app_grpc_port" \
   --gateway \
+  --gateway.addr 0.0.0.0 \
   --gateway.port "$bridge_host_port" \
   --rpc.port "$bridge_rpc_port" \
   --keyring.accname "$validator_key_name"

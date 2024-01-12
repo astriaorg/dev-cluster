@@ -81,7 +81,7 @@ spec:
               name: bridge-jsonrpc
           startupProbe:
             httpGet:
-              path: /header/1
+              path: /head
               port: bridge-rest
             failureThreshold: 30
             periodSeconds: 10
