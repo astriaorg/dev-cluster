@@ -1,7 +1,15 @@
 {
   "app_hash": "",
   "app_state": {
-    "accounts": {{ toPrettyJson .Values.config.sequencer.genesisAccounts | indent 4 | trim }},
+    "accounts": [
+      {{- range $index, $value := .Values.config.sequencer.genesisAccounts }}
+      {{- if $index }},{{- end }}
+      {
+        "address": "{{  $value.address }}",
+        "balance": {{ toString $value.balance | replace "\"" "" }}
+      }
+      {{- end }}
+    ],
     "authority_sudo_key": "{{ .Values.config.sequencer.sudoAuthorityKey }}",
     "native_asset_base_denomination": "nria"
   },
