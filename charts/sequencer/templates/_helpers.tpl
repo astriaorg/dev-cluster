@@ -51,5 +51,4 @@ Selector labels
 */}}
 {{- define "sequencer.selectorLabels" -}}
 app: {{ include "sequencer.name" . }}
-name: {{ .Values.config.moniker }}-sequencer-metrics
 {{- end }}

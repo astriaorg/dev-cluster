@@ -44,7 +44,7 @@ spec:
   selector:
     app: {{ .Values.config.moniker }}-sequencer
   ports:
-    - name: cometbft-metrics
+    - name: cometbft-metric
       port: {{ .Values.ports.cometBFTMETRICS }}
       targetPort: cometbft-metric
 {{- end }}
