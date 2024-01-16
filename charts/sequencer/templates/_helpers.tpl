@@ -50,5 +50,4 @@ Common labels
 Selector labels
 */}}
 {{- define "sequencer.selectorLabels" -}}
-app: {{ include "sequencer.name" . }}
 {{- end }}
