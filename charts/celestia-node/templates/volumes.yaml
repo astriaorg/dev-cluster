@@ -7,7 +7,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ $label }}-{{ $value.persistentVolumeName }}-pv
+  name: {{ $label }}-{{ $key }}-pvc
 spec:
   capacity:
     storage: {{ $value.size }}
@@ -15,7 +15,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: {{ $label }}-{{ $value.persistentVolumeName }}-local
+  storageClassName: {{ $label }}-{{ $key }}-local
   local:
     path: {{ tpl $value.path . }}
   nodeAffinity:
@@ -32,7 +32,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ $label }}-{{ $value.persistentVolumeName }}-pvc
+  name: {{ $label }}-{{ $key }}-pvc
   namespace: {{ $.Values.global.namespace }}
   labels:
     "app.kubernetes.io/name": "{{ $label }}-{{ $.Chart.Name }}"
@@ -40,7 +40,7 @@ metadata:
     "helm.sh/chart": {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
 spec:
   {{- if $.Values.storage.local }}
-  storageClassName: {{ $label }}-{{ $value.persistentVolumeName }}-local
+  storageClassName: {{ $label }}-{{ $key }}-local
   {{- end }}
   {{- if $value.storageClassName }}
   storageClassName: {{ $value.storageClassName }}
