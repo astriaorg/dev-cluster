@@ -17,7 +17,6 @@ Selector labels
 */}}
 {{- define "rollup.selectorLabels" -}}
 app: {{ include "rollup.name" . }}
-name: geth-metrics
 {{- end }}
 
 
