@@ -56,6 +56,28 @@ config:
       port: 6060
       additionalLabels:
         release: kube-prometheus-stack
+    alerting:
+      enabled: false
+      interval: ""
+      additionalLabels:
+        release: kube-prometheus-stack
+      annotations: {}
+      # scrapeTimeout: 10s
+      # path: /metrics
+      prometheusRule:
+        enabled: true
+        additionalLabels:
+          release: kube-prometheus-stack
+        namespace: monitoring
+        rules:
+        - alert: Cometbft is Unhealthy 
+          expr: cometbft_healthy == 0 # Insert your query Expression 
+          for: 1m # Rough number but should be enough to init warn
+          labels:
+            severity: warning
+          annotations:
+            summary: Cometbft is Unhealthy (instance {{ $labels.instance }})
+            description: "Cometbft is Unhealthy (target {{ $labels.instance }})"
 
   faucet:
     enabled: true
