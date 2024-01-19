@@ -9,7 +9,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  jobLabel: cometbft-metrics
+  jobLabel: cometbft-metric
   namespaceSelector:
     matchNames:
       - {{ .Values.global.namespace }}
@@ -17,7 +17,7 @@ spec:
     matchLabels:
       {{- include "sequencer.selectorLabels" . | nindent 6 }}
   endpoints:
-    - port: cometbft-metrics
+    - port: cometbft-metric
       path: /metrics
       {{- with .Values.serviceMonitor.interval }}
       interval: {{ . }}
