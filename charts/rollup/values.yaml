@@ -70,9 +70,9 @@ config:
           release: kube-prometheus-stack
         namespace: monitoring
         rules:
-        - alert: Cometbft is Unhealthy 
-          expr: cometbft_healthy == 0 # Insert your query Expression 
-          for: 1m # Rough number but should be enough to init warn
+        - alert: Cometbft is Unhealthy
+          expr: cometbft_healthy == 0  # Insert your query Expression 
+          for: 1m  # Rough number but should be enough to init warn
           labels:
             severity: warning
           annotations:
