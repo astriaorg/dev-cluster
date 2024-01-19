@@ -71,7 +71,7 @@ config:
         namespace: monitoring
         rules:
         - alert: Cometbft is Unhealthy
-          expr: cometbft_healthy == 0  # Insert your query Expression 
+          expr: cometbft_healthy == 0  # Insert your query Expression
           for: 1m  # Rough number but should be enough to init warn
           labels:
             severity: warning
