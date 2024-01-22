@@ -3,6 +3,29 @@ entries:
   astria-evm-rollup:
   - apiVersion: v2
     appVersion: 0.5.2
+    created: "2024-01-22T20:36:40.790574198Z"
+    dependencies:
+    - condition: celestia-node.enabled
+      name: celestia-node
+      repository: file://../celestia-node
+      version: 0.1.10
+    description: A Helm chart for EVM rollup in k8s deployed on top of Astria Sequencer
+      Network + Celestia.
+    digest: 455d04792477addea65c8a1203ee31878a44b43075240b4a14cdd274458a8f06
+    maintainers:
+    - name: wafflesvonmaple
+      url: astria.org
+    - name: steezeburger
+      url: astria.org
+    - name: joroshiba
+      url: astria.org
+    name: astria-evm-rollup
+    type: application
+    urls:
+    - https://github.com/astriaorg/dev-cluster/releases/download/astria-evm-rollup-0.8.6/astria-evm-rollup-0.8.6.tgz
+    version: 0.8.6
+  - apiVersion: v2
+    appVersion: 0.5.2
     created: "2024-01-19T18:25:28.799783095Z"
     dependencies:
     - condition: celestia-node.enabled
@@ -792,6 +815,23 @@ entries:
   celestia-node:
   - apiVersion: v2
     appVersion: 0.12.3
+    created: "2024-01-22T20:36:40.928306431Z"
+    description: A Helm chart for deploying a Celestia light node.
+    digest: 9759d4e0404f5b3c96ff1a1117a418c59b8ce29c9cf2544d2cb74d4b852ab144
+    maintainers:
+    - name: wafflesvonmaple
+      url: astria.org
+    - name: steezeburger
+      url: astria.org
+    - name: joroshiba
+      url: astria.org
+    name: celestia-node
+    type: application
+    urls:
+    - https://github.com/astriaorg/dev-cluster/releases/download/celestia-node-0.1.10/celestia-node-0.1.10.tgz
+    version: 0.1.10
+  - apiVersion: v2
+    appVersion: 0.12.3
     created: "2024-01-16T23:24:35.66954216Z"
     description: A Helm chart for deploying a Celestia light node.
     digest: b374354e32e53553c422a458b7fc26ef626209b4edfbf8604c3d121c4971ba5e
@@ -1147,4 +1187,4 @@ entries:
     urls:
     - https://astriaorg.github.io/dev-cluster/sequencer-relayer-0.3.0.tgz
     version: 0.3.0
-generated: "2024-01-22T19:32:36.820446975Z"
+generated: "2024-01-22T20:36:40.928521633Z"
