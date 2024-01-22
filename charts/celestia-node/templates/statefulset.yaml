@@ -18,6 +18,10 @@ spec:
       labels:
         app: {{ $label }}
     spec:
+      securityContext:
+        runAsUser: 10001
+        fsGroup: 10001
+        fsGroupChangePolicy: "OnRootMismatch"
       initContainers:
         - name: init-{{ $label }}
           image: {{ .Values.images.node }}
