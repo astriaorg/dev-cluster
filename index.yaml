@@ -669,6 +669,23 @@ entries:
   celestia-local:
   - apiVersion: v2
     appVersion: 1.3.0
+    created: "2024-01-22T19:32:36.820321491Z"
+    description: A Helm chart for Kubernetes
+    digest: dac48454e8716603d577c72bd6fca0710bb6bb8a71ea5dc21c8fd7e2cb095492
+    maintainers:
+    - name: wafflesvonmaple
+      url: astria.org
+    - name: steezeburger
+      url: astria.org
+    - name: joroshiba
+      url: astria.org
+    name: celestia-local
+    type: application
+    urls:
+    - https://github.com/astriaorg/dev-cluster/releases/download/celestia-local-0.3.4/celestia-local-0.3.4.tgz
+    version: 0.3.4
+  - apiVersion: v2
+    appVersion: 1.3.0
     created: "2024-01-12T20:51:56.966357078Z"
     description: A Helm chart for Kubernetes
     digest: 6a06a55095126b5ebdbec10896922451679e5e928d810c55e993e858ca131697
@@ -1130,4 +1147,4 @@ entries:
     urls:
     - https://astriaorg.github.io/dev-cluster/sequencer-relayer-0.3.0.tgz
     version: 0.3.0
-generated: "2024-01-19T18:25:28.940305987Z"
+generated: "2024-01-22T19:32:36.820446975Z"
