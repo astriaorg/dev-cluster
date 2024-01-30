@@ -40,16 +40,16 @@ spec:
             - -faucet.amount=1
             - -proxycount=1
             - -firestoreprojectid=raas-dusk-2
-          {{- if .Values.firestoreEmulator.enabled }}
+          {{- if .Values.firestoreEmulatorConnection.enabled }}
           env:
             - name: FIRESTORE_EMULATOR_HOST
-              value: {{ .Values.firestoreEmulator.host }}
+              value: {{ .Values.firestoreEmulatorConnection.host }}
           {{- end }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: server-port
-              containerPort: {{ .Values.service.port }}
+            - name: {{ .Values.containerPort.name }}
+              containerPort: {{ .Values.containerPort.port }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}

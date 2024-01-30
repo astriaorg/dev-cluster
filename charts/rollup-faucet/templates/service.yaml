@@ -6,8 +6,8 @@ metadata:
     {{- include "rollup-faucet.labels" . | nindent 4 }}
 spec:
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: server-port
-      name: fct-svc-port
+    - port: {{ .Values.service.port.port }}
+      name: {{ .Values.service.port.name }}
+      targetPort: {{ .Values.containerPort.name }}
   selector:
     {{- include "rollup-faucet.selectorLabels" . | nindent 4 }}

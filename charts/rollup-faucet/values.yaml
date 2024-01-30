@@ -10,8 +10,13 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "local"
 
-firestoreEmulator:
+# Needed for local development.
+# NOTE - Connecting is handled in the golang firestore sdk,
+#  that's why you don't see this value being used in the code directly.
+firestoreEmulatorConnection:
   enabled: true
+  # NOTE - `host.docker.internal` is the address of the host machine,
+  #  where emulator will be running for local development.
   host: host.docker.internal:8889
 
 imagePullSecrets: []
@@ -42,16 +47,22 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-service:
-  name: rollup-faucet-svc
+containerPort:
+  name: server-port
   port: 8089
+
+service:
+  name: faucet-service
+  port:
+    name: fct-svc-port
+    port: 8089
 
 ingress:
   name: rollup-faucet-ingress
   enabled: true
   className: nginx
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
+  annotations:
+    kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
     - host: faucet.astria.localdev.me

@@ -1,17 +1,9 @@
 {{- if .Values.ingress.enabled -}}
-{{- $svcPort := .Values.service.port -}}
-{{- if and .Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
-  {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}
-  {{- $_ := set .Values.ingress.annotations "kubernetes.io/ingress.class" .Values.ingress.className}}
-  {{- end }}
-{{- end }}
-{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1
-{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1beta1
-{{- else -}}
-apiVersion: extensions/v1beta1
-{{- end }}
+{{- $ingressApiIsStable := eq (include "rollup-faucet.ingress.isStable" .) "true" -}}
+{{- $ingressSupportsIngressClassName := eq (include "rollup-faucet.ingress.supportsIngressClassName" .) "true" -}}
+{{- $ingressSupportsPathType := eq (include "rollup-faucet.ingress.supportsPathType" .) "true" -}}
+
+apiVersion: {{ include "rollup-faucet.ingress.apiVersion" $ }}
 kind: Ingress
 metadata:
   name: {{ .Values.ingress.name }}
@@ -42,18 +34,18 @@ spec:
         paths:
           {{- range .paths }}
           - path: {{ .path }}
-            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+            {{- if $ingressSupportsPathType }}
             pathType: {{ .pathType }}
             {{- end }}
             backend:
-              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              {{- if $ingressApiIsStable }}
               service:
-                name: faucet-service
+                name: {{ $.Values.service.name }}
                 port:
-                  name: fct-svc-port
+                  name: {{ $.Values.service.port.name }}
               {{- else }}
-              serviceName: faucet-service
-              servicePort: fct-svc-port
+              serviceName: {{ $.Values.service.name }}
+              servicePort: {{ $.Values.service.port.name }}
               {{- end }}
           {{- end }}
     {{- end }}
