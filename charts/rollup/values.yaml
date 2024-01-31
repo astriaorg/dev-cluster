@@ -70,14 +70,14 @@ config:
           release: kube-prometheus-stack
         namespace: monitoring
         rules:
-        - alert: Cometbft is Unhealthy
-          expr: cometbft_healthy == 0  # Insert your query Expression
-          for: 1m  # Rough number but should be enough to init warn
+        - alert: Geth_Slow_Finalized
+          expr: increase(chain_head_finalized{namespace="astria-dusk3-cluster"}[5m]) < 20  # Insert your query Expression
+          for: 5m  # Rough number but should be enough to init warn
           labels:
-            severity: warning
+            severity: critical
           annotations:
-            summary: Cometbft is Unhealthy (instance {{ $labels.instance }})
-            description: "Cometbft is Unhealthy (target {{ $labels.instance }})"
+            summary: Slow Chain Head Finalized (instance {{ $labels.instance }})
+            description: "Chain Head Finalized on {{ $labels.namespace }} is increasing at a rate slower then 20 blocks per 5 minute\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   faucet:
     enabled: true
