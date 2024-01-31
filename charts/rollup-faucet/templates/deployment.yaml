@@ -36,10 +36,10 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           command: [ "/app/eth-faucet" ]
           args:
-            - -httpport=8089
-            - -faucet.amount=1
-            - -proxycount=1
-            - -firestoreprojectid=raas-dusk-2
+            - -httpport={{ .Values.containerPort.port }}
+            - -faucet.amount={{ .Values.faucetConfig.amount }}
+            - -proxycount={{ .Values.faucetConfig.proxyCount }}
+            - -firestoreprojectid={{ .Values.faucetConfig.firestoreProjectID }}
           {{- if .Values.firestoreEmulatorConnection.enabled }}
           env:
             - name: FIRESTORE_EMULATOR_HOST
