@@ -12,6 +12,10 @@ data:
   ASTRIA_SEQUENCER_RELAYER_RPC_PORT: "{{ .Values.ports.relayerRPC }}"
   ASTRIA_SEQUENCER_RELAYER_RELAY_ONLY_VALIDATOR_KEY_BLOCKS: "false"
   ASTRIA_SEQUENCER_RELAYER_CELESTIA_BEARER_TOKEN: "{{ .Values.config.relayer.celestiaBearerToken }}"
+  # false: the service will write to stdout if connected to a TTY. See `.Values.global.useTTY`
+  ASTRIA_SEQUENCER_RELAYER_FORCE_STDOUT: "false"
+  # false: the service will not try to connect to an OTEL endpoint.
+  ASTRIA_SEQUENCER_RELAYER_NO_OTEL: "false"
   TOKEN_SERVER: "{{ .Values.config.relayer.tokenServer }}"
 ---
 apiVersion: v1

@@ -21,6 +21,10 @@ data:
   ASTRIA_CONDUCTOR_ETHEREUM_L1_URL: "{{ .Values.config.rollup.optimism.ethereumL1Websocket }}"
   ASTRIA_CONDUCTOR_OPTIMISM_PORTAL_CONTRACT_ADDRESS: "{{ .Values.config.rollup.optimism.portalContractAddress }}"
   ASTRIA_CONDUCTOR_INITIAL_ETHEREUM_L1_BLOCK_HEIGHT: "{{ .Values.config.rollup.optimism.initialEthereumL1BlockHeight }}"
+  # false: the service will write to stdout if connected to a TTY. See `.Values.global.useTTY`
+  ASTRIA_CONDUCTOR_FORCE_STDOUT: "false"
+  # false: the service will not try to connect to an OTEL endpoint.
+  ASTRIA_CONDUCTOR_NO_OTEL: "false"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -44,6 +48,10 @@ data:
   {{- if not .Values.secretProvider.enabled }}
   ASTRIA_COMPOSER_PRIVATE_KEY: "{{ .Values.config.sequencer.privateKey }}"
   {{- end }}
+  # false: the service will write to stdout if connected to a TTY. See `.Values.global.useTTY`
+  ASTRIA_COMPOSER_FORCE_STDOUT: "false"
+  # false: the service will not try to connect to an OTEL endpoint.
+  ASTRIA_COMPOSER_NO_OTEL: "false"
 ---
 apiVersion: v1
 kind: ConfigMap

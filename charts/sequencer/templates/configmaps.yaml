@@ -42,4 +42,8 @@ data:
   ASTRIA_SEQUENCER_ENABLE_MINT: "false"
   # Socket address for gRPC server
   ASTRIA_SEQUENCER_GRPC_ADDR: "127.0.0.1:{{ .Values.ports.sequencerGRPC }}"
+  # false: the service will write to stdout if connected to a TTY. See `.Values.global.useTTY`
+  ASTRIA_SEQUENCER_FORCE_STDOUT: "false"
+  # false: the service will not try to connect to an OTEL endpoint.
+  ASTRIA_SEQUENCER_NO_OTEL: "false"
 ---
