@@ -16,6 +16,7 @@ data:
   ASTRIA_SEQUENCER_RELAYER_FORCE_STDOUT: "false"
   # false: the service will not try to connect to an OTEL endpoint.
   ASTRIA_SEQUENCER_RELAYER_NO_OTEL: "false"
+  ASTRIA_SEQUENCER_RELAYER_PRETTY_PRINT: "true"
   TOKEN_SERVER: "{{ .Values.config.relayer.tokenServer }}"
 ---
 apiVersion: v1

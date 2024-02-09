@@ -25,6 +25,7 @@ data:
   ASTRIA_CONDUCTOR_FORCE_STDOUT: "false"
   # false: the service will not try to connect to an OTEL endpoint.
   ASTRIA_CONDUCTOR_NO_OTEL: "false"
+  ASTRIA_CONDUCTOR_PRETTY_PRINT: "true"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -52,6 +53,7 @@ data:
   ASTRIA_COMPOSER_FORCE_STDOUT: "false"
   # false: the service will not try to connect to an OTEL endpoint.
   ASTRIA_COMPOSER_NO_OTEL: "false"
+  ASTRIA_COMPOSER_PRETTY_PRINT: "true"
 ---
 apiVersion: v1
 kind: ConfigMap

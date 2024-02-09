@@ -46,4 +46,5 @@ data:
   ASTRIA_SEQUENCER_FORCE_STDOUT: "false"
   # false: the service will not try to connect to an OTEL endpoint.
   ASTRIA_SEQUENCER_NO_OTEL: "false"
+  ASTRIA_SEQUENCER_PRETTY_PRINT: "true"
 ---
