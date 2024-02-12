@@ -3,6 +3,29 @@ entries:
   astria-evm-rollup:
   - apiVersion: v2
     appVersion: 0.5.2
+    created: "2024-02-12T20:50:58.798382694Z"
+    dependencies:
+    - condition: celestia-node.enabled
+      name: celestia-node
+      repository: file://../celestia-node
+      version: 0.1.11
+    description: A Helm chart for EVM rollup in k8s deployed on top of Astria Sequencer
+      Network + Celestia.
+    digest: 169faf84c4b149223d50d7c70f8b552aeaffa6db6b24806f0073a6c111666063
+    maintainers:
+    - name: wafflesvonmaple
+      url: astria.org
+    - name: steezeburger
+      url: astria.org
+    - name: joroshiba
+      url: astria.org
+    name: astria-evm-rollup
+    type: application
+    urls:
+    - https://github.com/astriaorg/dev-cluster/releases/download/astria-evm-rollup-0.8.8/astria-evm-rollup-0.8.8.tgz
+    version: 0.8.8
+  - apiVersion: v2
+    appVersion: 0.5.2
     created: "2024-02-08T23:08:54.805055119Z"
     dependencies:
     - condition: celestia-node.enabled
@@ -715,6 +738,23 @@ entries:
   celestia-local:
   - apiVersion: v2
     appVersion: 1.3.0
+    created: "2024-02-12T20:50:58.900485854Z"
+    description: A Helm chart for Kubernetes
+    digest: 31989f8ea2a64ea5d75b6705644e332a76709083023f2a5168f40bc67da7c938
+    maintainers:
+    - name: wafflesvonmaple
+      url: astria.org
+    - name: steezeburger
+      url: astria.org
+    - name: joroshiba
+      url: astria.org
+    name: celestia-local
+    type: application
+    urls:
+    - https://github.com/astriaorg/dev-cluster/releases/download/celestia-local-0.3.5/celestia-local-0.3.5.tgz
+    version: 0.3.5
+  - apiVersion: v2
+    appVersion: 1.3.0
     created: "2024-01-22T19:32:36.820321491Z"
     description: A Helm chart for Kubernetes
     digest: dac48454e8716603d577c72bd6fca0710bb6bb8a71ea5dc21c8fd7e2cb095492
@@ -836,6 +876,23 @@ entries:
     - https://astriaorg.github.io/dev-cluster/celestia-local-0.1.0.tgz
     version: 0.1.0
   celestia-node:
+  - apiVersion: v2
+    appVersion: 0.12.4
+    created: "2024-02-12T20:50:59.009861Z"
+    description: A Helm chart for deploying a Celestia light node.
+    digest: 64ec1b12d89e2666347569124904d0e93a60501767312f959b34332a48a2bdfa
+    maintainers:
+    - name: wafflesvonmaple
+      url: astria.org
+    - name: steezeburger
+      url: astria.org
+    - name: joroshiba
+      url: astria.org
+    name: celestia-node
+    type: application
+    urls:
+    - https://github.com/astriaorg/dev-cluster/releases/download/celestia-node-0.1.11/celestia-node-0.1.11.tgz
+    version: 0.1.11
   - apiVersion: v2
     appVersion: 0.12.3
     created: "2024-01-22T20:36:40.928306431Z"
@@ -1210,4 +1267,4 @@ entries:
     urls:
     - https://astriaorg.github.io/dev-cluster/sequencer-relayer-0.3.0.tgz
     version: 0.3.0
-generated: "2024-02-08T23:08:54.80529373Z"
+generated: "2024-02-12T20:50:59.010116186Z"
