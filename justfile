@@ -42,7 +42,7 @@ deploy-astria-local: (deploy-chart "celestia-local") (deploy-sequencer-validator
 validatorName := "single"
 deploy-sequencer-validator name=validatorName:
   helm install --debug \
-    {{ if name != 'single' { replace('-f values/validators/#.yml' , '#', name) } else { '' } }} \
+    {{ replace('-f values/validators/#.yml' , '#', name) }} \
     -n astria-validator-{{name}} --create-namespace \
     {{name}}-sequencer-chart ./charts/sequencer
 deploy-sequencer-validators: (deploy-sequencer-validator "node0") (deploy-sequencer-validator "node1") (deploy-sequencer-validator "node2")
