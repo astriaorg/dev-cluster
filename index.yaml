@@ -3,6 +3,29 @@ entries:
   astria-evm-rollup:
   - apiVersion: v2
     appVersion: 0.5.2
+    created: "2024-02-12T20:59:44.829899755Z"
+    dependencies:
+    - condition: celestia-node.enabled
+      name: celestia-node
+      repository: file://../celestia-node
+      version: 0.1.11
+    description: A Helm chart for EVM rollup in k8s deployed on top of Astria Sequencer
+      Network + Celestia.
+    digest: 8adb4b0fa00b6ef22250aa6a575b329a03c578dc307500b1c4bfad15c370a6ad
+    maintainers:
+    - name: wafflesvonmaple
+      url: astria.org
+    - name: steezeburger
+      url: astria.org
+    - name: joroshiba
+      url: astria.org
+    name: astria-evm-rollup
+    type: application
+    urls:
+    - https://github.com/astriaorg/dev-cluster/releases/download/astria-evm-rollup-0.8.9/astria-evm-rollup-0.8.9.tgz
+    version: 0.8.9
+  - apiVersion: v2
+    appVersion: 0.5.2
     created: "2024-02-12T20:50:58.798382694Z"
     dependencies:
     - condition: celestia-node.enabled
@@ -475,6 +498,29 @@ entries:
     - https://astriaorg.github.io/dev-cluster/astria-evm-rollup-0.2.0.tgz
     version: 0.2.0
   astria-sequencer-validator:
+  - apiVersion: v2
+    appVersion: 0.8.0
+    created: "2024-02-12T20:59:44.951173488Z"
+    dependencies:
+    - condition: sequencer-relayer.enabled
+      name: sequencer-relayer
+      repository: file://../sequencer-relayer
+      version: 0.3.2
+    description: A Helm chart for deploying a k8s validating node on the Astria Sequencer
+      Network, which writes data to Celestia.
+    digest: 2336afa4acebaed18d3fad9068e8cf5c7b19299228449a6798ddc2e0e1e44ec3
+    maintainers:
+    - name: wafflesvonmaple
+      url: astria.org
+    - name: steezeburger
+      url: astria.org
+    - name: joroshiba
+      url: astria.org
+    name: astria-sequencer-validator
+    type: application
+    urls:
+    - https://github.com/astriaorg/dev-cluster/releases/download/astria-sequencer-validator-0.9.5/astria-sequencer-validator-0.9.5.tgz
+    version: 0.9.5
   - apiVersion: v2
     appVersion: 0.8.0
     created: "2024-01-19T18:25:28.939892563Z"
@@ -1267,4 +1313,4 @@ entries:
     urls:
     - https://astriaorg.github.io/dev-cluster/sequencer-relayer-0.3.0.tgz
     version: 0.3.0
-generated: "2024-02-12T20:50:59.010116186Z"
+generated: "2024-02-12T20:59:44.95167218Z"
