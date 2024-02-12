@@ -108,7 +108,7 @@ alerting:
     namespace: monitoring
     rules:
     - alert: Chain_Node_Down
-      expr: up{container="cometbft"} == 0 # Insert your query Expression
+      expr: up{container="cometbft"} == 0  # Insert your query Expression
       for: 1m  # Rough number but should be enough to init warn
       labels:
         severity: critical
