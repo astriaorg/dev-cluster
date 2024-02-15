@@ -11,7 +11,18 @@ global:
 config:
   moniker: "node0"
   sequencer:
-    sudoAuthorityKey: 1c0c490f1b5528d8173c5de46d131160e4b2c0c3
+    authoritySudoAddress: 1c0c490f1b5528d8173c5de46d131160e4b2c0c3
+    nativeAssetBaseDenomination: nria
+    allowedFeeAssets:
+      - nria
+    ibc:
+      enabled: true
+      inboundEnabled: true
+      outboundEnabled: true
+      sudoAddress: 1c0c490f1b5528d8173c5de46d131160e4b2c0c3
+      relayerAddresses:
+        - 1c0c490f1b5528d8173c5de46d131160e4b2c0c3
+        - 34fec43c7fcab9aef3b3cf8aba855e41ee69ca3a
     # Note large balances must be strings support templating with the u128 size account balances
     genesisAccounts:
     - address: 1c0c490f1b5528d8173c5de46d131160e4b2c0c3
@@ -23,6 +34,18 @@ config:
       # NOTE - the following address matches the privKey that funds the sequencer-faucet
     - address: 00d75b270542084a54fcf0d0f6eab0402982d156
       balance: "340282366920938463463374607431768211455"
+
+    metrics:
+      enabled: false
+
+    otel:
+      enabled: false
+      endpoint:
+      tracesEndpoint:
+      tracesCompression: gzip
+      tracesTimeout: 10
+      otlpHeaders:
+      traceHeaders:
 
   # Values for CometBFT node configuration
   cometBFT:
@@ -75,7 +98,7 @@ sequencer-relayer:
 # sequencer core images
 images:
   cometBFT: docker.io/cometbft/cometbft:v0.37.x
-  sequencer: ghcr.io/astriaorg/sequencer:0.8.0
+  sequencer: ghcr.io/astriaorg/sequencer:0.9.0
 
 ports:
   cometBFTP2P: 26656
@@ -84,6 +107,7 @@ ports:
   sequencerABCI: 26658
   sequencerGRPC: 8080
   relayerRPC: 2450
+  sequencerMetrics: 9000
 
 # ServiceMonitor configuration
 serviceMonitor:

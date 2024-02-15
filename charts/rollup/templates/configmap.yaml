@@ -6,13 +6,12 @@ metadata:
 data:
   ASTRIA_CONDUCTOR_LOG: "astria_conductor={{ .Values.config.logLevel }}"
   {{- if (index .Values "celestia-node").enabled }}
-  ASTRIA_CONDUCTOR_CELESTIA_NODE_URL: "{{ include "celestiaNode.service.adresses.rpc" (index .Subcharts "celestia-node") }}"
-  TOKEN_SERVER_URL: "{{ include "celestiaNode.service.adresses.token" (index .Subcharts "celestia-node") }}"
+  ASTRIA_CONDUCTOR_CELESTIA_NODE_URL: "{{ include "celestiaNode.service.addresses.rpc" (index .Subcharts "celestia-node") }}"
+  TOKEN_SERVER_URL: "{{ include "celestiaNode.service.addresses.token" (index .Subcharts "celestia-node") }}"
   {{- else }}
   ASTRIA_CONDUCTOR_CELESTIA_NODE_URL: "{{ .Values.config.celestia.rpc }}"
   TOKEN_SERVER_URL: "{{ .Values.config.celestia.token }}"
   {{- end }}
-  ASTRIA_CONDUCTOR_CHAIN_ID: "{{ .Values.config.rollup.chainId }}"
   ASTRIA_CONDUCTOR_EXECUTION_RPC_URL: "http://127.0.0.1:{{ .Values.ports.executionGRPC }}"
   ASTRIA_CONDUCTOR_EXECUTION_COMMIT_LEVEL: "{{ .Values.config.rollup.executionCommitLevel }}"
   ASTRIA_CONDUCTOR_SEQUENCER_URL: "{{ .Values.config.sequencer.websocket }}"
@@ -21,6 +20,17 @@ data:
   ASTRIA_CONDUCTOR_ETHEREUM_L1_URL: "{{ .Values.config.rollup.optimism.ethereumL1Websocket }}"
   ASTRIA_CONDUCTOR_OPTIMISM_PORTAL_CONTRACT_ADDRESS: "{{ .Values.config.rollup.optimism.portalContractAddress }}"
   ASTRIA_CONDUCTOR_INITIAL_ETHEREUM_L1_BLOCK_HEIGHT: "{{ .Values.config.rollup.optimism.initialEthereumL1BlockHeight }}"
+  ASTRIA_CONDUCTOR_NO_METRICS: "{{ not .Values.config.rollup.metrics.enabled }}"
+  ASTRIA_CONDUCTOR_METRICS_HTTP_LISTENER_ADDR: "127.0.0.1:{{ .Values.ports.conductorMetrics }}"
+  ASTRIA_CONDUCTOR_FORCE_STDOUT: "{{ .Values.global.useTTY }}"
+  ASTRIA_CONDUCTOR_PRETTY_PRINT: "{{ .Values.global.useTTY }}"
+  ASTRIA_CONDUCTOR_NO_OTEL: "{{ not .Values.config.rollup.otel.enabled }}"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "{{ .Values.config.rollup.otel.endpoint }}"
+  OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "{{ .Values.config.rollup.otel.tracesEndpoint }}"
+  OTEL_EXPORTER_OTLP_TRACES_TIMEOUT: "{{ .Values.config.rollup.otel.tracesTimeout }}"
+  OTEL_EXPORTER_OTLP_TRACES_COMPRESSION: "{{ .Values.config.rollup.otel.tracesCompression }}"
+  OTEL_EXPORTER_OTLP_HEADERS: "{{ .Values.config.rollup.otel.otlpHeaders }}"
+  OTEL_EXPORTER_OTLP_TRACE_HEADERS: "{{ .Values.config.rollup.otel.traceHeaders }}"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -41,9 +51,22 @@ data:
   ASTRIA_COMPOSER_API_LISTEN_ADDR: "0.0.0.0:0"
   ASTRIA_COMPOSER_SEQUENCER_URL: "{{ .Values.config.sequencer.rpc }}"
   ASTRIA_COMPOSER_ROLLUPS: "{{ .Values.config.rollup.chainId }}::ws://127.0.0.1:{{ .Values.ports.wsRPC }}"
+  ASTRIA_COMPOSER_MAX_BYTES_PER_BUNDLE: "{{ .Values.config.rollup.maxBytesPerBundle }}"
+  ASTRIA_COMPOSER_MAX_SUBMIT_INTERVAL_MS: "{{ .Values.config.rollup.maxSubmitInterval }}"
   {{- if not .Values.secretProvider.enabled }}
   ASTRIA_COMPOSER_PRIVATE_KEY: "{{ .Values.config.sequencer.privateKey }}"
   {{- end }}
+  ASTRIA_COMPOSER_NO_METRICS: "{{ not .Values.config.rollup.metrics.enabled }}"
+  ASTRIA_COMPOSER_METRICS_HTTP_LISTENER_ADDR: "127.0.0.1:{{ .Values.ports.composerMetrics }}"
+  ASTRIA_COMPOSER_FORCE_STDOUT: "{{ .Values.global.useTTY }}"
+  ASTRIA_COMPOSER_PRETTY_PRINT: "{{ .Values.global.useTTY }}"
+  ASTRIA_COMPOSER_NO_OTEL: "{{ not .Values.config.rollup.otel.enabled }}"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "{{ .Values.config.rollup.otel.endpoint }}"
+  OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "{{ .Values.config.rollup.otel.tracesEndpoint }}"
+  OTEL_EXPORTER_OTLP_TRACES_TIMEOUT: "{{ .Values.config.rollup.otel.tracesTimeout }}"
+  OTEL_EXPORTER_OTLP_TRACES_COMPRESSION: "{{ .Values.config.rollup.otel.tracesCompression }}"
+  OTEL_EXPORTER_OTLP_HEADERS: "{{ .Values.config.rollup.otel.otlpHeaders }}"
+  OTEL_EXPORTER_OTLP_TRACE_HEADERS: "{{ .Values.config.rollup.otel.traceHeaders }}"
 ---
 apiVersion: v1
 kind: ConfigMap

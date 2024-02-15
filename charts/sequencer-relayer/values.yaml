@@ -15,9 +15,22 @@ config:
     tokenServer: http://celestia-service.astria-dev-cluster.svc.cluster.local:5353
     sequencerRpc: ""
 
+    metrics:
+      enabled: false
+
+    otel:
+      enabled: false
+      endpoint:
+      tracesEndpoint:
+      tracesCompression: gzip
+      tracesTimeout: 10
+      otlpHeaders:
+      traceHeaders:
+
 # sequencer core images
 images:
-  sequencerRelayer: ghcr.io/astriaorg/sequencer-relayer:0.9.1
+  sequencerRelayer: ghcr.io/astriaorg/sequencer-relayer:0.10.0
 
 ports:
   relayerRPC: 2450
+  metrics: 9000
