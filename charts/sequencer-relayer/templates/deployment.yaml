@@ -4,7 +4,7 @@ metadata:
   name: sequencer-relayer
   labels:
     app: sequencer-relayer
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "sequencer-relayer.namespace" . }}
 spec:
   replicas: {{ .Values.global.replicaCount }}
   selector:
@@ -20,7 +20,7 @@ spec:
       containers:
         - name: sequencer-relayer
           imagePullPolicy: IfNotPresent
-          image: "{{ .Values.images.sequencerRelayer }}"
+          image: {{ include "sequencer-relayer.image" . }}
           command: [ "/scripts/start-relayer.sh" ]
           stdin: {{ .Values.global.useTTY }}
           tty: {{ .Values.global.useTTY }}

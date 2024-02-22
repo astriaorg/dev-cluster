@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: relayer-env
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "sequencer-relayer.namespace" . }}
 data:
   ASTRIA_SEQUENCER_RELAYER_LOG: "astria_sequencer_relayer=debug"
   ASTRIA_SEQUENCER_RELAYER_SEQUENCER_ENDPOINT: "{{ .Values.config.relayer.sequencerRpc }}"
@@ -12,6 +12,9 @@ data:
   ASTRIA_SEQUENCER_RELAYER_RPC_PORT: "{{ .Values.ports.relayerRPC }}"
   ASTRIA_SEQUENCER_RELAYER_RELAY_ONLY_VALIDATOR_KEY_BLOCKS: "false"
   ASTRIA_SEQUENCER_RELAYER_CELESTIA_BEARER_TOKEN: "{{ .Values.config.relayer.celestiaBearerToken }}"
+  TOKEN_SERVER: "{{ .Values.config.relayer.tokenServer }}"
+  {{- if not .Values.global.dev }}
+  {{- else }}
   ASTRIA_SEQUENCER_RELAYER_NO_METRICS: "{{ not .Values.config.relayer.metrics.enabled }}"
   ASTRIA_SEQUENCER_RELAYER_METRICS_HTTP_LISTENER_ADDR: "127.0.0.1:{{ .Values.ports.metrics }}"
   ASTRIA_SEQUENCER_RELAYER_FORCE_STDOUT: "{{ .Values.global.useTTY }}"
@@ -23,13 +26,13 @@ data:
   OTEL_EXPORTER_OTLP_TRACES_COMPRESSION: "{{ .Values.config.relayer.otel.tracesCompression }}"
   OTEL_EXPORTER_OTLP_HEADERS: "{{ .Values.config.relayer.otel.otlpHeaders }}"
   OTEL_EXPORTER_OTLP_TRACE_HEADERS: "{{ .Values.config.relayer.otel.traceHeaders }}"
-  TOKEN_SERVER: "{{ .Values.config.relayer.tokenServer }}"
+  {{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: relayer-scripts
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "sequencer-relayer.namespace" . }}
 data:
   start-relayer.sh: |
     {{- .Files.Get "files/scripts/start-relayer.sh" | nindent 4 }}

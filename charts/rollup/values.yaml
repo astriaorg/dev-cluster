@@ -1,9 +1,36 @@
 global:
-  namespace: "astria-dev-cluster"
+  namespaceOverride: ""
   replicaCount: 1
   # Whether to use tty readable logging for astria services, when false use json.
   # Best to be false in production environments, true for clean logs on local dev.
   useTTY: true
+  dev: false
+
+images:
+  geth:
+    repo: "ghcr.io/astriaorg/go-ethereum"
+    tag: "0.5.2" 
+    devTag: "latest" # "0.6.0"
+  conductor:
+    repo: "ghcr.io/astriaorg/conductor"
+    tag: "latest" 
+    devTag: "latest" # "0.12.1"
+  composer: 
+    repo: "ghcr.io/astriaorg/composer"
+    tag: "0.3.1" 
+    devTag: "latest" # "0.4.0"
+
+  # Rollup faucet
+  faucet: "ghcr.io/astriaorg/ria-faucet:0.0.1"
+
+  # Pertaining to deploying blockscout block explorer
+  blockscout:
+    core: "docker.io/blockscout/blockscout:5.1.0"
+    postgres: "docker.io/library/postgres:14"
+    redis: "docker.io/library/redis:alpine"
+    sigProvider: "ghcr.io/blockscout/sig-provider@sha256:ae371ce8d0a20993bf61ca81b3394416f4778c9edd398250fd4d81a8d6820950"
+    smartContractVerifier: "ghcr.io/blockscout/smart-contract-verifier@sha256:f07b2d874c28d45f5ba81f297c868a746a03771e8b6d9b8e96f0eba0beeb1016"
+    visualizer: "ghcr.io/blockscout/visualizer@sha256:99479da126248e0aba5c32b1e32625f8c527b72924f55cb510b50e5f854b2d15"
 
 config:
   # The level at which core astria components will log out
@@ -103,7 +130,7 @@ config:
   # Configuration related to sequencer connection for rollup
   sequencer:
     # Block height to start syncing rollup from
-    initialBlockHeight: 1
+    initialBlockHeight: 10
     # Websocket connection used for
     websocket: "ws://node0-sequencer-rpc-service.astria-dev-cluster.svc.cluster.local:26657/websocket"
     # URL path for the sequencer
@@ -118,7 +145,7 @@ config:
     # this must be set to access celestia network.
     rpc: ""
     token: ""
-    initialBlockHeight: 1
+    initialBlockHeight: 2
     heightVariance: 10
 
   blockscout:
@@ -141,24 +168,6 @@ celestia-node:
     # coreIp: celestia-service.astria-dev-cluster.svc.cluster.local
     # # The custom info below must be grabbed from the custom network bridge on startup
     # customInfo: "<GENESIS_HASH>:<BRIDGE_MULTIADDRESS>"
-
-images:
-  # Core images for the rollup, developed for Astria
-  geth: "ghcr.io/astriaorg/go-ethereum:0.6.0"
-  conductor: "ghcr.io/astriaorg/conductor:0.12.0"
-  composer: "ghcr.io/astriaorg/composer:0.4.0"
-
-  # Rollup faucet
-  faucet: "ghcr.io/astriaorg/ria-faucet:0.0.1"
-
-  # Pertaining to deploying blockscout block explorer
-  blockscout:
-    core: "docker.io/blockscout/blockscout:5.1.0"
-    postgres: "docker.io/library/postgres:14"
-    redis: "docker.io/library/redis:alpine"
-    sigProvider: "ghcr.io/blockscout/sig-provider@sha256:ae371ce8d0a20993bf61ca81b3394416f4778c9edd398250fd4d81a8d6820950"
-    smartContractVerifier: "ghcr.io/blockscout/smart-contract-verifier@sha256:f07b2d874c28d45f5ba81f297c868a746a03771e8b6d9b8e96f0eba0beeb1016"
-    visualizer: "ghcr.io/blockscout/visualizer@sha256:99479da126248e0aba5c32b1e32625f8c527b72924f55cb510b50e5f854b2d15"
 
 # When deploying in a production environment should use a secret provider
 # This is configured for use with GCP, need to set own resource names

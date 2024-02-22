@@ -2,11 +2,23 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 global:
-  namespace: "astria-dev-cluster"
+  namespaceOverride: ""
   replicaCount: 1
   # Whether to use tty readable logging for astria services, when false use json.
   # Best to be false in production environments, true for clean logs on local dev.
   useTTY: true
+  dev: false
+
+# sequencer core images
+images:
+  cometBFT: 
+    repo: docker.io/cometbft/cometbft
+    tag: v0.37.x
+    devTag: v0.37.x
+  sequencer: 
+    repo: ghcr.io/astriaorg/sequencer
+    tag: "0.8.0" # "0.9.0"
+    devTag: latest
 
 config:
   moniker: "node0"
@@ -94,11 +106,6 @@ config:
 
 sequencer-relayer:
   enabled: false
-
-# sequencer core images
-images:
-  cometBFT: docker.io/cometbft/cometbft:v0.37.x
-  sequencer: ghcr.io/astriaorg/sequencer:0.9.0
 
 ports:
   cometBFTP2P: 26656

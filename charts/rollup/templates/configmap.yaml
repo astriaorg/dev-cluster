@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-conductor-env
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "rollup.namespace" .  }}
 data:
   ASTRIA_CONDUCTOR_LOG: "astria_conductor={{ .Values.config.logLevel }}"
   {{- if (index .Values "celestia-node").enabled }}
@@ -20,6 +20,9 @@ data:
   ASTRIA_CONDUCTOR_ETHEREUM_L1_URL: "{{ .Values.config.rollup.optimism.ethereumL1Websocket }}"
   ASTRIA_CONDUCTOR_OPTIMISM_PORTAL_CONTRACT_ADDRESS: "{{ .Values.config.rollup.optimism.portalContractAddress }}"
   ASTRIA_CONDUCTOR_INITIAL_ETHEREUM_L1_BLOCK_HEIGHT: "{{ .Values.config.rollup.optimism.initialEthereumL1BlockHeight }}"
+  {{- if not .Values.global.dev }}
+  ASTRIA_CONDUCTOR_CHAIN_ID: "{{ .Values.config.rollup.chainId }}"
+  {{- else }}
   ASTRIA_CONDUCTOR_NO_METRICS: "{{ not .Values.config.rollup.metrics.enabled }}"
   ASTRIA_CONDUCTOR_METRICS_HTTP_LISTENER_ADDR: "127.0.0.1:{{ .Values.ports.conductorMetrics }}"
   ASTRIA_CONDUCTOR_FORCE_STDOUT: "{{ .Values.global.useTTY }}"
@@ -31,12 +34,13 @@ data:
   OTEL_EXPORTER_OTLP_TRACES_COMPRESSION: "{{ .Values.config.rollup.otel.tracesCompression }}"
   OTEL_EXPORTER_OTLP_HEADERS: "{{ .Values.config.rollup.otel.otlpHeaders }}"
   OTEL_EXPORTER_OTLP_TRACE_HEADERS: "{{ .Values.config.rollup.otel.traceHeaders }}"
+  {{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-conductor-scripts
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "rollup.namespace" .  }}
 data:
   start-conductor.sh: |
     {{- .Files.Get "files/scripts/start-conductor.sh" | nindent 4 }}
@@ -45,17 +49,19 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-composer-env
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "rollup.namespace" .  }}
 data:
   ASTRIA_COMPOSER_LOG: "astria_composer={{ .Values.config.logLevel }}"
   ASTRIA_COMPOSER_API_LISTEN_ADDR: "0.0.0.0:0"
   ASTRIA_COMPOSER_SEQUENCER_URL: "{{ .Values.config.sequencer.rpc }}"
   ASTRIA_COMPOSER_ROLLUPS: "{{ .Values.config.rollup.chainId }}::ws://127.0.0.1:{{ .Values.ports.wsRPC }}"
-  ASTRIA_COMPOSER_MAX_BYTES_PER_BUNDLE: "{{ .Values.config.rollup.maxBytesPerBundle }}"
-  ASTRIA_COMPOSER_MAX_SUBMIT_INTERVAL_MS: "{{ .Values.config.rollup.maxSubmitInterval }}"
   {{- if not .Values.secretProvider.enabled }}
   ASTRIA_COMPOSER_PRIVATE_KEY: "{{ .Values.config.sequencer.privateKey }}"
   {{- end }}
+  {{- if not .Values.global.dev }}
+  {{- else }}
+  ASTRIA_COMPOSER_MAX_BYTES_PER_BUNDLE: "{{ .Values.config.rollup.maxBytesPerBundle }}"
+  ASTRIA_COMPOSER_MAX_SUBMIT_INTERVAL_MS: "{{ .Values.config.rollup.maxSubmitInterval }}"
   ASTRIA_COMPOSER_NO_METRICS: "{{ not .Values.config.rollup.metrics.enabled }}"
   ASTRIA_COMPOSER_METRICS_HTTP_LISTENER_ADDR: "127.0.0.1:{{ .Values.ports.composerMetrics }}"
   ASTRIA_COMPOSER_FORCE_STDOUT: "{{ .Values.global.useTTY }}"
@@ -67,12 +73,13 @@ data:
   OTEL_EXPORTER_OTLP_TRACES_COMPRESSION: "{{ .Values.config.rollup.otel.tracesCompression }}"
   OTEL_EXPORTER_OTLP_HEADERS: "{{ .Values.config.rollup.otel.otlpHeaders }}"
   OTEL_EXPORTER_OTLP_TRACE_HEADERS: "{{ .Values.config.rollup.otel.traceHeaders }}"
+  {{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-faucet-env
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "rollup.namespace" .  }}
 data:
   ETH_FAUCET_PROXYCOUNT: "{{ .Values.config.faucet.proxyCount }}"
   ETH_FAUCET_PORT: "{{ .Values.ports.faucet }}"
@@ -86,7 +93,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-geth-env
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "rollup.namespace" .  }}
 data:
   home_dir: "/home/geth"
   data_dir: "/home/geth/{{ .Values.config.rollup.name }}geth"
@@ -95,7 +102,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-executor-scripts
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "rollup.namespace" .  }}
 data:
   geth-genesis.json: |
     {{- tpl (.Files.Get "files/genesis/geth-genesis.json") $ | nindent 4 }}
@@ -106,7 +113,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-blockscout-env
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "rollup.namespace" .  }}
 data:
   ACCOUNT_CLOAK_KEY: ""
   ACCOUNT_ENABLED: "false"
@@ -224,7 +231,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.config.rollup.name }}-smart-contract-verifier-env
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "rollup.namespace" .  }}
 data:
   SMART_CONTRACT_VERIFIER__JAEGER__AGENT_ENDPOINT: "localhost:6831"
   SMART_CONTRACT_VERIFIER__JAEGER__ENABLED: "false"
@@ -252,7 +259,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "rollup.namespace" .  }}
   name: {{ .Values.config.rollup.name }}-visualizer-env
 data:
   VISUALIZER__SERVER__GRPC__ENABLED: "false"

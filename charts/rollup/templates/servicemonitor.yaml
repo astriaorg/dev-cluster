@@ -12,7 +12,7 @@ spec:
   jobLabel: geth-metrics
   namespaceSelector:
     matchNames:
-      - {{ .Values.global.namespace }}
+      - {{ include "rollup.namespace" . }}
   selector:
     matchLabels:
       app: {{ .Values.config.rollup.name }}-astria-dev-cluster

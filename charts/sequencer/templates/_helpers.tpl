@@ -1,4 +1,18 @@
 {{/*
+Namepsace to deploy elements into.
+*/}}
+{{- define "sequencer.namespace" -}}
+{{- default .Release.Namespace .Values.global.namespaceOverride | trunc 63 | trimSuffix "-" -}}
+{{- end }}
+
+{{- define "sequencer.image" -}}
+{{ .Values.images.sequencer.repo }}:{{ if .Values.global.dev }}{{ .Values.images.sequencer.devTag }}{{ else }}{{ .Values.images.sequencer.tag }}{{ end }}
+{{- end }}
+{{- define "cometBFT.image" -}}
+{{ .Values.images.cometBFT.repo }}:{{ if .Values.global.dev }}{{ .Values.images.cometBFT.devTag }}{{ else }}{{ .Values.images.cometBFT.tag }}{{ end }}
+{{- end }}
+
+{{/*
 Return if ingress is stable.
 */}}
 {{- define "sequencer.ingress.isStable" -}}

@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.config.rollup.name }}-geth
   labels:
     app: {{ .Values.config.rollup.name }}-astria-dev-cluster
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "rollup.namespace" . }}
 spec:
   replicas : {{ .Values.global.replicaCount }}
   selector:
@@ -19,7 +19,7 @@ spec:
       initContainers:
         - name: init-geth
           command: [ "/scripts/init-geth.sh" ]
-          image: {{ .Values.images.geth }}
+          image: {{ include "rollup.image" . }}
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.config.rollup.name }}-executor-scripts-volume
@@ -60,7 +60,7 @@ spec:
             - --metrics.addr=0.0.0.0
             - --metrics.port={{ .Values.ports.metrics }}
             {{- end }}
-          image: {{ .Values.images.geth }}
+          image: {{ include "rollup.image" . }}
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.config.rollup.name }}-executor-scripts-volume
@@ -83,7 +83,7 @@ spec:
               name: geth-metrics
             {{- end }}              
         - name: composer
-          image: {{ .Values.images.composer }}
+          image: {{ include "composer.image" . }}
           command: [ "/usr/local/bin/astria-composer" ]
           stdin: {{ .Values.global.useTTY }}
           tty: {{ .Values.global.useTTY }}
@@ -104,7 +104,7 @@ spec:
             name: sequencer-private-key
           {{- end }}
         - name: conductor
-          image: {{ .Values.images.conductor }}
+          image: {{ include "conductor.image" . }}
           command: [ "/scripts/start-conductor.sh" ]
           stdin: {{ .Values.global.useTTY }}
           tty: {{ .Values.global.useTTY }}
@@ -147,7 +147,7 @@ metadata:
   name: {{ .Values.config.rollup.name }}-faucet
   labels:
     app: {{ .Values.config.rollup.name }}-astria-dev-cluster
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "rollup.namespace" . }}
 spec:
   replicas : {{ .Values.global.replicaCount }}
   selector:
@@ -211,7 +211,7 @@ metadata:
   name: {{ .Values.config.rollup.name }}-blockscout
   labels:
     app: {{ .Values.config.rollup.name }}-astria-dev-cluster
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "rollup.namespace" . }}
 spec:
   replicas : {{ .Values.global.replicaCount }}
   selector:

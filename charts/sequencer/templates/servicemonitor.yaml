@@ -12,7 +12,7 @@ spec:
   jobLabel: cometbft-metric
   namespaceSelector:
     matchNames:
-      - {{ .Values.global.namespace }}
+      - {{ include "sequencer.namespace" . }}
   selector:
     matchLabels:
       {{- include "sequencer.selectorLabels" . | nindent 6 }}
