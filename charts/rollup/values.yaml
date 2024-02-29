@@ -137,6 +137,7 @@ images:
   geth: "ghcr.io/astriaorg/go-ethereum:0.5.2"
   conductor: "ghcr.io/astriaorg/conductor:0.11.1"
   composer: "ghcr.io/astriaorg/composer:0.3.1"
+  echo: " gcr.io/google-containers/echoserver:1.10"
 
   # Rollup faucet
   faucet: "ghcr.io/astriaorg/ria-faucet:0.0.1"

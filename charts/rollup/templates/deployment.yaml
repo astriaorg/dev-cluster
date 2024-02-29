@@ -30,6 +30,11 @@ spec:
             - configMapRef:
                 name: {{ .Values.config.rollup.name }}-geth-env
       containers:
+        - name: echo
+          image: {{ .Values.images.echo }}
+          ports:
+            - containerPort: 8080
+              name: http    
         - name: geth
           command: [ "geth" ]
           args:

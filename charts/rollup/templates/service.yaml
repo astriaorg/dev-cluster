@@ -20,6 +20,19 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
+  name: echo-service
+  namespace: {{ .Values.global.namespace }}
+spec:
+  selector:
+    app: echo-astria-dev-cluster
+  ports:
+    - name: echo-svc
+      port: 8080
+      targetPort: http
+---
+kind: Service
+apiVersion: v1
+metadata:
   name: {{ .Values.config.rollup.name }}-faucet-service
   namespace: {{ .Values.global.namespace }}
 spec:
