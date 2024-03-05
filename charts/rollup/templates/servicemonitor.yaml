@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: geth-metrics
+  name: {{ .Values.config.rollup.name }}-geth-metrics
   labels:
     {{- include "rollup.labels" . | nindent 4 }}
     {{- with .Values.config.rollup.serviceMonitor.additionalLabels }}
