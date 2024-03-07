@@ -21,7 +21,7 @@ Define the k8s path to rpc service
 
 
 {{/*
-Define the k8s path to rpc service
+Define the k8s path to rpc service as http rpc
 */}}
 {{- define "celestiaNode.service.addresses.rpc" -}}
 http://{{ include "celestiaNode.service.addresses.base" . }}
@@ -31,10 +31,10 @@ http://{{ include "celestiaNode.service.addresses.base" . }}
 {{- end }}
 
 {{/*
-Define the k8s path to rpc service
+Define the k8s path to rpc service as ws
 */}}
 {{- define "celestiaNode.service.addresses.ws" -}}
-ws://http://{{ include "celestiaNode.service.addresses.base" . }}
+ws://{{ include "celestiaNode.service.addresses.base" . }}
 {{- end }}
 
 {{/*
