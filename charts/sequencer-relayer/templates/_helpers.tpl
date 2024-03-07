@@ -6,5 +6,17 @@ Namepsace to deploy elements into.
 {{- end }}
 
 {{- define "sequencer-relayer.image" -}}
-{{ .Values.images.sequencer-relayer.repo }}:{{ if .Values.global.dev }}{{ .Values.images.sequencer-relayer.devTag }}{{ else }}{{ .Values.images.sequencer-relayer.tag }}{{ end }}
+{{ .Values.images.sequencerRelayer.repo }}:{{ if .Values.global.dev }}{{ .Values.images.sequencerRelayer.devTag }}{{ else }}{{ .Values.images.sequencerRelayer.tag }}{{ end }}
+{{- end }}
+
+{{- define "sequencer-relayer.storage.mountPath" -}}
+/astria-sequencer-relayer
+{{- end }}
+
+{{- define "sequencer-relayer.storage.preSubmitPath" -}}
+{{ include "sequencer-relayer.storage.mountPath" . }}/presubmit.json
+{{- end }}
+
+{{- define "sequencer-relayer.storage.postSubmitPath" -}}
+{{ include "sequencer-relayer.storage.mountPath" . }}/postsubmit.json
 {{- end }}

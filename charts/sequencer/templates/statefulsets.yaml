@@ -47,6 +47,12 @@ spec:
           ports:
             - containerPort: {{ .Values.ports.sequencerABCI }}
               name: sequencer-abci
+            - containerPort: {{ .Values.ports.sequencerGRPC }}
+              name: sequencer-grpc
+            {{- if .Values.config.sequencer.metrics.enabled }}
+            - containerPort: {{ .Values.ports.sequencerMetrics }}
+              name: sequencer-metric
+            {{- end }}
         - name: cometbft
           imagePullPolicy: IfNotPresent
           command: [ "cometbft", "start" ]

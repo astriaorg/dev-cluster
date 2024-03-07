@@ -25,14 +25,14 @@ load-image image:
   kind load docker-image {{image}} --name astria-dev-cluster
 
 deploy-chart chart:
-  helm install --debug {{chart}}-chart ./charts/{{chart}} 
+  helm install --debug {{chart}}-chart ./charts/{{chart}} --namespace astria-dev-cluster
 
 delete-chart chart:
-  helm uninstall {{chart}}-chart
+  helm uninstall {{chart}}-chart --namespace astria-dev-cluster
 
 redeploy-chart chart:
-  helm uninstall {{chart}}-chart
-  helm install --debug {{chart}}-chart ./charts/{{chart}}
+  helm uninstall {{chart}}-chart --namespace astria-dev-cluster
+  helm install --debug {{chart}}-chart ./charts/{{chart}} --namespace astria-dev-cluster
 
 restart deployment:
   kubectl rollout restart -n astria-dev-cluster deployment {{deployment}}
@@ -44,11 +44,11 @@ deploy-sequencer-validator name=validatorName:
   helm install --debug \
     {{ replace('-f values/validators/#.yml' , '#', name) }} \
     -n astria-validator-{{name}} --create-namespace \
-    {{name}}-sequencer-chart ./charts/sequencer
+    {{name}}-sequencer-chart ./charts/sequencer --namespace astria-dev-cluster
 deploy-sequencer-validators: (deploy-sequencer-validator "node0") (deploy-sequencer-validator "node1") (deploy-sequencer-validator "node2")
 
 delete-sequencer-validator name=validatorName:
-  helm uninstall {{name}}-sequencer-chart -n astria-validator-{{name}}
+  helm uninstall {{name}}-sequencer-chart -n astria-validator-{{name}} --namespace astria-dev-cluster
 delete-sequencer-validators: (delete-sequencer-validator "node0") (delete-sequencer-validator "node1") (delete-sequencer-validator "node2")
 
 wait-for-sequencer:
@@ -67,7 +67,7 @@ deploy-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAll
     {{ if genesisAllocAddress != '' { replace('--set config.rollup.genesisAccounts[0].address=#', '#', genesisAllocAddress) } else { '' } }} \
     {{ if privateKey          != '' { replace('--set config.faucet.privateKey=#', '#', privateKey) } else { '' } }} \
     {{ if sequencerStartBlock != '' { replace('--set config.sequencer.initialBlockHeight=#', '#', sequencerStartBlock) } else { '' } }} \
-    {{rollupName}}chain-chart-deploy ./charts/rollup
+    {{rollupName}}chain-chart-deploy ./charts/rollup --namespace astria-dev-cluster
 
 deploy-dev-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey sequencerStartBlock=defaultSequencerStartBlock:
   helm install --debug \
@@ -77,7 +77,7 @@ deploy-dev-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesi
     {{ if privateKey          != '' { replace('--set config.faucet.privateKey=#', '#', privateKey) } else { '' } }} \
     {{ if sequencerStartBlock != '' { replace('--set config.sequencer.initialBlockHeight=#', '#', sequencerStartBlock) } else { '' } }} \
     -f values/rollup/dev.yaml \
-    {{rollupName}}chain-chart-deploy ./charts/rollup
+    {{rollupName}}chain-chart-deploy ./charts/rollup --namespace astria-dev-cluster
 
 wait-for-rollup rollupName=defaultRollupName:
   kubectl wait -n astria-dev-cluster deployment {{rollupName}}-geth --for=condition=Available=True --timeout=600s
@@ -85,7 +85,7 @@ wait-for-rollup rollupName=defaultRollupName:
 
 defaultRollupNameForDelete := "astria"
 delete-rollup rollupName=defaultRollupNameForDelete:
-  helm uninstall {{rollupName}}chain-chart-deploy
+  helm uninstall {{rollupName}}chain-chart-deploy --namespace astria-dev-cluster
 
 deploy-all-local: create-cluster deploy-ingress-controller wait-for-ingress-controller deploy-astria-local wait-for-sequencer (deploy-chart "sequencer-faucet") deploy-rollup wait-for-rollup
 
@@ -98,10 +98,10 @@ deploy-hyperlane-agents rollupName=defaultRollupName agentConfig=defaultHypAgent
     {{ if agentConfig         != '' { replace('--set config.agentConfig=#', '#', agentConfig) } else { '' } }} \
     {{ if relayerPrivateKey   != '' { replace('--set config.relayer.privateKey=#', '#', relayerPrivateKey) } else { '' } }} \
     {{ if validatorPrivateKey != '' { replace('--set config.validator.privateKey=#', '#', validatorPrivateKey) } else { '' } }} \
-    {{rollupName}}-hyperlane-agents-chart ./charts/hyperlane-agents
+    {{rollupName}}-hyperlane-agents-chart ./charts/hyperlane-agents --namespace astria-dev-cluster
 
 delete-hyperlane-agents rollupName=defaultRollupNameForDelete:
-  helm uninstall {{rollupName}}-hyperlane-agents-chart
+  helm uninstall {{rollupName}}-hyperlane-agents-chart --namespace astria-dev-cluster
 
 clean:
   kind delete cluster --name astria-dev-cluster

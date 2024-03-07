@@ -38,3 +38,18 @@ config:
 ports:
   relayerRPC: 2450
   metrics: 9000
+
+serviceMonitor:
+  enabled: false
+  port: 26660
+  additionalLabels:
+    release: kube-prometheus-stack
+
+storage:
+  enabled: false
+  local: true
+  entities:
+    sequencerRelayerStorage:
+      size: "1Gi"
+      persistentVolumeName: "sequencer-relayer-storage"
+      path: "/data/sequencer-relayer-data"
