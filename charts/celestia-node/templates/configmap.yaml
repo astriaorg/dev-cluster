@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ $label }}-files-env
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "celestiaNode.namespace" . }}
 data:
   config.toml: |
   {{- tpl (.Files.Get "files/config.toml") $ | nindent 4 }}
@@ -12,7 +12,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ $label }}-scripts-env
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "celestiaNode.namespace" . }}
 data:
   start-node.sh: |
   {{- tpl (.Files.Get "files/scripts/start-node.sh") $ | nindent 4 }}
@@ -23,7 +23,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ $label }}-env
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "celestiaNode.namespace" . }}
 data:
   CELESTIA_CUSTOM_TO_BE: {{ .Values.config.chainId }}:{{ $customInfo }}
 {{- end }}

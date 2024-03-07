@@ -1,4 +1,11 @@
 {{/*
+Namepsace to deploy elements into.
+*/}}
+{{- define "celestiaNode.namespace" -}}
+{{- default .Release.Namespace .Values.global.namespaceOverride | trunc 63 | trimSuffix "-" -}}
+{{- end }}
+
+{{/*
 Define the base label
 */}}
 {{- define "celestiaNode.baseLabel" -}}

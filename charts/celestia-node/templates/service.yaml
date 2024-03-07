@@ -3,7 +3,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: {{ include "celestiaNode.service.name" . }}
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "celestiaNode.namespace" . }}
 spec:
   selector:
     app: {{ $label }}
@@ -18,7 +18,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: {{ include "celestiaNode.service.token.name" . }}
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "celestiaNode.namespace" . }}
 spec:
   selector:
     app: {{ $label }}

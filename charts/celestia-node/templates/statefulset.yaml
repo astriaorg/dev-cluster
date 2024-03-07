@@ -6,7 +6,7 @@ metadata:
   name: {{ $label }}
   labels:
     app: {{ $label }}
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "celestiaNode.namespace" . }}
 spec:
   replicas: {{ .Values.global.replicaCount }}
   selector:
