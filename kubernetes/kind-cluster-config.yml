@@ -38,3 +38,5 @@ nodes:
       containerPath: /data/rollup-data/
     - hostPath: /tmp/astria/sequencer-data
       containerPath: /data/sequencer-data
+    - hostPath: /tmp/astria/sequencer-relayer-data
+      containerPath: /data/sequencer-relayer-data
