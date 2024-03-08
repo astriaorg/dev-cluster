@@ -61,7 +61,7 @@ metadata:
   name: {{ .Values.config.rollup.name }}-composer-env
   namespace: {{ include "rollup.namespace" .  }}
 data:
-  ASTRIA_COMPOSER_LOG: "astria_composer={{ .Values.config.logLevel }}"
+  ASTRIA_COMPOSER_LOG: "astria_composer=info"
   ASTRIA_COMPOSER_API_LISTEN_ADDR: "0.0.0.0:0"
   ASTRIA_COMPOSER_SEQUENCER_URL: "{{ .Values.config.sequencer.rpc }}"
   ASTRIA_COMPOSER_ROLLUPS: "{{ .Values.config.rollup.chainId }}::ws://127.0.0.1:{{ .Values.ports.wsRPC }}"
