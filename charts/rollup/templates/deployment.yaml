@@ -103,6 +103,18 @@ spec:
           - mountPath: "/var/secrets"
             name: sequencer-private-key
           {{- end }}
+          {{- if .Values.config.rollup.metrics.enabled }} 
+          ports:
+            - containerPort: {{ .Values.ports.composerMetrics }}
+              name: composer-metrics
+          {{- end }}
+          resources:
+            requests:
+              cpu: 1
+              memory: 500Mi
+            limits:
+              cpu: 1
+              memory: 2Gi
         - name: conductor
           image: {{ include "conductor.image" . }}
           command: [ "/scripts/start-conductor.sh" ]
@@ -115,6 +127,18 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Values.config.rollup.name }}-conductor-env
+          resources:
+            requests:
+              cpu: 1
+              memory: 500Mi
+            limits:
+              cpu: 1
+              memory: 2Gi
+          {{- if .Values.config.rollup.metrics.enabled }} 
+          ports:
+            - containerPort: {{ .Values.ports.conductorMetrics }}
+              name: conductor-metrics
+          {{- end }}
       volumes:
         - name: {{ .Values.config.rollup.name }}-executor-scripts-volume
           configMap:

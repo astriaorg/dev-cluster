@@ -3,14 +3,14 @@ global:
   replicaCount: 1
   # Whether to use tty readable logging for astria services, when false use json.
   # Best to be false in production environments, true for clean logs on local dev.
-  useTTY: true
+  useTTY: false
   dev: false
 
 images:
   geth:
     repo: "ghcr.io/astriaorg/go-ethereum"
-    tag: "0.5.2" 
-    devTag: "latest" # "0.6.0"
+    tag: "0.5.2"
+    devTag: "0.6.0" # "0.6.0"
   conductor:
     repo: "ghcr.io/astriaorg/conductor"
     tag: "latest" 
@@ -117,7 +117,7 @@ config:
             description: "Chain Head Finalized on {{ $labels.namespace }} is increasing at a rate slower then 20 blocks per 5 minute\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   faucet:
-    enabled: true
+    enabled: false
     proxyCount: 1
     # The account from which the faucet disburses funds, likely want to have
     # the corresponding account given a balance in genesis accounts.
@@ -130,7 +130,7 @@ config:
   # Configuration related to sequencer connection for rollup
   sequencer:
     # Block height to start syncing rollup from
-    initialBlockHeight: 10
+    initialBlockHeight: 2
     # Websocket connection used for
     websocket: "ws://node0-sequencer-rpc-service.astria-dev-cluster.svc.cluster.local:26657/websocket"
     # URL path for the sequencer
@@ -142,14 +142,15 @@ config:
 
   celestia:
     # if config.rollup.executionLevel is NOT 'SoftOnly' AND celestia-node is not enabled
-    # this must be set to access celestia network.
+    # the rpc, ws, and token fields must be set to access celestia network.
     rpc: ""
+    ws: ""
     token: ""
     initialBlockHeight: 2
-    heightVariance: 10
+    heightVariance: 100
 
   blockscout:
-    enabled: true
+    enabled: false
 
 celestia-node:
   # Strongly recommend leaving enabled when not doing `SoftOnly` execution

@@ -25,4 +25,20 @@ spec:
       {{- with .Values.config.rollup.serviceMonitor.scrapeTimeout  }}
       scrapeTimeout: {{ . }}
       {{- end }}
+    - port: composer-metrics
+      path: /
+      {{- with .Values.config.rollup.serviceMonitor.interval }}
+      interval: {{ . }}
+      {{- end }}
+      {{- with .Values.config.rollup.serviceMonitor.scrapeTimeout  }}
+      scrapeTimeout: {{ . }}
+      {{- end }}
+    - port: conductor-metrics
+      path: /
+      {{- with .Values.config.rollup.serviceMonitor.interval }}
+      interval: {{ . }}
+      {{- end }}
+      {{- with .Values.config.rollup.serviceMonitor.scrapeTimeout  }}
+      scrapeTimeout: {{ . }}
+      {{- end }}
 {{- end }}
