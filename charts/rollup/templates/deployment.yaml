@@ -110,11 +110,11 @@ spec:
           {{- end }}
           resources:
             requests:
-              cpu: 1
-              memory: 500Mi
+              cpu: 0.25
+              memory: 10Mi
             limits:
               cpu: 1
-              memory: 2Gi
+              memory: 1Gi
         - name: conductor
           image: {{ include "conductor.image" . }}
           command: [ "/scripts/start-conductor.sh" ]
@@ -129,11 +129,11 @@ spec:
                 name: {{ .Values.config.rollup.name }}-conductor-env
           resources:
             requests:
-              cpu: 1
-              memory: 500Mi
+              cpu: 0.25
+              memory: 10Mi
             limits:
               cpu: 1
-              memory: 2Gi
+              memory: 1Gi
           {{- if .Values.config.rollup.metrics.enabled }} 
           ports:
             - containerPort: {{ .Values.ports.conductorMetrics }}
