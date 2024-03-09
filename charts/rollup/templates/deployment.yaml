@@ -49,6 +49,7 @@ spec:
             - --grpc.addr=0.0.0.0
             - --grpc.port={{ .Values.ports.executionGRPC }}
             - --db.engine={{ .Values.config.rollup.dbEngine }}
+            - --maxpeers=0
             {{- if .Values.config.rollup.archiveNode }}
             - --gcmode=archive
             - --history.transactions=0
@@ -81,7 +82,9 @@ spec:
             {{- if .Values.config.rollup.metrics.enabled }} 
             - containerPort: {{ .Values.ports.metrics }}
               name: geth-metrics
-            {{- end }}              
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources.geth | trim | nindent 12 }}     
         - name: composer
           image: {{ include "composer.image" . }}
           command: [ "/usr/local/bin/astria-composer" ]
@@ -109,12 +112,7 @@ spec:
               name: composer-metrics
           {{- end }}
           resources:
-            requests:
-              cpu: 0.25
-              memory: 10Mi
-            limits:
-              cpu: 1
-              memory: 1Gi
+            {{- toYaml .Values.resources.composer | trim | nindent 12 }}
         - name: conductor
           image: {{ include "conductor.image" . }}
           command: [ "/scripts/start-conductor.sh" ]
@@ -128,12 +126,7 @@ spec:
             - configMapRef:
                 name: {{ .Values.config.rollup.name }}-conductor-env
           resources:
-            requests:
-              cpu: 0.25
-              memory: 10Mi
-            limits:
-              cpu: 1
-              memory: 1Gi
+            {{- toYaml .Values.resources.conductor | trim | nindent 12 }}
           {{- if .Values.config.rollup.metrics.enabled }} 
           ports:
             - containerPort: {{ .Values.ports.conductorMetrics }}

@@ -16,9 +16,9 @@ images:
     tag: "latest" 
     devTag: "latest" # "0.12.1"
   composer: 
-    repo: "ghcr.io/astriaorg/composer"
+    repo: "astria-composer"
     tag: "0.3.1" 
-    devTag: "latest" # "0.4.0"
+    devTag: "local" # "0.4.0"
 
   # Rollup faucet
   faucet: "ghcr.io/astriaorg/ria-faucet:0.0.1"
@@ -117,7 +117,7 @@ config:
             description: "Chain Head Finalized on {{ $labels.namespace }} is increasing at a rate slower then 20 blocks per 5 minute\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   faucet:
-    enabled: false
+    enabled: true
     proxyCount: 1
     # The account from which the faucet disburses funds, likely want to have
     # the corresponding account given a balance in genesis accounts.
@@ -147,10 +147,10 @@ config:
     ws: ""
     token: ""
     initialBlockHeight: 2
-    heightVariance: 100
+    heightVariance: 10
 
   blockscout:
-    enabled: false
+    enabled: true
 
 celestia-node:
   # Strongly recommend leaving enabled when not doing `SoftOnly` execution
@@ -270,6 +270,29 @@ ingress:
 # Default persistent storage values
 # NOTE - `rollupName` will be used with `persistentVolumeName` to generate names for kubernetes resources.
 #  e.g. astria-executor-pv, astria-executor-pvc
+
+resources:
+  conductor:
+    requests:
+      cpu: 0.01
+      memory: 1Mi
+    limits:
+      cpu: 0.1
+      memory: 20Mi
+  composer:
+    requests:
+      cpu: 0.01
+      memory: 1Mi
+    limits:
+      cpu: 0.1
+      memory: 20Mi
+  geth:
+    requests:
+      cpu: 0.25
+      memory: 256Mi
+    limits:
+      cpu: 2
+      memory: 1Gi
 
 storage:
   enabled: false
