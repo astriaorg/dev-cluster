@@ -3,6 +3,29 @@ entries:
   astria-evm-rollup:
   - apiVersion: v2
     appVersion: 0.5.2
+    created: "2024-03-11T19:29:01.455757966Z"
+    dependencies:
+    - condition: celestia-node.enabled
+      name: celestia-node
+      repository: file://../celestia-node
+      version: 0.2.0
+    description: A Helm chart for EVM rollup in k8s deployed on top of Astria Sequencer
+      Network + Celestia.
+    digest: 11225228162ff8920eb87a21f18e5431e5b1efb3a95797d0040871fb2c83fe32
+    maintainers:
+    - name: wafflesvonmaple
+      url: astria.org
+    - name: steezeburger
+      url: astria.org
+    - name: joroshiba
+      url: astria.org
+    name: astria-evm-rollup
+    type: application
+    urls:
+    - https://github.com/astriaorg/dev-cluster/releases/download/astria-evm-rollup-0.9.0/astria-evm-rollup-0.9.0.tgz
+    version: 0.9.0
+  - apiVersion: v2
+    appVersion: 0.5.2
     created: "2024-03-05T19:30:18.11624055Z"
     dependencies:
     - condition: celestia-node.enabled
@@ -522,6 +545,29 @@ entries:
     version: 0.2.0
   astria-sequencer-validator:
   - apiVersion: v2
+    appVersion: 0.9.0
+    created: "2024-03-11T19:29:01.593828734Z"
+    dependencies:
+    - condition: sequencer-relayer.enabled
+      name: sequencer-relayer
+      repository: file://../sequencer-relayer
+      version: 0.4.0
+    description: A Helm chart for deploying a k8s validating node on the Astria Sequencer
+      Network, which writes data to Celestia.
+    digest: 32b0e1d854414767effedf01fbc0a1a8066defeea4a753cb26641d137eb975e5
+    maintainers:
+    - name: wafflesvonmaple
+      url: astria.org
+    - name: steezeburger
+      url: astria.org
+    - name: joroshiba
+      url: astria.org
+    name: astria-sequencer-validator
+    type: application
+    urls:
+    - https://github.com/astriaorg/dev-cluster/releases/download/astria-sequencer-validator-0.10.0/astria-sequencer-validator-0.10.0.tgz
+    version: 0.10.0
+  - apiVersion: v2
     appVersion: 0.8.0
     created: "2024-02-12T20:59:44.951173488Z"
     dependencies:
@@ -807,6 +853,23 @@ entries:
   celestia-local:
   - apiVersion: v2
     appVersion: 1.3.0
+    created: "2024-03-11T19:29:01.74613454Z"
+    description: A Helm chart for Kubernetes
+    digest: c1b0c2d11d7ed131598f075d706f3451b6a72411d364720dd1faf2c472cdc677
+    maintainers:
+    - name: wafflesvonmaple
+      url: astria.org
+    - name: steezeburger
+      url: astria.org
+    - name: joroshiba
+      url: astria.org
+    name: celestia-local
+    type: application
+    urls:
+    - https://github.com/astriaorg/dev-cluster/releases/download/celestia-local-0.3.6/celestia-local-0.3.6.tgz
+    version: 0.3.6
+  - apiVersion: v2
+    appVersion: 1.3.0
     created: "2024-02-12T20:50:58.900485854Z"
     description: A Helm chart for Kubernetes
     digest: 31989f8ea2a64ea5d75b6705644e332a76709083023f2a5168f40bc67da7c938
@@ -945,6 +1008,23 @@ entries:
     - https://astriaorg.github.io/dev-cluster/celestia-local-0.1.0.tgz
     version: 0.1.0
   celestia-node:
+  - apiVersion: v2
+    appVersion: 0.12.4
+    created: "2024-03-11T19:29:01.864137497Z"
+    description: A Helm chart for deploying a Celestia light node.
+    digest: 4879d6399ed04d065c2dc70c495908d31610b37a041997f61ee410e88c1cd597
+    maintainers:
+    - name: wafflesvonmaple
+      url: astria.org
+    - name: steezeburger
+      url: astria.org
+    - name: joroshiba
+      url: astria.org
+    name: celestia-node
+    type: application
+    urls:
+    - https://github.com/astriaorg/dev-cluster/releases/download/celestia-node-0.2.0/celestia-node-0.2.0.tgz
+    version: 0.2.0
   - apiVersion: v2
     appVersion: 0.12.4
     created: "2024-02-12T20:50:59.009861Z"
@@ -1283,6 +1363,24 @@ entries:
     version: 0.1.0
   sequencer-relayer:
   - apiVersion: v2
+    appVersion: 0.10.0
+    created: "2024-03-11T19:29:01.979085259Z"
+    description: A Helm chart for deploying a relayer which writes data from Astria
+      sequencer network to Celestia.
+    digest: 3268639ee5723cb99a9b184bd554ee6013e88f4bd4af07d8f1daf5687e93a1aa
+    maintainers:
+    - name: wafflesvonmaple
+      url: astria.org
+    - name: steezeburger
+      url: astria.org
+    - name: joroshiba
+      url: astria.org
+    name: sequencer-relayer
+    type: application
+    urls:
+    - https://github.com/astriaorg/dev-cluster/releases/download/sequencer-relayer-0.4.0/sequencer-relayer-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
     appVersion: 0.9.1
     created: "2024-01-11T22:33:37.70451238Z"
     description: A Helm chart for deploying a relayer which writes data from Astria
@@ -1336,4 +1434,4 @@ entries:
     urls:
     - https://astriaorg.github.io/dev-cluster/sequencer-relayer-0.3.0.tgz
     version: 0.3.0
-generated: "2024-03-05T19:30:18.116688674Z"
+generated: "2024-03-11T19:29:01.97935462Z"
