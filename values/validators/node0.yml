@@ -1,6 +1,7 @@
 # Override value example for second validator from main chart
 global:
   namespaceOverride: astria-dev-cluster
+  dev: true
 
 config:
   moniker: node0
