@@ -59,4 +59,6 @@ exec celestia bridge start \
   --gateway.port "$bridge_host_port" \
   --rpc.addr 0.0.0.0 \
   --rpc.port "$bridge_rpc_port" \
-  --keyring.accname "$validator_key_name"
+  --keyring.accname "$validator_key_name" \
+  --log.level "debug" \
+  --log.level.module "share/discovery:error"

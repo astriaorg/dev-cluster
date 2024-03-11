@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 global:
-  namespace: "astria-dev-cluster"
+  namespaceOverride: ''
   replicaCount: 1
 
 config:
@@ -10,10 +10,10 @@ config:
   network: mocha-4
   chainId: mocha-4
   coreIp: "full.consensus.mocha-4.celestia-mocha.com"
-  configInfo: false
   type: light
   coreGrpcPort: 9090
   tokenAuthLevel: 'read'
+  customInfo: ''
 
 images:
   pullPolicy: IfNotPresent

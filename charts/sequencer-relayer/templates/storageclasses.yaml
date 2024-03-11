@@ -5,12 +5,10 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{ $value.persistentVolumeName }}-local
-  namespace: {{ $.Values.global.namespace }}
-# NOTE - gce-pd provisioner has not been tested yet
+  name: sequencer-relayer-{{ $value.persistentVolumeName }}-local
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Retain
 ---
   {{- end }}
-{{- end}}
+{{- end }}

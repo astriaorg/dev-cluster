@@ -85,6 +85,13 @@ spec:
               port: bridge-rest
             failureThreshold: 30
             periodSeconds: 10
+          resources:
+            requests:
+              cpu: 1
+              memory: 4Gi
+            limits:
+              cpu: 2
+              memory: 8Gi
         - name: token-server
           image: {{ .Values.tokenServerImage }}
           command: [ "/bin/httpd", "-v", "-f", "-p", "5353", "-h", "/home/celestia/token-server/" ]

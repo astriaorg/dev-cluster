@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.config.rollup.name }}-geth
   labels:
     app: {{ .Values.config.rollup.name }}-astria-dev-cluster
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "rollup.namespace" . }}
 spec:
   replicas : {{ .Values.global.replicaCount }}
   selector:
@@ -19,7 +19,7 @@ spec:
       initContainers:
         - name: init-geth
           command: [ "/scripts/init-geth.sh" ]
-          image: {{ .Values.images.geth }}
+          image: {{ include "rollup.image" . }}
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.config.rollup.name }}-executor-scripts-volume
@@ -49,6 +49,7 @@ spec:
             - --grpc.addr=0.0.0.0
             - --grpc.port={{ .Values.ports.executionGRPC }}
             - --db.engine={{ .Values.config.rollup.dbEngine }}
+            - --maxpeers=0
             {{- if .Values.config.rollup.archiveNode }}
             - --gcmode=archive
             - --history.transactions=0
@@ -60,7 +61,7 @@ spec:
             - --metrics.addr=0.0.0.0
             - --metrics.port={{ .Values.ports.metrics }}
             {{- end }}
-          image: {{ .Values.images.geth }}
+          image: {{ include "rollup.image" . }}
           volumeMounts:
             - mountPath: /scripts/
               name: {{ .Values.config.rollup.name }}-executor-scripts-volume
@@ -81,9 +82,11 @@ spec:
             {{- if .Values.config.rollup.metrics.enabled }} 
             - containerPort: {{ .Values.ports.metrics }}
               name: geth-metrics
-            {{- end }}              
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources.geth | trim | nindent 12 }}     
         - name: composer
-          image: {{ .Values.images.composer }}
+          image: {{ include "composer.image" . }}
           command: [ "/usr/local/bin/astria-composer" ]
           stdin: {{ .Values.global.useTTY }}
           tty: {{ .Values.global.useTTY }}
@@ -103,8 +106,15 @@ spec:
           - mountPath: "/var/secrets"
             name: sequencer-private-key
           {{- end }}
+          {{- if .Values.config.rollup.metrics.enabled }} 
+          ports:
+            - containerPort: {{ .Values.ports.composerMetrics }}
+              name: composer-metrics
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources.composer | trim | nindent 12 }}
         - name: conductor
-          image: {{ .Values.images.conductor }}
+          image: {{ include "conductor.image" . }}
           command: [ "/scripts/start-conductor.sh" ]
           stdin: {{ .Values.global.useTTY }}
           tty: {{ .Values.global.useTTY }}
@@ -115,6 +125,13 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Values.config.rollup.name }}-conductor-env
+          resources:
+            {{- toYaml .Values.resources.conductor | trim | nindent 12 }}
+          {{- if .Values.config.rollup.metrics.enabled }} 
+          ports:
+            - containerPort: {{ .Values.ports.conductorMetrics }}
+              name: conductor-metrics
+          {{- end }}
       volumes:
         - name: {{ .Values.config.rollup.name }}-executor-scripts-volume
           configMap:
@@ -147,7 +164,7 @@ metadata:
   name: {{ .Values.config.rollup.name }}-faucet
   labels:
     app: {{ .Values.config.rollup.name }}-astria-dev-cluster
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "rollup.namespace" . }}
 spec:
   replicas : {{ .Values.global.replicaCount }}
   selector:
@@ -211,7 +228,7 @@ metadata:
   name: {{ .Values.config.rollup.name }}-blockscout
   labels:
     app: {{ .Values.config.rollup.name }}-astria-dev-cluster
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "rollup.namespace" . }}
 spec:
   replicas : {{ .Values.global.replicaCount }}
   selector:

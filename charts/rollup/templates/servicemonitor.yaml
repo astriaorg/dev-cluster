@@ -12,13 +12,29 @@ spec:
   jobLabel: geth-metrics
   namespaceSelector:
     matchNames:
-      - {{ .Values.global.namespace }}
+      - {{ include "rollup.namespace" . }}
   selector:
     matchLabels:
       app: {{ .Values.config.rollup.name }}-astria-dev-cluster
   endpoints:
     - port: geth-metrics
       path: /debug/metrics/prometheus
+      {{- with .Values.config.rollup.serviceMonitor.interval }}
+      interval: {{ . }}
+      {{- end }}
+      {{- with .Values.config.rollup.serviceMonitor.scrapeTimeout  }}
+      scrapeTimeout: {{ . }}
+      {{- end }}
+    - port: composer-metrics
+      path: /
+      {{- with .Values.config.rollup.serviceMonitor.interval }}
+      interval: {{ . }}
+      {{- end }}
+      {{- with .Values.config.rollup.serviceMonitor.scrapeTimeout  }}
+      scrapeTimeout: {{ . }}
+      {{- end }}
+    - port: conductor-metrics
+      path: /
       {{- with .Values.config.rollup.serviceMonitor.interval }}
       interval: {{ . }}
       {{- end }}

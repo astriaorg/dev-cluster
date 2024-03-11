@@ -24,20 +24,19 @@ wait-for-ingress-controller:
 load-image image:
   kind load docker-image {{image}} --name astria-dev-cluster
 
-deploy-chart chart:
-  helm install --debug {{chart}}-chart ./charts/{{chart}} 
+
+defaultNamespace := "astria-dev-cluster"
+deploy-chart chart namespace=defaultNamespace:
+  helm install --debug {{chart}}-chart ./charts/{{chart}} --namespace namespace --create-namespace
 
 delete-chart chart:
-  helm uninstall {{chart}}-chart
-
-redeploy-chart chart:
-  helm uninstall {{chart}}-chart
-  helm install --debug {{chart}}-chart ./charts/{{chart}}
+  helm uninstall {{chart}}-chart --namespace namespace
 
 restart deployment:
   kubectl rollout restart -n astria-dev-cluster deployment {{deployment}}
 
-deploy-astria-local: (deploy-chart "celestia-local") (deploy-sequencer-validators)
+deploy-astria-local: (deploy-chart "celestia-local") (deploy-sequencer-validator)
+delete-astria-local: (delete-chart "celestia-local") (delete-sequencer-validator)
 
 validatorName := "single"
 deploy-sequencer-validator name=validatorName:
@@ -62,22 +61,22 @@ defaultPrivateKey          := ""
 defaultSequencerStartBlock := ""
 deploy-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey sequencerStartBlock=defaultSequencerStartBlock:
   helm install --debug \
-    {{ if rollupName          != '' { replace('--set config.rollup.name=# --set config.rollup.chainId=#chain --set celestia-node.config.labelPrefix=#', '#', rollupName) } else { '' } }} \
+    {{ if rollupName          != '' { replace('--set config.rollup.name=# --set celestia-node.config.labelPrefix=#', '#', rollupName) } else { '' } }} \
     {{ if networkId           != '' { replace('--set config.rollup.networkId=#', '#', networkId) } else { '' } }} \
     {{ if genesisAllocAddress != '' { replace('--set config.rollup.genesisAccounts[0].address=#', '#', genesisAllocAddress) } else { '' } }} \
     {{ if privateKey          != '' { replace('--set config.faucet.privateKey=#', '#', privateKey) } else { '' } }} \
     {{ if sequencerStartBlock != '' { replace('--set config.sequencer.initialBlockHeight=#', '#', sequencerStartBlock) } else { '' } }} \
-    {{rollupName}}chain-chart-deploy ./charts/rollup
+    {{rollupName}}chain-chart-deploy ./charts/rollup --namespace astria-dev-cluster
 
 deploy-dev-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey sequencerStartBlock=defaultSequencerStartBlock:
   helm install --debug \
-    {{ if rollupName          != '' { replace('--set config.rollup.name=# --set config.rollup.chainId=#chain --set celestia-node.config.labelPrefix=#', '#', rollupName) } else { '' } }} \
+    {{ if rollupName          != '' { replace('--set config.rollup.name=# --set celestia-node.config.labelPrefix=#', '#', rollupName) } else { '' } }} \
     {{ if networkId           != '' { replace('--set config.rollup.networkId=#', '#', networkId) } else { '' } }} \
     {{ if genesisAllocAddress != '' { replace('--set config.rollup.genesisAccounts[0].address=#', '#', genesisAllocAddress) } else { '' } }} \
     {{ if privateKey          != '' { replace('--set config.faucet.privateKey=#', '#', privateKey) } else { '' } }} \
     {{ if sequencerStartBlock != '' { replace('--set config.sequencer.initialBlockHeight=#', '#', sequencerStartBlock) } else { '' } }} \
     -f values/rollup/dev.yaml \
-    {{rollupName}}chain-chart-deploy ./charts/rollup
+    {{rollupName}}chain-chart-deploy ./charts/rollup --namespace astria-dev-cluster
 
 wait-for-rollup rollupName=defaultRollupName:
   kubectl wait -n astria-dev-cluster deployment {{rollupName}}-geth --for=condition=Available=True --timeout=600s
@@ -85,7 +84,7 @@ wait-for-rollup rollupName=defaultRollupName:
 
 defaultRollupNameForDelete := "astria"
 delete-rollup rollupName=defaultRollupNameForDelete:
-  helm uninstall {{rollupName}}chain-chart-deploy
+  helm uninstall {{rollupName}}chain-chart-deploy --namespace astria-dev-cluster
 
 deploy-all-local: create-cluster deploy-ingress-controller wait-for-ingress-controller deploy-astria-local wait-for-sequencer (deploy-chart "sequencer-faucet") deploy-rollup wait-for-rollup
 
@@ -98,13 +97,16 @@ deploy-hyperlane-agents rollupName=defaultRollupName agentConfig=defaultHypAgent
     {{ if agentConfig         != '' { replace('--set config.agentConfig=#', '#', agentConfig) } else { '' } }} \
     {{ if relayerPrivateKey   != '' { replace('--set config.relayer.privateKey=#', '#', relayerPrivateKey) } else { '' } }} \
     {{ if validatorPrivateKey != '' { replace('--set config.validator.privateKey=#', '#', validatorPrivateKey) } else { '' } }} \
-    {{rollupName}}-hyperlane-agents-chart ./charts/hyperlane-agents
+    {{rollupName}}-hyperlane-agents-chart ./charts/hyperlane-agents --namespace astria-dev-cluster
 
 delete-hyperlane-agents rollupName=defaultRollupNameForDelete:
-  helm uninstall {{rollupName}}-hyperlane-agents-chart
+  helm uninstall {{rollupName}}-hyperlane-agents-chart --namespace astria-dev-cluster
 
 clean:
   kind delete cluster --name astria-dev-cluster
 
 clean-persisted-data:
   rm -r /tmp/astria
+
+deploy-local-metrics:
+  kubectl apply -f kubernetes/metrics-server-local.yml

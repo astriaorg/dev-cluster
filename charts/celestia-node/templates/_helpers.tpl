@@ -1,4 +1,11 @@
 {{/*
+Namepsace to deploy elements into.
+*/}}
+{{- define "celestiaNode.namespace" -}}
+{{- default .Release.Namespace .Values.global.namespaceOverride | trunc 63 | trimSuffix "-" -}}
+{{- end }}
+
+{{/*
 Define the base label
 */}}
 {{- define "celestiaNode.baseLabel" -}}
@@ -15,8 +22,26 @@ Define the service name
 {{/*
 Define the k8s path to rpc service
 */}}
-{{- define "celestiaNode.service.adresses.rpc" -}}
-http://{{ include "celestiaNode.service.name" . }}.{{ .Values.global.namespace }}.svc.cluster.local:{{ .Values.ports.celestia.rpc }}
+{{- define "celestiaNode.service.addresses.base" -}}
+{{ include "celestiaNode.service.name" . }}.{{ .Values.global.namespace }}.svc.cluster.local:{{ .Values.ports.celestia.rpc }}
+{{- end }}
+
+
+{{/*
+Define the k8s path to rpc service as http rpc
+*/}}
+{{- define "celestiaNode.service.addresses.rpc" -}}
+http://{{ include "celestiaNode.service.addresses.base" . }}
+{{- end }}
+
+{{/*
+{{- end }}
+
+{{/*
+Define the k8s path to rpc service as ws
+*/}}
+{{- define "celestiaNode.service.addresses.ws" -}}
+ws://{{ include "celestiaNode.service.addresses.base" . }}
 {{- end }}
 
 {{/*
@@ -28,7 +53,7 @@ Define the token service name
 {{/*
 Define the k8s path to token service
 */}}
-{{- define "celestiaNode.service.adresses.token" -}}
+{{- define "celestiaNode.service.addresses.token" -}}
 http://{{ include "celestiaNode.service.token.name" . }}.{{ .Values.global.namespace }}.svc.cluster.local:{{ .Values.ports.tokenServer }}
 {{- end }}
 

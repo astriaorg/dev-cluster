@@ -33,7 +33,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ $label }}-{{ $key }}-pvc
-  namespace: {{ $.Values.global.namespace }}
+  namespace: {{ include "celestiaNode.namespace" $ }}
   labels:
     "app.kubernetes.io/name": "{{ $label }}-{{ $.Chart.Name }}"
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}

@@ -1,9 +1,36 @@
 global:
-  namespace: "astria-dev-cluster"
+  namespaceOverride: ""
   replicaCount: 1
   # Whether to use tty readable logging for astria services, when false use json.
   # Best to be false in production environments, true for clean logs on local dev.
-  useTTY: true
+  useTTY: false
+  dev: false
+
+images:
+  geth:
+    repo: "ghcr.io/astriaorg/go-ethereum"
+    tag: "0.5.2"
+    devTag: "0.6.0"
+  conductor:
+    repo: "ghcr.io/astriaorg/conductor"
+    tag: "0.11.1"
+    devTag: "latest"
+  composer:
+    repo: "ghcr.io/astriaorg/composer"
+    tag: "0.3.1"
+    devTag: "latest"
+
+  # Rollup faucet
+  faucet: "ghcr.io/astriaorg/ria-faucet:0.0.1"
+
+  # Pertaining to deploying blockscout block explorer
+  blockscout:
+    core: "docker.io/blockscout/blockscout:5.1.0"
+    postgres: "docker.io/library/postgres:14"
+    redis: "docker.io/library/redis:alpine"
+    sigProvider: "ghcr.io/blockscout/sig-provider@sha256:ae371ce8d0a20993bf61ca81b3394416f4778c9edd398250fd4d81a8d6820950"
+    smartContractVerifier: "ghcr.io/blockscout/smart-contract-verifier@sha256:f07b2d874c28d45f5ba81f297c868a746a03771e8b6d9b8e96f0eba0beeb1016"
+    visualizer: "ghcr.io/blockscout/visualizer@sha256:99479da126248e0aba5c32b1e32625f8c527b72924f55cb510b50e5f854b2d15"
 
 config:
   # The level at which core astria components will log out
@@ -11,10 +38,8 @@ config:
   logLevel: "debug"
 
   rollup:
-    # Default name for the rollup chain
+    # Default name for the rollup chain, used to generate Rollup ID
     name: astria
-    # Chain ID used for submission to shared sequencer, and generating DA namespace
-    chainId: astria
     # Can be set to 'pebble' or 'leveldb'
     dbEngine: pebble
     # Set to true to keep history of all blocks
@@ -26,6 +51,8 @@ config:
     # - "FirmOnly" -> blocks are only pulled from DA
     # - "SoftAndFirm" -> blocks are pulled from both the sequencer and DA
     executionCommitLevel: 'SoftAndFirm'
+    maxBytesPerBundle: 200000
+    maxSubmitInterval: 2000
     # Configuration specific to EVM rollup genesis
     genesis:
       # Set to a hex set of bytes if your rollup has manually configured extra data
@@ -50,6 +77,14 @@ config:
     metrics:
       # set to enable prometheus metrics
       enabled: false
+    otel:
+      enabled: false
+      endpoint:
+      tracesEndpoint:
+      tracesCompression: gzip
+      tracesTimeout: 10
+      otlpHeaders:
+      traceHeaders:
     serviceMonitor:
       # set to enable port svc and service monitor
       enabled: false
@@ -93,7 +128,7 @@ config:
   # Configuration related to sequencer connection for rollup
   sequencer:
     # Block height to start syncing rollup from
-    initialBlockHeight: 1
+    initialBlockHeight: 2
     # Websocket connection used for
     websocket: "ws://node0-sequencer-rpc-service.astria-dev-cluster.svc.cluster.local:26657/websocket"
     # URL path for the sequencer
@@ -105,10 +140,11 @@ config:
 
   celestia:
     # if config.rollup.executionLevel is NOT 'SoftOnly' AND celestia-node is not enabled
-    # this must be set to access celestia network.
+    # the rpc, ws, and token fields must be set to access celestia network.
     rpc: ""
+    ws: ""
     token: ""
-    initialBlockHeight: 1
+    initialBlockHeight: 2
     heightVariance: 10
 
   blockscout:
@@ -131,24 +167,6 @@ celestia-node:
     # coreIp: celestia-service.astria-dev-cluster.svc.cluster.local
     # # The custom info below must be grabbed from the custom network bridge on startup
     # customInfo: "<GENESIS_HASH>:<BRIDGE_MULTIADDRESS>"
-
-images:
-  # Core images for the rollup, developed for Astria
-  geth: "ghcr.io/astriaorg/go-ethereum:0.5.2"
-  conductor: "ghcr.io/astriaorg/conductor:0.11.1"
-  composer: "ghcr.io/astriaorg/composer:0.3.1"
-
-  # Rollup faucet
-  faucet: "ghcr.io/astriaorg/ria-faucet:0.0.1"
-
-  # Pertaining to deploying blockscout block explorer
-  blockscout:
-    core: "docker.io/blockscout/blockscout:5.1.0"
-    postgres: "docker.io/library/postgres:14"
-    redis: "docker.io/library/redis:alpine"
-    sigProvider: "ghcr.io/blockscout/sig-provider@sha256:ae371ce8d0a20993bf61ca81b3394416f4778c9edd398250fd4d81a8d6820950"
-    smartContractVerifier: "ghcr.io/blockscout/smart-contract-verifier@sha256:f07b2d874c28d45f5ba81f297c868a746a03771e8b6d9b8e96f0eba0beeb1016"
-    visualizer: "ghcr.io/blockscout/visualizer@sha256:99479da126248e0aba5c32b1e32625f8c527b72924f55cb510b50e5f854b2d15"
 
 # When deploying in a production environment should use a secret provider
 # This is configured for use with GCP, need to set own resource names
@@ -251,6 +269,29 @@ ingress:
 # NOTE - `rollupName` will be used with `persistentVolumeName` to generate names for kubernetes resources.
 #  e.g. astria-executor-pv, astria-executor-pvc
 
+resources:
+  conductor:
+    requests:
+      cpu: 0.01
+      memory: 1Mi
+    limits:
+      cpu: 0.1
+      memory: 20Mi
+  composer:
+    requests:
+      cpu: 0.01
+      memory: 1Mi
+    limits:
+      cpu: 0.1
+      memory: 20Mi
+  geth:
+    requests:
+      cpu: 0.25
+      memory: 256Mi
+    limits:
+      cpu: 2
+      memory: 1Gi
+
 storage:
   enabled: false
   local: true
@@ -269,3 +310,5 @@ ports:
   faucet: 8080
   blockscout: 4000
   metrics: 6060
+  conductorMetrics: 9000
+  composerMetrics: 9001

@@ -4,7 +4,7 @@ metadata:
   name: sequencer
   labels:
     app: {{ .Values.config.moniker }}-sequencer
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "sequencer.namespace" . }}
 spec:
   replicas: {{ .Values.global.replicaCount }}
   selector:
@@ -33,7 +33,7 @@ spec:
       containers:
         - name: sequencer
           imagePullPolicy: IfNotPresent
-          image: "{{ .Values.images.sequencer }}"
+          image: {{ include "sequencer.image" . }}
           command: [ "/usr/local/bin/astria-sequencer" ]
           stdin: {{ .Values.global.useTTY }}
           tty: {{ .Values.global.useTTY }}
@@ -47,13 +47,19 @@ spec:
           ports:
             - containerPort: {{ .Values.ports.sequencerABCI }}
               name: sequencer-abci
+            - containerPort: {{ .Values.ports.sequencerGRPC }}
+              name: sequencer-grpc
+            {{- if .Values.config.sequencer.metrics.enabled }}
+            - containerPort: {{ .Values.ports.sequencerMetrics }}
+              name: sequencer-metric
+            {{- end }}
         - name: cometbft
           imagePullPolicy: IfNotPresent
           command: [ "cometbft", "start" ]
           args:
           - "--home"
           - "/cometbft"
-          image: "{{ .Values.images.cometBFT }}"
+          image: "{{ include "cometBFT.image" . }}"
           envFrom:
             - configMapRef:
                 name: {{ .Values.config.moniker }}-cometbft-env

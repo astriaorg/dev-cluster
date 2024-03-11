@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: {{ .Values.config.moniker }}-sequencer-rpc-service
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "sequencer.namespace" . }}
 spec:
   selector:
     app: {{ .Values.config.moniker }}-sequencer
@@ -15,7 +15,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: {{ .Values.config.moniker }}-sequencer-p2p-service
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "sequencer.namespace" . }}
 spec:
   selector:
     app: {{ .Values.config.moniker }}-sequencer
@@ -34,12 +34,25 @@ spec:
   type: NodePort
   {{- end }}
 ---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.config.moniker }}-sequencer-grpc-service
+  namespace: {{ include "sequencer.namespace" . }}
+spec:
+  selector:
+    app: {{ .Values.config.moniker }}-sequencer
+  ports:
+    - name: sequencer-grpc
+      port: {{ .Values.ports.sequencerGRPC }}
+      targetPort: sequencer-grpc
+---
 {{- if .Values.serviceMonitor.enabled }} 
 kind: Service
 apiVersion: v1
 metadata:
   name: {{ .Values.config.moniker }}-sequencer-metrics
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ include "sequencer.namespace" . }}
 spec:
   selector:
     app: {{ .Values.config.moniker }}-sequencer
@@ -47,4 +60,9 @@ spec:
     - name: cometbft-metric
       port: {{ .Values.ports.cometBFTMETRICS }}
       targetPort: cometbft-metric
+    {{- if .Values.config.sequencer.metrics.enabled }}
+    - name: sequencer-metric
+      port: {{ .Values.ports.sequencerMetrics }}
+      targetPort: sequencer-metric
+    {{- end }}
 {{- end }}
