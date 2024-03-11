@@ -107,3 +107,6 @@ clean:
 
 clean-persisted-data:
   rm -r /tmp/astria
+
+deploy-local-metrics:
+  kubectl apply -f kubernetes/metrics-server-local.yml
