@@ -1,7 +1,9 @@
 # Override value example for second validator from main chart
+global:
+  namespaceOverride: astria-dev-cluster
+
 config:
-  namespaceOverride: 'astria-dev-cluster'
-  moniker: 'node0'
+  moniker: node0
 
   # Values for CometBFT node configuration
   cometBFT:

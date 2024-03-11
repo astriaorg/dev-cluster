@@ -24,31 +24,30 @@ wait-for-ingress-controller:
 load-image image:
   kind load docker-image {{image}} --name astria-dev-cluster
 
-deploy-chart chart:
-  helm install --debug {{chart}}-chart ./charts/{{chart}} --namespace astria-dev-cluster
+
+defaultNamespace := "astria-dev-cluster"
+deploy-chart chart namespace=defaultNamespace:
+  helm install --debug {{chart}}-chart ./charts/{{chart}} --namespace namespace --create-namespace
 
 delete-chart chart:
-  helm uninstall {{chart}}-chart --namespace astria-dev-cluster
-
-redeploy-chart chart:
-  helm uninstall {{chart}}-chart --namespace astria-dev-cluster
-  helm install --debug {{chart}}-chart ./charts/{{chart}} --namespace astria-dev-cluster
+  helm uninstall {{chart}}-chart --namespace namespace
 
 restart deployment:
   kubectl rollout restart -n astria-dev-cluster deployment {{deployment}}
 
 deploy-astria-local: (deploy-chart "celestia-local") (deploy-sequencer-validator)
+delete-astria-local: (delete-chart "celestia-local") (delete-sequencer-validator)
 
 validatorName := "single"
 deploy-sequencer-validator name=validatorName:
   helm install --debug \
     {{ replace('-f values/validators/#.yml' , '#', name) }} \
     -n astria-validator-{{name}} --create-namespace \
-    {{name}}-sequencer-chart ./charts/sequencer --namespace astria-dev-cluster
+    {{name}}-sequencer-chart ./charts/sequencer
 deploy-sequencer-validators: (deploy-sequencer-validator "node0") (deploy-sequencer-validator "node1") (deploy-sequencer-validator "node2")
 
 delete-sequencer-validator name=validatorName:
-  helm uninstall {{name}}-sequencer-chart -n astria-validator-{{name}} --namespace astria-dev-cluster
+  helm uninstall {{name}}-sequencer-chart -n astria-validator-{{name}}
 delete-sequencer-validators: (delete-sequencer-validator "node0") (delete-sequencer-validator "node1") (delete-sequencer-validator "node2")
 
 wait-for-sequencer:
@@ -62,7 +61,7 @@ defaultPrivateKey          := ""
 defaultSequencerStartBlock := ""
 deploy-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey sequencerStartBlock=defaultSequencerStartBlock:
   helm install --debug \
-    {{ if rollupName          != '' { replace('--set config.rollup.name=# --set config.rollup.chainId=#chain --set celestia-node.config.labelPrefix=#', '#', rollupName) } else { '' } }} \
+    {{ if rollupName          != '' { replace('--set config.rollup.name=# --set celestia-node.config.labelPrefix=#', '#', rollupName) } else { '' } }} \
     {{ if networkId           != '' { replace('--set config.rollup.networkId=#', '#', networkId) } else { '' } }} \
     {{ if genesisAllocAddress != '' { replace('--set config.rollup.genesisAccounts[0].address=#', '#', genesisAllocAddress) } else { '' } }} \
     {{ if privateKey          != '' { replace('--set config.faucet.privateKey=#', '#', privateKey) } else { '' } }} \
@@ -71,7 +70,7 @@ deploy-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAll
 
 deploy-dev-rollup rollupName=defaultRollupName networkId=defaultNetworkId genesisAllocAddress=defaultGenesisAllocAddress privateKey=defaultPrivateKey sequencerStartBlock=defaultSequencerStartBlock:
   helm install --debug \
-    {{ if rollupName          != '' { replace('--set config.rollup.name=# --set config.rollup.chainId=#chain --set celestia-node.config.labelPrefix=#', '#', rollupName) } else { '' } }} \
+    {{ if rollupName          != '' { replace('--set config.rollup.name=# --set celestia-node.config.labelPrefix=#', '#', rollupName) } else { '' } }} \
     {{ if networkId           != '' { replace('--set config.rollup.networkId=#', '#', networkId) } else { '' } }} \
     {{ if genesisAllocAddress != '' { replace('--set config.rollup.genesisAccounts[0].address=#', '#', genesisAllocAddress) } else { '' } }} \
     {{ if privateKey          != '' { replace('--set config.faucet.privateKey=#', '#', privateKey) } else { '' } }} \

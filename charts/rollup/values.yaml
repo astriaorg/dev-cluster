@@ -38,10 +38,8 @@ config:
   logLevel: "debug"
 
   rollup:
-    # Default name for the rollup chain
+    # Default name for the rollup chain, used to generate Rollup ID
     name: astria
-    # Chain ID used for submission to shared sequencer, and generating DA namespace
-    chainId: astria
     # Can be set to 'pebble' or 'leveldb'
     dbEngine: pebble
     # Set to true to keep history of all blocks

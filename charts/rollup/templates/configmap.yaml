@@ -15,7 +15,7 @@ data:
   ASTRIA_CONDUCTOR_SEQUENCER_URL: "{{ .Values.config.sequencer.websocket }}"
   ASTRIA_CONDUCTOR_INITIAL_SEQUENCER_BLOCK_HEIGHT: "{{ .Values.config.sequencer.initialBlockHeight }}"
   {{- if not .Values.global.dev }}
-  ASTRIA_CONDUCTOR_CHAIN_ID: "{{ .Values.config.rollup.chainId }}"
+  ASTRIA_CONDUCTOR_CHAIN_ID: "{{ .Values.config.rollup.name }}"
   ASTRIA_CONDUCTOR_ENABLE_OPTIMISM: "{{ .Values.config.rollup.optimism.enabled }}"
   ASTRIA_CONDUCTOR_ETHEREUM_L1_URL: "{{ .Values.config.rollup.optimism.ethereumL1Websocket }}"
   ASTRIA_CONDUCTOR_OPTIMISM_PORTAL_CONTRACT_ADDRESS: "{{ .Values.config.rollup.optimism.portalContractAddress }}"
@@ -64,7 +64,7 @@ data:
   ASTRIA_COMPOSER_LOG: "astria_composer={{ .Values.config.logLevel }}"
   ASTRIA_COMPOSER_API_LISTEN_ADDR: "0.0.0.0:0"
   ASTRIA_COMPOSER_SEQUENCER_URL: "{{ .Values.config.sequencer.rpc }}"
-  ASTRIA_COMPOSER_ROLLUPS: "{{ .Values.config.rollup.chainId }}::ws://127.0.0.1:{{ .Values.ports.wsRPC }}"
+  ASTRIA_COMPOSER_ROLLUPS: "{{ .Values.config.rollup.name }}::ws://127.0.0.1:{{ .Values.ports.wsRPC }}"
   {{- if not .Values.secretProvider.enabled }}
   ASTRIA_COMPOSER_PRIVATE_KEY: "{{ .Values.config.sequencer.privateKey }}"
   {{- end }}
@@ -208,7 +208,7 @@ data:
   MICROSERVICE_SIG_PROVIDER_URL: "http://localhost:8050/"
   MICROSERVICE_VISUALIZE_SOL2UML_ENABLED: "true"
   MICROSERVICE_VISUALIZE_SOL2UML_URL: "http://localhost:8151/"
-  NETWORK: "{{ .Values.config.rollup.chainId }}"
+  NETWORK: "{{ .Values.config.rollup.name }}"
   NETWORK_PATH: "/"
   POOL_SIZE: "90"
   POOL_SIZE_API: "10"
