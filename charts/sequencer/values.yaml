@@ -11,13 +11,13 @@ global:
 
 # sequencer core images
 images:
-  cometBFT: 
+  cometBFT:
     repo: docker.io/cometbft/cometbft
     tag: v0.37.x
     devTag: v0.37.x
-  sequencer: 
+  sequencer:
     repo: ghcr.io/astriaorg/sequencer
-    tag: "0.8.0" # "0.9.0"
+    tag: "0.8.0"
     devTag: latest
 
 config:
