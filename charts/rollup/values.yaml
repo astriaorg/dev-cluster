@@ -16,9 +16,9 @@ images:
     tag: "latest" 
     devTag: "latest" # "0.12.1"
   composer: 
-    repo: "astria-composer"
+    repo: "ghcr.io/astriaorg/composer"
     tag: "0.3.1" 
-    devTag: "local" # "0.4.0"
+    devTag: "latest" # "0.4.0"
 
   # Rollup faucet
   faucet: "ghcr.io/astriaorg/ria-faucet:0.0.1"
