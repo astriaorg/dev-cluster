@@ -21,7 +21,8 @@ config:
     celestiaBearerToken: ""
     celestiaRpc: http://celestia-service.astria-dev-cluster.svc.cluster.local:26658
     tokenServer: http://celestia-service.astria-dev-cluster.svc.cluster.local:5353
-    sequencerRpc: ""
+    cometbftRpc: ""
+    sequencerGrpc: ""
 
     metrics:
       enabled: false
