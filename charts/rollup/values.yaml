@@ -290,7 +290,7 @@ resources:
       memory: 256Mi
     limits:
       cpu: 2
-      memory: 1Gi
+      memory: 4Gi
 
 storage:
   enabled: false

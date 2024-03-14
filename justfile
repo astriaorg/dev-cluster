@@ -50,9 +50,10 @@ delete-sequencer-validator name=validatorName:
   helm uninstall {{name}}-sequencer-chart -n astria-validator-{{name}}
 delete-sequencer-validators: (delete-sequencer-validator "node0") (delete-sequencer-validator "node1") (delete-sequencer-validator "node2")
 
+# https://github.com/kubernetes/kubernetes/issues/79606#issuecomment-779779928
 wait-for-sequencer:
   kubectl wait -n astria-dev-cluster deployment celestia-local --for=condition=Available=True --timeout=600s
-  kubectl wait -n astria-dev-cluster deployment sequencer --for=condition=Available=True --timeout=600s
+  kubectl wait -n astria-dev-cluster rollout status --watch --timeout=600s statefulset/sequencer
 
 defaultRollupName          := "astria"
 defaultNetworkId           := ""
