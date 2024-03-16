@@ -4,7 +4,6 @@ metadata:
   name: {{ .Values.config.rollup.name }}-conductor-env
   namespace: {{ include "rollup.namespace" .  }}
 data:
-  RUST_BACKTRACE: "full"
   ASTRIA_CONDUCTOR_LOG: "astria_conductor={{ .Values.config.logLevel }}"
   {{- if (index .Values "celestia-node").enabled }}
   TOKEN_SERVER_URL: "{{ include "celestiaNode.service.addresses.token" (index .Subcharts "celestia-node") }}"
