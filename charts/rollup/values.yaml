@@ -64,16 +64,6 @@ config:
           value:
             # The balance must be a string due to size
             balance: "1000000000000000000000000000"
-    optimism:
-      # set to true to enable op-stack integration, and setup rest of config
-      enabled: false
-      # Websocket URL of Ethereum L1 node.
-      ethereumL1Websocket: "ws://127.0.0.1:8545"
-      # Contract address of the OptimismPortal contract on L1.
-      portalContractAddress: ""
-      # The block height of the Ethereum L1 chain that the
-      # OptimismPortal contract was deployed at.
-      initialEthereumL1BlockHeight: 1
     metrics:
       # set to enable prometheus metrics
       enabled: false
@@ -131,8 +121,6 @@ config:
     initialBlockHeight: 2
     # Fastest block time possible in MS
     blockTimeMs: 2000
-    # Websocket connection used for
-    websocket: "ws://node0-sequencer-rpc-service.astria-dev-cluster.svc.cluster.local:26657/websocket"
     # URL path for the sequencer
     rpc: "http://node0-sequencer-rpc-service.astria-dev-cluster.svc.cluster.local:26657"
     # gRPC path for the sequencer
