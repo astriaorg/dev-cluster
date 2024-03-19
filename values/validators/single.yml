@@ -8,6 +8,6 @@ sequencer-relayer:
     relayer:
       celestiaRpc: http://celestia-service.astria-dev-cluster.svc.cluster.local:26658
       cometbftRpc: http://node0-sequencer-rpc-service.astria-dev-cluster.svc.cluster.local:26657
-      sequencerGrpc: dns://node0-sequencer-grpc-service.astria-dev-cluster.svc.cluster.local:8080
+      sequencerGrpc: http://node0-sequencer-grpc-service.astria-dev-cluster.svc.cluster.local:8080
   storage:
     enabled: false
