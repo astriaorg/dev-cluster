@@ -1360,6 +1360,24 @@ entries:
     version: 0.1.2
   sequencer-faucet:
   - apiVersion: v2
+    appVersion: 0.5.0
+    created: "2024-03-19T20:51:58.784010381Z"
+    description: A Helm chart for deploying a k8s faucet node for the Astria Sequencer
+      Network.
+    digest: 5d634c2b6723b1c4536b635e88c94bbb90baea16070ddbe56e93134f4e60f2e3
+    maintainers:
+    - name: wafflesvonmaple
+      url: astria.org
+    - name: steezeburger
+      url: astria.org
+    - name: joroshiba
+      url: astria.org
+    name: sequencer-faucet
+    type: application
+    urls:
+    - https://github.com/astriaorg/dev-cluster/releases/download/sequencer-faucet-0.5.0/sequencer-faucet-0.5.0.tgz
+    version: 0.5.0
+  - apiVersion: v2
     appVersion: 0.4.0
     created: "2023-12-21T10:36:48.117838-06:00"
     description: A Helm chart for deploying a k8s faucet node for the Astria Sequencer
@@ -1562,4 +1580,4 @@ entries:
     urls:
     - https://astriaorg.github.io/dev-cluster/sequencer-relayer-0.3.0.tgz
     version: 0.3.0
-generated: "2024-03-19T20:05:25.591010223Z"
+generated: "2024-03-19T20:51:58.784145192Z"
