@@ -19,13 +19,11 @@
         {{- end }}
         "astriaOverrideGenesisExtraData": {{ .Values.config.rollup.genesis.overrideGenesisExtraData }},
         "astriaSequencerInitialHeight": {{ .Values.config.sequencer.initialBlockHeight }},
-        {{- if not .Values.global.dev }}
-        "astriaDataAvailabilityInitialHeight": {{ .Values.config.celestia.initialBlockHeight }},
-        "astriaDataAvailabilityHeightVariance": {{ .Values.config.celestia.heightVariance }}
-        {{- else }}
         "astriaRollupName": "{{ .Values.config.rollup.name }}",
         "astriaCelestiaInitialHeight": {{ .Values.config.celestia.initialBlockHeight }},
         "astriaCelestiaHeightVariance": {{ .Values.config.celestia.heightVariance }}
+        {{- if not .Values.global.dev }}
+        {{- else }}
         {{- end }}
     },
     "difficulty": "10000000",
