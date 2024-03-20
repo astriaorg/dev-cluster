@@ -45,7 +45,7 @@ config:
     # Set to true to keep history of all blocks
     archiveNode: false
     # EVM network ID used by the chain
-    networkId: 1337
+    networkId: "1337"
     # Determines what will drive block execution, options are:
     # - "SoftOnly" -> blocks are only pulled from the sequencer
     # - "FirmOnly" -> blocks are only pulled from DA
@@ -118,7 +118,7 @@ config:
   # Configuration related to sequencer connection for rollup
   sequencer:
     # Block height to start syncing rollup from
-    initialBlockHeight: 2
+    initialBlockHeight: "2"
     # Fastest block time possible in MS
     blockTimeMs: 2000
     # URL path for the sequencer
@@ -136,8 +136,8 @@ config:
     rpc: ""
     ws: ""
     token: ""
-    initialBlockHeight: 2
-    heightVariance: 10
+    initialBlockHeight: "2"
+    heightVariance: "10"
 
   blockscout:
     enabled: true
