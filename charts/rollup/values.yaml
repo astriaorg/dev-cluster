@@ -33,9 +33,11 @@ images:
     visualizer: "ghcr.io/blockscout/visualizer@sha256:99479da126248e0aba5c32b1e32625f8c527b72924f55cb510b50e5f854b2d15"
 
 config:
-  # The level at which core astria components will log out
-  # Options are: error, warn, info, and debug
-  logLevel: "debug"
+  # The filter directives which core astria components will use to write trace data.
+  # Common options are log levels: error, warn, info, debug, trace
+  # For a full overview of filter capabilities see:
+  # https://docs.rs/tracing-subscriber/0.3.18/tracing_subscriber/filter/struct.EnvFilter.html#directives
+  filterDirectives: "debug"
 
   rollup:
     # Default name for the rollup chain, used to generate Rollup ID
